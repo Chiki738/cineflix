@@ -1,0 +1,13 @@
+.formLogin {
+    background-image: url('../img/fondo.jpg');
+    min-height: 100vh;
+}
+
+.formLogin>form {
+    background-color: rgba(0, 0, 0, 0.6);
+    gap: 20px
+}
+
+.formLogin strong:hover {
+    text-decoration: underline;
+}

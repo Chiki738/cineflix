@@ -1,0 +1,44 @@
+footer * {
+    color: #ffffff;
+}
+
+.redesEnlace {
+    gap: 20px;
+}
+
+.redesEnlace i {
+    outline: 1px solid black;
+}
+
+.redesEnlace a {
+    text-decoration: none;
+    font-size: clamp(1.3rem, 1.26rem + 0.212vw, 1.6rem);
+    color: black;
+}
+
+#facebook {
+    background-color: #ffffff;
+    color: rgb(23, 114, 232);
+}
+
+#instagram {
+    background-color: #ffffff;
+    color: rgb(201, 85, 128);
+}
+
+#twitter {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+}
+
+#gmail {
+    background-color: #ff4f4f;
+    color: black;
+}
+
+
+.footerContainer>p {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 17px;
+}
