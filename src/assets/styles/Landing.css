@@ -1,23 +1,23 @@
-.lading{
+.lading {
     background-image: url('../img/fondo.jpg');
     min-height: 100vh;
     max-height: 800px;
 }
 
-.btnRegistro{
+.btnRegistro {
     background-color: rgb(30, 197, 80);
 }
 
-.btnRegistro:hover{
+.btnRegistro:hover {
     background-color: rgb(30, 197, 80);
     box-shadow: 0 0 10px rgb(30, 197, 80);
     color: #ebebeb !important;
 }
 
-.lading>div{
+.lading>div {
     width: 85%;
 }
 
-.lading h2{
+.lading h2 {
     font-size: clamp(2.5rem, 0.967rem + 4.259vw, 4.8rem)
 }

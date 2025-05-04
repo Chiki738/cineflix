@@ -1,38 +1,69 @@
-import { Link } from "react-router-dom";
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { loginUser } from "../services/authService";
 import "../assets/styles/Login.css";
 
 function Login() {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [showPassword, setShowPassword] = useState(false);
+//   const navigate = useNavigate();
+
+//   const handleLogin = async (e) => {
+//     e.preventDefault();
+//     try {
+//     //   const data = await loginUser(email, password);
+//       localStorage.setItem("token", data.token);
+//       localStorage.setItem("user", JSON.stringify(data.user));
+//       navigate("/Home");
+//     } catch (error) {
+//       alert("Credenciales incorrectas");
+//       console.error("Error de inicio de sesión:", error);
+//     }
+//   };
+
+//   const togglePassword = () => setShowPassword(!showPassword);
+
   return (
     <div className="formLogin d-flex flex-column justify-content-center align-items-center text-white text-center">
-      <form className="d-flex flex-column justify-content-center align-items-center p-4 rounded-2">
+      <form
+        // onSubmit={handleLogin}
+        className="d-flex flex-column justify-content-center align-items-center p-4 rounded-2">
         <h3>INISIAR SESIÓN</h3>
 
-        <div class="mb-3">
+        <div className="mb-3">
           <input
             type="email"
             placeholder="Ingresar correo electrónico"
             className="form-control"
             style={{ width: "300px" }}
             id="email"
+            // value={email}
+            // onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
 
-        <div class="input-group mb-3">
+        {/* <div className="input-group mb-3">
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             className="form-control"
             placeholder="Ingresar contraseña"
             id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
           <button
             className="btn btn-outline-secondary"
             type="button"
-            id="button-addon2">
-            <i className="fa-solid fa-eye"></i>
+            onClick={togglePassword}>
+            <i
+              className={`fa-solid ${
+                showPassword ? "fa-eye-slash" : "fa-eye"
+              }`}></i>
           </button>
-        </div>
+        </div> */}
 
         <button
           type="submit"
@@ -42,9 +73,9 @@ function Login() {
 
         <p className="pb-0">
           ¿No tienes cuenta?&nbsp;
-          <Link to="/Registro" style={{ color: "white" }}>
+          <a href="/Registro" style={{ color: "white" }}>
             <strong>Registrate</strong>
-          </Link>
+          </a>
         </p>
       </form>
     </div>
