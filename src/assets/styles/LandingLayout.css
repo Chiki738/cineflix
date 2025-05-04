@@ -1,9 +1,8 @@
-/* .btnLogin{
+.btnLogin {
     background-color: rgb(30, 197, 80);
 }
 
-.btnLogin:hover{
-    background-color: rgb(30, 197, 80);
+.btnLogin:hover {
+    background-color: #3de3c2;
     box-shadow: 0 0 10px rgb(30, 197, 80);
-    color: #ebebeb !important;
-} */
+}
