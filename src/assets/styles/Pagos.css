@@ -1,4 +1,4 @@
-.pagosContainer {
+/* .pagosContainer {
     background-image: url('../img/fondo.jpg');
     min-height: 100vh;
     max-height: 800px;
@@ -16,22 +16,19 @@
     font-size: 60px;
 }
 
-/* Estado normal (no seleccionado) */
 .pagosContainer .btn-check+.btn {
     color: #ffffff;
     border: none;
     background-color: transparent;
 }
 
-/* Desactivar hover si no está seleccionado */
 .pagosContainer .btn-check+.btn:hover {
     background-color: transparent;
     color: #ffffff;
 }
 
-/* Estado seleccionado */
 .pagosContainer .btn-check:checked+.btn {
     background-color: #06D6A0;
     color: #000000;
     outline: 2px solid #000000;
-}
+} */
