@@ -3,6 +3,8 @@ import LandingLayout from "./layouts/LandingLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/Login";
 import Registro from "./pages/Registro";
+import Pagos from "./pages/Pagos";
+import Home from "./pages/Home";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
             </AuthLayout>
           }
         />
+        <Route path="/Pagos" element={<Pagos />} />
+        <Route path="/Home" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );
