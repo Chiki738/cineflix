@@ -14,10 +14,10 @@ function Landing() {
           y series que tenemos.
         </p>
 
-        <Link to="/Registro">
-          <button className="btnRegistro px-sm-4 px-3 py-1 text-dark fw-bold rounded-3 border-success fs-5">
-            Registrate
-          </button>
+        <Link
+          to="/Registro"
+          className="btnRegistro btn px-sm-4 px-3 py-1 text-dark fw-bold rounded-3 border-success fs-5">
+          Registrate
         </Link>
       </div>
     </div>
