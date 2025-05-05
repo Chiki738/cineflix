@@ -10,7 +10,7 @@ function Registro() {
       <form
         // onSubmit={handleRegister}
         className="d-flex flex-column justify-content-center align-items-center p-4 rounded-2">
-        <h3>REGISTRATE</h3>
+        <h3 className="fw-bold">REGISTRATE</h3>
 
         <div className="mb-3">
           <input
@@ -77,11 +77,13 @@ function Registro() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">
-          REGISTRARSE
-        </button>
+        <Link to="/Pagos">
+          <button
+            type="submit"
+            className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">
+            REGISTRARSE
+          </button>
+        </Link>
 
         <p className="pb-0">
           ¿Ya tienes una cuenta?&nbsp;

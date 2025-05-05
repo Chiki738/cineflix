@@ -1,7 +1,9 @@
- /* .formRegistro {
+ .formRegistro {
      background-image: url('../img/fondo.jpg');
      min-height: 100vh;
      max-height: 800px;
+     background-repeat: no-repeat;
+     background-size: cover;
  }
 
  .formRegistro>form {
@@ -11,4 +13,4 @@
 
  .formRegistro strong:hover {
      text-decoration: underline;
- } */
+ }
