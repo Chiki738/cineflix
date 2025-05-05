@@ -1,7 +1,6 @@
 .pagosContainer {
     background-image: url('../img/fondo.jpg');
     min-height: 100vh;
-    max-height: 800px;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -15,7 +14,7 @@
 }
 
 .pagosContainer h2 {
-    font-size: 60px;
+    font-size: clamp(2.8rem, 2.167rem + 1.759vw, 3.75rem)
 }
 
 .pagosContainer .btn-check+.btn {
@@ -33,4 +32,21 @@
     background-color: #06D6A0;
     color: #000000;
     outline: 2px solid #000000;
+}
+
+.pagosContainer .card-body {
+    text-align: justify;
+}
+
+.pagosContainer li::before {
+    content: "✅";
+}
+
+.pagosContainer h5 {
+    font-size: clamp(1.25rem, 1.083rem + 0.463vw, 1.5rem) !important
+}
+
+.pagosContainer h6 {
+    text-align: center;
+    font-size: clamp(2.5rem, 2.083rem + 1.157vw, 3.125rem)
 }
