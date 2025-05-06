@@ -26,7 +26,7 @@ function Login() {
       <form
         onSubmit={handleLogin}
         className="d-flex flex-column justify-content-center align-items-center p-4 rounded-2">
-        <h3>INISIAR SESIÓN</h3>
+        <h3>INICIAR SESIÓN</h3>
         <div className="mb-3">
           <input
             type="email"
@@ -49,7 +49,7 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <link
+          <button
             className="btn btn-outline-secondary"
             type="button"
             onClick={togglePassword}>
@@ -57,9 +57,9 @@ function Login() {
               className={`fa-solid ${
                 showPassword ? "fa-eye-slash" : "fa-eye"
               }`}></i>
-          </link>
+          </button>
         </div>
-        /*{" "}
+
         <button
           type="submit"
           className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">

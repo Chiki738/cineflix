@@ -1,6 +1,8 @@
-/* .formLogin {
+.formLogin {
     background-image: url('../img/fondo.jpg');
     min-height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .formLogin>form {
@@ -10,4 +12,4 @@
 
 .formLogin strong:hover {
     text-decoration: underline;
-} */
+}
