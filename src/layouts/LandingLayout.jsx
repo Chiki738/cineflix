@@ -9,7 +9,7 @@ function LandingLayout() {
     <>
       <Header redirectTo="/">
         <Link
-          to="/"
+          to="/Login"
           className="btnLogin btn px-sm-4 py-sm-1 px-2 text-dark fw-bold rounded-3 border-success">
           Iniciar sesión
         </Link>
