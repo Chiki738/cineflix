@@ -106,7 +106,7 @@ function Pagos() {
                         </ul>
                         <div className="mt-auto d-flex justify-content-center">
                           <Link
-                            to="/"
+                            to="/Login"
                             className="btnSeleccionar btn px-sm-4 py-sm-1 px-2 fw-bold text-white rounded-3 border-success">
                             Seleccionar
                           </Link>

@@ -5,7 +5,7 @@ function Landing() {
   return (
     <div className="lading d-flex justify-content-center align-items-center text-center">
       <div>
-        <h2 className="text-center text-white fw-bold">
+        <h2 className="text-center text-white fw-bold display-1">
           PELICULAS, SERIES Y MUCHO MÁS...
         </h2>
 

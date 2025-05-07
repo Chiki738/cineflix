@@ -1,10 +1,10 @@
-import Header from "../components/Header.jsx";
+import HeaderSimple from "../components/headers/HeaderSimple.jsx";
 import Footer from "../components/Footer.jsx";
 
 function AuthLayout({ children }) {
   return (
     <>
-      <Header />
+      <HeaderSimple />
       {children}
       <Footer />
     </>
