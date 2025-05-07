@@ -4,7 +4,7 @@ import terminos from "../assets/pdf/terminos.pdf";
 
 function Footer() {
   return (
-    <footer className="bg-dark text-white py-3 gap-sm-3">
+    <footer className="bg-dark text-white py-3 gap-sm-3" data-bs-theme="dark">
       <div className="d-flex flex-sm-row flex-column justify-content-evenly align-items-center">
         <ul className="p-0 mb-4 mb-sm-0">
           <li className="p-1">

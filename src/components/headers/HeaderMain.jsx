@@ -1,16 +1,35 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import perfilImg from "../../assets/img/perfil.jpg";
 import "../../assets/styles/HeaderMain.css";
 
 function HeaderMain() {
+  const location = useLocation();
+  const isCategoria = location.pathname.startsWith("/Categorias");
+
+  const categorias = [
+    "Acción",
+    "Animación",
+    "Aventura",
+    "Ciencia ficción",
+    "Comedia",
+    "Crimen",
+    "Documental",
+    "Drama",
+    "Familiar / Infantil",
+    "Fantasía",
+    "Romance",
+    "Suspenso",
+    "Terror",
+  ];
+
   return (
-    <nav className="navbar bg-dark fixed-top px-3" data-bs-theme="dark">
+    <nav className="navbar bg-dark fixed-top px-2" data-bs-theme="dark">
       <div className="container-fluid hstack gap-3 justify-content-between align-items-center">
         {/* Logo */}
         <Link
           to="/Home"
           className="navbar-brand mb-0 h1"
-          style={{ color: "#3DE3C2", fontWeight: "bold", fontSize:"35px"}}>
+          style={{ color: "#3DE3C2", fontWeight: "bold", fontSize: "35px" }}>
           CINEFLIX
         </Link>
 
@@ -18,55 +37,61 @@ function HeaderMain() {
         <div className="d-none d-lg-flex hstack gap-4 flex-grow-1 align-items-center">
           <ul className="navbar-nav flex-row gap-3">
             <li className="nav-item">
-              <a className="nav-link active" href="#">
+              <NavLink
+                to="/Home"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "active" : ""}`
+                }>
                 Inicio
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink to="/Peliculas" className="nav-link">
                 Películas
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink to="/Series" className="nav-link">
                 Series
-              </a>
+              </NavLink>
             </li>
+
+            {/* Menú Categorías */}
             <li className="nav-item dropdown">
               <a
-                className="nav-link dropdown-toggle"
+                className={`nav-link dropdown-toggle ${
+                  isCategoria ? "active" : ""
+                }`}
+                href="#"
+                role="button"
                 data-bs-toggle="dropdown"
-                href="#">
+                aria-expanded="false">
                 Categorías
               </a>
               <ul className="dropdown-menu">
-                {[
-                  "Acción",
-                  "Animación",
-                  "Aventura",
-                  "Ciencia ficción",
-                  "Comedia",
-                  "Crimen",
-                  "Documental",
-                  "Drama",
-                  "Familiar / Infantil",
-                  "Fantasía",
-                  "Romance",
-                  "Suspenso",
-                  "Terror",
-                ].map((cat, i) => (
+                {categorias.map((cat, i) => (
                   <li key={i}>
-                    <a className="dropdown-item" href="#">
+                    <Link
+                      to={`/Categorias/${cat
+                        .replace(/ /g, "")
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")}`}
+                      className="dropdown-item">
                       {cat}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
             </li>
+
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink
+                to="/Perfil/Lista"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "active" : ""}`
+                }>
                 Mi lista
-              </a>
+              </NavLink>
             </li>
           </ul>
 
@@ -88,7 +113,6 @@ function HeaderMain() {
 
         {/* Iconos: perfil y botón menú móvil */}
         <div className="hstack gap-3">
-          {/* Botón menú móvil */}
           <button
             className="navbar-toggler border-0 p-1 d-lg-none"
             type="button"
@@ -117,12 +141,12 @@ function HeaderMain() {
             <ul className="dropdown-menu dropdown-menu-end">
               <li>
                 <Link to="/Perfil" className="dropdown-item">
-                  Perfil&nbsp; <i class="fa-solid fa-user"></i>
+                  Perfil <i className="fa-solid fa-user"></i>
                 </Link>
               </li>
               <li>
                 <Link to="/Login" className="dropdown-item">
-                  Salir&nbsp; <i class="fa-solid fa-right-from-bracket"></i>
+                  Salir <i className="fa-solid fa-right-from-bracket"></i>
                 </Link>
               </li>
             </ul>
@@ -149,55 +173,48 @@ function HeaderMain() {
         <div className="offcanvas-body">
           <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to="/Home">
                 Inicio
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to="#">
                 Películas
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to="#">
                 Series
-              </a>
+              </Link>
             </li>
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
+                href="#"
+                role="button"
                 data-bs-toggle="dropdown"
-                href="#">
+                aria-expanded="false">
                 Categorías
               </a>
               <ul className="dropdown-menu">
-                {[
-                  "Acción",
-                  "Animación",
-                  "Aventura",
-                  "Ciencia ficción",
-                  "Comedia",
-                  "Crimen",
-                  "Documental",
-                  "Drama",
-                  "Familiar / Infantil",
-                  "Fantasía",
-                  "Romance",
-                  "Suspenso",
-                  "Terror",
-                ].map((cat, i) => (
+                {categorias.map((cat, i) => (
                   <li key={i}>
-                    <a className="dropdown-item" href="#">
+                    <Link
+                      to={`/Categorias/${cat
+                        .replace(/ /g, "")
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")}`}
+                      className="dropdown-item">
                       {cat}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to="/Perfil/Lista">
                 Mi lista
-              </a>
+              </Link>
             </li>
           </ul>
 

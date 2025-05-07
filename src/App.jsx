@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import Perfil from "./pages/Perfil";
+import Peliculas from "./pages/Peliculas";
+import Series from "./pages/Series"
 
 // Importa los nuevos componentes
 import Informacion from "./pages/Informacion";
@@ -40,11 +42,12 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/Home" element={<Home />} />
           <Route path="/Perfil" element={<Perfil />}>
-            {/* Rutas anidadas solo accesibles desde /Perfil */}
-            <Route path="Informacion" element={<Informacion />} />
+            <Route index path="Informacion" element={<Informacion />} />
             <Route path="Historial" element={<Historial />} />
             <Route path="Lista" element={<Lista />} />
           </Route>
+          <Route path="/Peliculas" element={<Peliculas />} />
+          <Route path="/Series" element={<Series />} />
         </Route>
       </Routes>
     </BrowserRouter>

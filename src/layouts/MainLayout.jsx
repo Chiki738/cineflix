@@ -6,7 +6,7 @@ function MainLayout() {
   return (
     <>
       <HeaderMain />
-      <div style={{ marginTop: "56px" }}>
+      <div style={{ marginTop: "68px"}}>
         <Outlet />
       </div>
       <Footer />
