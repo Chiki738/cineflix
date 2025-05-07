@@ -25,7 +25,7 @@ function Perfil() {
       </div>
 
       <div
-        className="container text-center bs-tertiary-color-rgb py-3 px-5 rounded-3"
+        className="container text-center bs-tertiary-color-rgb py-3 px-5 rounded-3 shadow-lg"
         style={{ backgroundColor: "#212529" }}>
         {/* Fondo gris oscuro */}
         <div className="row">
