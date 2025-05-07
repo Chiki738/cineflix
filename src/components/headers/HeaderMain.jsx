@@ -1,4 +1,5 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
+import { useState } from "react";
 import perfilImg from "../../assets/img/perfil.jpg";
 import "../../assets/styles/HeaderMain.css";
 
@@ -21,6 +22,25 @@ function HeaderMain() {
     "Suspenso",
     "Terror",
   ];
+
+  // Estado para controlar la visibilidad del offcanvas
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Función para abrir y cerrar el offcanvas
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+    if (!isOpen) {
+      document.body.style.overflow = "hidden"; // Desactivar el scroll
+    } else {
+      document.body.style.overflow = "auto"; // Restaurar el scroll
+    }
+  };
+
+  // Función para manejar el clic en un enlace y cerrar el menú
+  const handleLinkClick = () => {
+    setIsOpen(false); // Cerrar el menú
+    document.body.style.overflow = "auto"; // Restaurar el scroll
+  };
 
   return (
     <nav className="navbar bg-dark fixed-top px-2" data-bs-theme="dark">
@@ -76,7 +96,8 @@ function HeaderMain() {
                         .replace(/ /g, "")
                         .normalize("NFD")
                         .replace(/[\u0300-\u036f]/g, "")}`}
-                      className="dropdown-item">
+                      className="dropdown-item"
+                      onClick={handleLinkClick}>
                       {cat}
                     </Link>
                   </li>
@@ -116,9 +137,7 @@ function HeaderMain() {
           <button
             className="navbar-toggler border-0 p-1 d-lg-none"
             type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasNavbar"
-            aria-controls="offcanvasNavbar"
+            onClick={toggleMenu} // Abre y cierra el menú con un solo clic
             style={{ boxShadow: "none" }}>
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -140,7 +159,7 @@ function HeaderMain() {
             </a>
             <ul className="dropdown-menu dropdown-menu-end">
               <li>
-                <Link to="/Perfil" className="dropdown-item">
+                <Link to="/Perfil/Informacion" className="dropdown-item">
                   Perfil <i className="fa-solid fa-user"></i>
                 </Link>
               </li>
@@ -156,7 +175,7 @@ function HeaderMain() {
 
       {/* Menú lateral móvil */}
       <div
-        className="offcanvas offcanvas-end"
+        className={`offcanvas offcanvas-end ${isOpen ? "show" : ""}`}
         tabIndex="-1"
         id="offcanvasNavbar"
         aria-labelledby="offcanvasNavbarLabel">
@@ -168,22 +187,24 @@ function HeaderMain() {
             type="button"
             className="btn-close"
             data-bs-dismiss="offcanvas"
-            aria-label="Close"></button>
+            aria-label="Close"
+            onClick={toggleMenu}></button>{" "}
+          {/* Cierra el menú */}
         </div>
         <div className="offcanvas-body">
           <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li className="nav-item">
-              <Link className="nav-link" to="/Home">
+              <Link className="nav-link" to="/Home" onClick={handleLinkClick}>
                 Inicio
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="#">
+              <Link className="nav-link" to="#" onClick={handleLinkClick}>
                 Películas
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="#">
+              <Link className="nav-link" to="#" onClick={handleLinkClick}>
                 Series
               </Link>
             </li>
@@ -204,7 +225,8 @@ function HeaderMain() {
                         .replace(/ /g, "")
                         .normalize("NFD")
                         .replace(/[\u0300-\u036f]/g, "")}`}
-                      className="dropdown-item">
+                      className="dropdown-item"
+                      onClick={handleLinkClick}>
                       {cat}
                     </Link>
                   </li>
@@ -212,7 +234,10 @@ function HeaderMain() {
               </ul>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/Perfil/Lista">
+              <Link
+                className="nav-link"
+                to="/Perfil/Lista"
+                onClick={handleLinkClick}>
                 Mi lista
               </Link>
             </li>

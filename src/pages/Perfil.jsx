@@ -8,7 +8,7 @@ function Perfil() {
   const [mostrarModal, setMostrarModal] = useState(false); // Estado del modal
 
   return (
-    <div className="bg-black p-5 min-vh-100">
+    <div className="bg-black p-sm-5 p-3 min-vh-100">
       <div className="d-flex flex-column justify-content-center align-items-center gap-4">
         <img
           src={perfilImg}
@@ -31,7 +31,7 @@ function Perfil() {
         <div className="row">
           <Link
             to="Informacion"
-            className={`col btn fw-bold rounded-3 px-1 py-2${
+            className={`col-12 col-sm-4 btn fw-bold rounded-3 px-1 py-2${
               location.pathname.includes("/Perfil/Informacion")
                 ? " bg-white text-dark"
                 : " text-white bg-transparent"
@@ -40,7 +40,7 @@ function Perfil() {
           </Link>
           <Link
             to="Historial"
-            className={`col btn fw-bold rounded-3 px-1 py-2${
+            className={`col-12 col-sm-4 btn fw-bold rounded-3 px-1 py-2${
               location.pathname.includes("/Perfil/Historial")
                 ? " bg-white text-dark"
                 : " text-white bg-transparent"
@@ -49,7 +49,7 @@ function Perfil() {
           </Link>
           <Link
             to="Lista"
-            className={`col btn fw-bold rounded-3 px-1 py-2${
+            className={`col-12 col-sm-4 btn fw-bold rounded-3 px-1 py-2${
               location.pathname.includes("/Perfil/Lista")
                 ? " bg-white text-dark"
                 : " text-white bg-transparent"
@@ -62,7 +62,7 @@ function Perfil() {
       {/* Modal */}
       {mostrarModal && <CambiarFoto onClose={() => setMostrarModal(false)} />}
 
-      <div className="p-4">
+      <div className="p-sm-4 px-1 py-3">
         <Outlet />
       </div>
     </div>
