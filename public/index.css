@@ -22,3 +22,15 @@ a {
   flex-direction: column;
   justify-content: space-between;
 }
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE y Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari */
+}

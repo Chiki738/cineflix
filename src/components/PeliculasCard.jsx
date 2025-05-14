@@ -2,13 +2,13 @@ import FotoPortada from "../assets/img/transformers.jpg";
 
 function PeliculasCard() {
   return (
-    <div className="card mx-3 mb-4" style={{ width: "18rem" }}>
+    <div className="card mx-3 mb-4 bg-dark" style={{ width: "18rem" }}>
       <div className="text-center">
         <img src={FotoPortada} className="rounded img-fluid" alt="Transformers" />
       </div>
 
       <div className="card-body">
-        <h5 className="card-title text-center">Transformers</h5>
+        <h5 className="card-title text-center text-white">Transformers</h5>
 
         <div className="d-flex flex-column align-items-center gap-3 mt-4">
           <button
