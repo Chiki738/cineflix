@@ -1,10 +1,15 @@
 import FotoPortada from "../assets/img/transformers.jpg";
+import { Link } from "react-router-dom";
 
 function PeliculasCard() {
   return (
     <div className="card mx-3 mb-4 bg-dark" style={{ width: "18rem" }}>
       <div className="text-center">
-        <img src={FotoPortada} className="rounded img-fluid" alt="Transformers" />
+        <img
+          src={FotoPortada}
+          className="rounded img-fluid"
+          alt="Transformers"
+        />
       </div>
 
       <div className="card-body">
@@ -18,12 +23,9 @@ function PeliculasCard() {
             GUARDAR EN LISTA
           </button>
 
-          <button
-            className="btn btn-info w-75"
-            data-bs-toggle="modal"
-            data-bs-target="#modalVerPelicula">
+          <Link to="/ver" className="btn btn-info w-75">
             VER
-          </button>
+          </Link>
         </div>
       </div>
     </div>

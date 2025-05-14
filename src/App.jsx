@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Perfil from "./pages/Perfil";
 import Peliculas from "./pages/Peliculas";
 import Series from "./pages/Series"
+import Ver from "./pages/Ver"
 
 // Importa los nuevos componentes
 import InformacionLayout from "./layouts/InformacionLayout";
@@ -48,6 +49,7 @@ function App() {
           </Route>
           <Route path="/Peliculas" element={<Peliculas />} />
           <Route path="/Series" element={<Series />} />
+          <Route path="/Ver" element={<Ver />} />
         </Route>
       </Routes>
     </BrowserRouter>
