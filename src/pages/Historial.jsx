@@ -1,11 +1,19 @@
+import PeliculasCard from "../components/PeliculasCard";
 
 function Historial() {
   return (
-    <>
-      <h3>Historial</h3>
-    </>
+    <div className="d-flex flex-wor align-items-start flex-wrap justify-content-center">
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+    </div>
   );
 }
 
 export default Historial;
-

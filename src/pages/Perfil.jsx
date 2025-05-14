@@ -1,14 +1,14 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useState } from "react";
 import perfilImg from "../assets/img/perfil.jpg";
-import CambiarFoto from "../components/CambiarFoto";
+import CambiarFoto from "../components/modals/CambiarFoto";
 
 function Perfil() {
   const location = useLocation();
   const [mostrarModal, setMostrarModal] = useState(false); // Estado del modal
 
   return (
-    <div className="bg-black p-sm-5 p-3 min-vh-100">
+    <div className="bg-black py-sm-5 px-sm-3 p-3 min-vh-100">
       <div className="d-flex flex-column justify-content-center align-items-center gap-4">
         <img
           src={perfilImg}
@@ -16,7 +16,7 @@ function Perfil() {
           alt="perfil"
         />
         <button
-          className="btn btn-secondary text-black"
+          className="btn btn-secondary text-black " 
           onClick={() => setMostrarModal(true)} // Abrir modal
         >
           CAMBIAR FOTO
@@ -25,7 +25,7 @@ function Perfil() {
       </div>
 
       <div
-        className="container text-center bs-tertiary-color-rgb py-3 px-5 rounded-3 shadow-lg"
+        className="text-center bs-tertiary-color-rgb py-3 px-5 mx-3 rounded-3 shadow-lg"
         style={{ backgroundColor: "#212529" }}>
         {/* Fondo gris oscuro */}
         <div className="row">
@@ -62,7 +62,7 @@ function Perfil() {
       {/* Modal */}
       {mostrarModal && <CambiarFoto onClose={() => setMostrarModal(false)} />}
 
-      <div className="p-sm-4 px-1 py-3">
+      <div className="px-3 py-4">
         <Outlet />
       </div>
     </div>

@@ -1,12 +1,9 @@
+function Informacion({ children }) {
+  return (
+    <div className="d-flex justify-content-center flex-wrap gap-4">
+      {children}
+    </div>
+  );
+}
 
-function Informacion() {
-    return (
-      <>
-        <h3>Informacion</h3>
-      </>
-    );
-  }
-  
-  export default Informacion;
-  
-  
+export default Informacion;

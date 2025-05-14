@@ -1,12 +1,109 @@
+import PeliculasCard from "../components/PeliculasCard";
 
 function Peliculas() {
-    return (
-      <>
-        <h3>Peliculas</h3>
-      </>
-    );
-  }
-  
-  export default Peliculas;
-  
-  
+  return (
+    <div className="min-vh-100 d-flex flex-wor align-items-start flex-wrap p-3 bg-black justify-content-center">
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+    </div>
+  );
+}
+
+export default Peliculas;

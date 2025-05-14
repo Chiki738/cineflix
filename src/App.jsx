@@ -11,7 +11,7 @@ import Peliculas from "./pages/Peliculas";
 import Series from "./pages/Series"
 
 // Importa los nuevos componentes
-import Informacion from "./pages/Informacion";
+import InformacionLayout from "./layouts/InformacionLayout";
 import Historial from "./pages/Historial";
 import Lista from "./pages/Lista";
 
@@ -42,7 +42,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/Home" element={<Home />} />
           <Route path="/Perfil" element={<Perfil />}>
-            <Route index path="Informacion" element={<Informacion />} />
+            <Route index path="Informacion" element={<InformacionLayout />} />
             <Route path="Historial" element={<Historial />} />
             <Route path="Lista" element={<Lista />} />
           </Route>

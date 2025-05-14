@@ -11,3 +11,14 @@ li {
 a {
   text-decoration: none;
 }
+
+.card-info {
+  width: 450px;
+  background: #18181b;
+  border-radius: 1rem;
+  padding: 2rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

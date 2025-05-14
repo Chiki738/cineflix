@@ -1,8 +1,108 @@
+import PeliculasCard from "../components/PeliculasCard";
+
 function Series() {
   return (
-    <>
-      <h3>Series</h3>
-    </>
+    <div className="min-vh-100 d-flex flex-wor align-items-start flex-wrap p-3 bg-black justify-content-center">
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+      <PeliculasCard />
+    </div>
   );
 }
 
