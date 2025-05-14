@@ -199,12 +199,15 @@ function HeaderMain() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="#" onClick={handleLinkClick}>
+              <Link
+                className="nav-link"
+                to="/Peliculas"
+                onClick={handleLinkClick}>
                 Películas
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="#" onClick={handleLinkClick}>
+              <Link className="nav-link" to="/Series" onClick={handleLinkClick}>
                 Series
               </Link>
             </li>

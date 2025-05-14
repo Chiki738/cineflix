@@ -49,7 +49,7 @@ function Home() {
           }}></div>
 
         {/* Contenido sobre fondo */}
-        <div className="d-flex flex-column justify-content-center align-items-start h-100 ps-3">
+        <div className="d-flex flex-column justify-content-center align-items-start vh-100 ps-3">
           <div style={{ width: "50%", zIndex: 1 }}>
             <h3 className="display-2 text-white fw-bold">DRAGON BALL</h3>
             <p className="text-white">
