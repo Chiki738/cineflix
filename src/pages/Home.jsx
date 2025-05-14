@@ -1,34 +1,8 @@
-import { useRef } from "react";
 import dragonball from "../assets/img/dragonball.jpg";
 import PeliculasCard from "../components/PeliculasCard";
 
 function Home() {
   // Refs para cada carrusel
-  const scrollRefs = useRef({});
-
-  // Función para manejar el drag
-  const handleMouseEvents = (e, categoria, type) => {
-    const el = scrollRefs.current[categoria];
-    if (!el) return;
-
-    if (type === "down") {
-      el.isDown = true;
-      el.startX = e.pageX - el.offsetLeft;
-      el.scrollLeftStart = el.scrollLeft;
-    }
-
-    if (type === "leave" || type === "up") {
-      el.isDown = false;
-    }
-
-    if (type === "move") {
-      if (!el.isDown) return;
-      e.preventDefault();
-      const x = e.pageX - el.offsetLeft;
-      const walk = (x - el.startX) * 2; // velocidad
-      el.scrollLeft = el.scrollLeftStart - walk;
-    }
-  };
 
   return (
     <div className="min-vh-100 bg-black pt-3 pb-5 pt-sm-0">
@@ -80,18 +54,8 @@ function Home() {
         <div className="ps-3 pe-3 mb-4" key={categoria}>
           <h3 className="text-white">{categoria}</h3>
           <div
-            ref={(el) => (scrollRefs.current[categoria] = el)}
-            className="d-flex gap-3 py-2 no-scrollbar"
-            style={{
-              overflowX: "auto",
-              whiteSpace: "nowrap",
-              scrollSnapType: "x mandatory",
-              cursor: "grab",
-            }}
-            onMouseDown={(e) => handleMouseEvents(e, categoria, "down")}
-            onMouseLeave={(e) => handleMouseEvents(e, categoria, "leave")}
-            onMouseUp={(e) => handleMouseEvents(e, categoria, "up")}
-            onMouseMove={(e) => handleMouseEvents(e, categoria, "move")}>
+            className="d-flex overflow-auto gap-3 py-2"
+            style={{ scrollSnapType: "x mandatory", whiteSpace: "nowrap" }}>
             {[...Array(10)].map((_, i) => (
               <div
                 key={i}
