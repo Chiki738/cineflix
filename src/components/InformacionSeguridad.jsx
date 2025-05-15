@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ConfirmarEliminar from "./modals/ConfirmarEliminar";
+import ConfirmarEliminar from "./modals/ConfirmarAccion";
 import CambiarContrasenia from "./modals/CambiarContrasenia";
 
 function InformacionSeguridad() {
@@ -55,7 +55,7 @@ function InformacionSeguridad() {
         <button
           className="btn btn-danger w-75"
           data-bs-toggle="modal"
-          data-bs-target="#modalEliminarCuenta">
+          data-bs-target="#modalEliminar">
           ELIMINAR CUENTA
         </button>
       </div>

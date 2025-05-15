@@ -8,19 +8,23 @@ import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import Perfil from "./pages/Perfil";
 import Peliculas from "./pages/Peliculas";
-import Series from "./pages/Series"
-import Ver from "./pages/Ver"
+import Series from "./pages/Series";
+import Ver from "./pages/Ver";
 
-// Importa los nuevos componentes
 import InformacionLayout from "./layouts/InformacionLayout";
 import Historial from "./pages/Historial";
 import Lista from "./pages/Lista";
+
+import AdminLayout from "./layouts/AdminLayout";
+import PeliculasAdmin from "./pages/PeliculasAdmin"
+import SeriesAdmin from "./pages/SeriesAdmin"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route index path="/" element={<LandingLayout />} />
+
         <Route
           path="/Registro"
           element={
@@ -50,6 +54,12 @@ function App() {
           <Route path="/Peliculas" element={<Peliculas />} />
           <Route path="/Series" element={<Series />} />
           <Route path="/Ver" element={<Ver />} />
+        </Route>
+
+        {/* Rutas futuras para AdminLayout */}
+        <Route element={<AdminLayout />}>
+          <Route path="/PeliculasAdmin" element={<PeliculasAdmin />} />
+          <Route path="/SeriesAdmin" element={<SeriesAdmin />} />
         </Route>
       </Routes>
     </BrowserRouter>

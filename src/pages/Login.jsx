@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../assets/styles/Login.css";
 
 function Login() {
@@ -65,6 +66,11 @@ function Login() {
           className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">
           INGRESAR
         </button>
+        <Link to="/PeliculasAdmin"
+          type="submit"
+          className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">
+          ADMIN
+        </Link>
         <p className="pb-0">
           ¿No tienes cuenta?&nbsp;
           <a href="/Registro" style={{ color: "white" }}>

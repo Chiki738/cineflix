@@ -1,10 +1,10 @@
-function ConfirmarEliminar() {
+function ConfirmarAccion() {
   return (
-    <div className="modal fade" id="modalEliminarCuenta" tabIndex="-1">
+    <div className="modal fade" id="modalEliminar" tabIndex="-1">
       <div className="modal-dialog modal-dialog-centered modal-sm">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Eliminar cuenta</h5>
+            <h5 className="modal-title">Eliminar</h5>
             <button
               type="button"
               className="btn-close"
@@ -13,7 +13,7 @@ function ConfirmarEliminar() {
           </div>
           <div className="modal-body">
             <p>
-              ¿Estás seguro de que deseas eliminar tu cuenta permanentemente?
+              ¿Estás seguro de que deseas proceder?
             </p>
           </div>
           <div className="modal-footer">
@@ -33,4 +33,4 @@ function ConfirmarEliminar() {
   );
 }
 
-export default ConfirmarEliminar;
+export default ConfirmarAccion;
