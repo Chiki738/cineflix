@@ -36,7 +36,7 @@ function Registro() {
       contrasena: form.password.value, // Aquí la contraseña sin encriptar
       fechaNacimiento: form.birthDate.value,
       telefono: form.phone.value,
-      foto: "perfil.jpg",
+      foto:"https://lc.cx/bu3dOF",
       rol: "USER",
       // No enviamos aún plan
     };

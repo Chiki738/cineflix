@@ -1,20 +1,22 @@
-// authService.js
 export async function loginUser(credentials) {
-  const response = await fetch("http://localhost:8080/api/usuarios/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(credentials),
-  });
+  const urls = [
+    { url: "http://localhost:8080/api/admins/login", rolEsperado: "ADMIN" },
+    { url: "http://localhost:8080/api/usuarios/login", rolEsperado: "USER" },
+  ];
 
-  if (response.status === 403) {
-    throw new Error(
-      "Acceso prohibido: credenciales incorrectas o sin permisos"
-    );
+  for (const { url, rolEsperado } of urls) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(credentials),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.rol === rolEsperado) return data;
+    }
   }
 
-  if (!response.ok) {
-    throw new Error("Error de autenticación");
-  }
-
-  return await response.json();
+  // Si ninguna API respondió correctamente
+  throw new Error("Credenciales incorrectas");
 }
