@@ -1,94 +1,160 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import "../assets/styles/Registro.css";
-// import useRegister from "../hooks/useRegister";
 
 function Registro() {
-  //   const { formData, handleChange, handleRegister } = useRegister();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMatch, setPasswordMatch] = useState(true);
+  const navigate = useNavigate();
+
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setPasswordMatch(newPassword === confirmPassword);
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    const newConfirmPassword = e.target.value;
+    setConfirmPassword(newConfirmPassword);
+    setPasswordMatch(password === newConfirmPassword);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!passwordMatch) {
+      alert("Las contraseñas no coinciden.");
+      return;
+    }
+
+    const form = e.target;
+    const userData = {
+      nombre: form.name.value,
+      apellidos: form.lastName.value,
+      email: form.email.value,
+      contrasena: form.password.value, // Aquí la contraseña sin encriptar
+      fechaNacimiento: form.birthDate.value,
+      telefono: form.phone.value,
+      foto: "perfil.jpg",
+      rol: "USER",
+      // No enviamos aún plan
+    };
+
+    // Guardar datos en localStorage para usar en el pago
+    localStorage.setItem("user", JSON.stringify(userData));
+
+    // Solo redirigimos a la página de pagos para que el usuario seleccione el plan
+    alert("Registro exitoso. Ahora selecciona tu plan.");
+    navigate("/Pagos");
+  };
 
   return (
     <div className="formRegistro d-flex flex-column justify-content-center align-items-center text-white text-center p-5">
       <form
-        // onSubmit={handleRegister}
-        className="d-flex flex-column justify-content-center align-items-center p-4 rounded-2">
-        <h3 className="fw-bold">REGISTRATE</h3>
+        onSubmit={handleSubmit}
+        className="w-100 p-4"
+        style={{ maxWidth: "500px" }}>
+        <h3 className="fw-bold mb-4">REGÍSTRATE</h3>
 
-        <div className="mb-3">
-          <input
-            type="text"
-            placeholder="Ingresar primer nombre"
-            className="form-control"
-            style={{ width: "300px" }}
-            id="name"
-            // value={formData.name}
-            // onChange={handleChange}
-            required
-          />
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Primer nombre"
+              id="name"
+              name="name"
+              required
+            />
+          </div>
+
+          <div className="col-md-6 mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Primer apellido"
+              id="lastName"
+              name="lastName"
+              required
+            />
+          </div>
+
+          <div className="col-12 mb-3">
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Correo electrónico"
+              id="email"
+              name="email"
+              required
+            />
+          </div>
+
+          <div className="col-md-6 mb-3">
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Contraseña"
+              id="password"
+              name="password"
+              value={password}
+              onChange={handlePasswordChange}
+              required
+            />
+          </div>
+
+          <div className="col-md-6 mb-3">
+            <input
+              type={`password`}
+              className={`form-control ${!passwordMatch ? "is-invalid" : ""}`}
+              placeholder="Confirmar contraseña"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              required
+            />
+            {!passwordMatch && (
+              <div className="invalid-feedback">
+                Las contraseñas no coinciden.
+              </div>
+            )}
+          </div>
+
+          <div className="col-md-6 mb-3">
+            <input
+              type="date"
+              className="form-control"
+              placeholder="Fecha de nacimiento"
+              id="birthDate"
+              name="birthDate"
+              required
+            />
+          </div>
+
+          <div className="col-md-6 mb-4">
+            <input
+              type="tel"
+              className="form-control"
+              placeholder="Número telefónico"
+              id="phone"
+              name="phone"
+              required
+            />
+          </div>
         </div>
 
-        <div className="mb-3">
-          <input
-            type="text"
-            placeholder="Ingresar primer apellido"
-            className="form-control"
-            style={{ width: "300px" }}
-            id="lastName"
-            // value={formData.lastName}
-            // onChange={handleChange}
-            required
-          />
-        </div>
+        <button
+          type="submit"
+          className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">
+          REGISTRARSE
+        </button>
 
-        <div className="mb-3">
-          <input
-            type="email"
-            placeholder="Ingresar correo electrónico"
-            className="form-control"
-            style={{ width: "300px" }}
-            id="email"
-            // value={formData.email}
-            // onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="mb-3">
-          <input
-            type="password"
-            placeholder="Ingresar contraseña"
-            className="form-control"
-            style={{ width: "300px" }}
-            id="password"
-            // value={formData.password}
-            // onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="mb-3">
-          <input
-            type="password"
-            placeholder="Confirmar contraseña"
-            className="form-control"
-            style={{ width: "300px" }}
-            id="confirmPassword" // ID diferente para el campo de confirmación
-            // value={formData.confirmPassword}
-            // onChange={handleChange}
-            required
-          />
-        </div>
-
-        <Link to="/Pagos">
-          <button
-            type="submit"
-            className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">
-            REGISTRARSE
-          </button>
-        </Link>
-
-        <p className="pb-0">
+        <p className="pt-3">
           ¿Ya tienes una cuenta?&nbsp;
           <Link to="/Login" style={{ color: "white" }}>
-            <strong>Iniciar Sesión</strong>
+            <strong>Iniciar sesión</strong>
           </Link>
         </p>
       </form>

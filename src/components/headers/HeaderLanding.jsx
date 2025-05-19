@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "../../assets/styles/HeaderLanding.css";
 
-function Header() {
+function HeaderLanding() {
   return (
     <header
       className="navbar bg-dark border-bottom border-body px-2 px-sm-3"
@@ -23,4 +23,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default HeaderLanding;

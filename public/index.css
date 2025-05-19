@@ -34,3 +34,7 @@ a {
   display: none;
   /* Chrome, Safari */
 }
+
+.form-input {
+  width: 300px;
+}

@@ -1,4 +1,3 @@
-// import { Link } from "react-router-dom";
 import HeaderLanding from "../components/headers/HeaderLanding.jsx";
 import Landing from "../pages/Landing.jsx";
 import Footer from "../components/Footer.jsx";

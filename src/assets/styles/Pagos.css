@@ -1,65 +1,47 @@
-.pagosContainer {
-    background-image: url('../img/fondo.jpg');
-    min-height: 100vh;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+ .pagosContainer {
+     background-image: url('../img/fondo.jpg');
+     min-height: 100vh;
+     background-repeat: no-repeat;
+     background-size: cover;
+ }
 
-.pagosContainer>div {
-    background-color: rgba(0, 0, 0, 0.6);
-}
+ .pagosContainer>div {
+     background-color: rgba(0, 0, 0, 0.6);
+ }
 
-.pagosContainer>div>* {
-    margin-bottom: 20px;
-}
+ .pagosContainer>div>* {
+     margin-bottom: 20px;
+ }
 
-.pagosContainer h2 {
-    font-size: clamp(2.8rem, 2.167rem + 1.759vw, 3.75rem)
-}
+ .pagosContainer h2 {
+     font-size: clamp(2.8rem, 2.167rem + 1.759vw, 3.75rem)
+ }
 
-.pagosContainer .btn-check+.btn {
-    color: #ffffff;
-    border: none;
-    background-color: transparent;
-}
+ .pagosContainer .btn-check+.btn {
+     color: #ffffff;
+     border: none;
+     background-color: transparent;
+ }
 
-.pagosContainer .btn-check+.btn:hover {
-    background-color: transparent;
-    color: #ffffff;
-}
+ .pagosContainer .btn-check:checked+.btn {
+     background-color: #06D6A0;
+     color: #000000;
+     outline: 2px solid #000000;
+ }
 
-.pagosContainer .btn-check:checked+.btn {
-    background-color: #06D6A0;
-    color: #000000;
-    outline: 2px solid #000000;
-}
+ .pagosContainer li::before {
+     content: "✅";
+ }
 
-.pagosContainer .card-body {
-    text-align: justify;
-}
+ .pagosContainer .btnSeleccionar {
+     background-color: #031633;
+ }
 
-.pagosContainer li::before {
-    content: "✅";
-}
+ .pagosContainer .btnSeleccionar {
+     background-color: #031633;
+ }
 
-.pagosContainer h5 {
-    font-size: clamp(1.25rem, 1.083rem + 0.463vw, 1.5rem) !important
-}
-
-.pagosContainer h6 {
-    text-align: center;
-    font-size: clamp(2.5rem, 2.083rem + 1.157vw, 3.125rem)
-}
-
-.pagosContainer .btnSeleccionar {
-    background-color: #031633;
-}
-
-.pagosContainer .btnSeleccionar {
-    background-color: #031633;
-}
-
-.pagosContainer .btnSeleccionar:hover {
-    box-shadow: 0 0 10px #031633;
-    background-color: #28579e;
-}
+ .pagosContainer .btnSeleccionar:hover {
+     box-shadow: 0 0 10px #031633;
+     background-color: #28579e;
+ }

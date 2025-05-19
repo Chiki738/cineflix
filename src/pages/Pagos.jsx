@@ -1,9 +1,62 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { obtenerPlanes } from "../services/planService";
+import { registerUser } from "../services/registerService"; // Usamos el servicio para enviar usuario con plan
 import "../assets/styles/Pagos.css";
 
 function Pagos() {
-  const [opcion, setOpcion] = useState("1");
+  const [opcion, setOpcion] = useState("1"); // mensual o anual
+  const [planes, setPlanes] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const cargarPlanes = async () => {
+      try {
+        const datos = await obtenerPlanes();
+        setPlanes(datos);
+      } catch (error) {
+        console.error("Error al cargar los planes:", error.message);
+      }
+    };
+    cargarPlanes();
+  }, []);
+
+  const elegirPlan = async (plan) => {
+    try {
+      // Obtener usuario del localStorage
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        alert("No hay datos de usuario, por favor regístrate primero.");
+        navigate("/Registro");
+        return;
+      }
+
+      // Agregar datos del plan al usuario
+      const modalidad = opcion === "1" ? "mensual" : "anual";
+
+      const usuarioConPlan = {
+        ...user,
+        plan_seleccionado: plan.nombre,
+        modalidad_plan: modalidad,
+        fecha_inicio_plan: new Date().toISOString(),
+        fecha_fin_plan: new Date(
+          new Date().setMonth(
+            new Date().getMonth() + (modalidad === "mensual" ? 1 : 12)
+          )
+        ).toISOString(),
+      };
+
+      // Enviar datos completos al backend
+      await registerUser(usuarioConPlan);
+
+      // Limpiar localStorage y redirigir
+      localStorage.removeItem("user");
+      alert("Plan seleccionado y registro completo.");
+      navigate("/Login");
+    } catch (error) {
+      alert("Error al seleccionar plan: " + error.message);
+    }
+  };
 
   return (
     <div className="pagosContainer d-flex justify-content-center align-items-center text-center text-white p-sm-5 px-1 py-5">
@@ -45,79 +98,33 @@ function Pagos() {
           </div>
         </div>
 
-        <div className="mt-3">
-          {["1", "2"].includes(opcion) && (
-            <>
-              <p className="fs-6">
-                Contenido del plan {opcion === "1" ? "mensual" : "anual"}
-              </p>
-              <div className="row">
-                {[
-                  {
-                    nombre: "Básico",
-                    precio: opcion === "1" ? "FREE" : "FREE",
-                    beneficios: [
-                      "Video en HD (1080p)",
-                      "1 pantalla simultanea",
-                      "Sin descargas offline",
-                      "Acceso al catálogo estándar",
-                      "Reproducción con anuncios",
-                    ],
-                  },
-                  {
-                    nombre: "Premium",
-                    precio: opcion === "1" ? "$5/mes" : "$50/anual",
-                    beneficios: [
-                      "Video en HD (1080p)",
-                      "2 pantallas simultaneas",
-                      "Descargas offline (Hasta 5)",
-                      "Acceso al catálogo completo",
-                      "Reproducción sin anuncios",
-                    ],
-                  },
-                  {
-                    nombre: "Vip",
-                    precio: opcion === "1" ? "$10/mes" : "$100/anual",
-                    beneficios: [
-                      "Video en HD (1080p) y HDR",
-                      "4 pantallas simultaneas",
-                      "Descargas ilimitadas",
-                      "Estrenos exclusivos",
-                      "Perfiles personalizados",
-                      "Soporte al cliente personalizado",
-                    ],
-                  },
-                ].map((plan, i) => (
-                  <div
-                    key={i}
-                    className="col-12 col-md-6 col-xl-4 d-flex align-items-stretch mb-5 mb-md-5 mb-xl-0 flex-wrap">
-                    <div className="card w-100 h-100">
-                      <div className="card-body d-flex flex-column">
-                        <h5 className="card-title">
-                          <strong>{plan.nombre}</strong>
-                        </h5>
-                        <h6 className="mb-4">{plan.precio}</h6>
-                        <ul className="text-start flex-grow-1 ps-md-0 ps-sm-5 ps-2">
-                          {plan.beneficios.map((b, j) => (
-                            <li key={j} className="mb-2">
-                              &#32;{b}
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="mt-auto d-flex justify-content-center">
-                          <Link
-                            to="/Login"
-                            className="btnSeleccionar btn px-sm-4 py-sm-1 px-2 fw-bold text-white rounded-3 border-success">
-                            Seleccionar
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+        <div
+          className="d-flex flex-wrap justify-content-center gap-4 mt-5"
+          style={{ width: "100%" }}>
+          {planes.map((plan) => {
+            const modalidad = opcion === "1" ? "mensual" : "anual";
+            const precio = plan.modalidades[modalidad]?.precio || 0;
+
+            return (
+              <div
+                key={plan.id}
+                className="plan p-4 rounded-4 d-flex flex-column gap-2 justify-content-between bg-white"
+                style={{ minWidth: "330px" }}>
+                <h4 className="text-black text-start">{plan.nombre}</h4>
+                <h2 className="text-black">${precio}</h2>
+                <ul className="text-start text-black ps-0">
+                  {plan.caracteristicas.map((item, index) => (
+                    <li key={index}>&nbsp;{item}</li>
+                  ))}
+                </ul>
+                <button
+                  className="btnSeleccionar btn px-sm-4 py-sm-1 px-2 fw-bold text-white rounded-3 border-success"
+                  onClick={() => elegirPlan(plan)}>
+                  Elegir plan
+                </button>
               </div>
-            </>
-          )}
+            );
+          })}
         </div>
       </div>
     </div>

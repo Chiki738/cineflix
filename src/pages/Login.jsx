@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { loginUser } from "../services/authService";
 import "../assets/styles/Login.css";
 
 function Login() {
@@ -9,55 +9,57 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const toggle = () => setShowPassword(!showPassword);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      //   const data = await loginUser(email, password);
-      navigate("/Home");
+      const response = await loginUser({ email, contrasena: password });
+
+      if (response.rol === "ADMIN" || response.rol === "USER") {
+        const user = { email: response.email, rol: response.rol };
+        localStorage.setItem("user", JSON.stringify(user));
+        navigate(response.rol === "ADMIN" ? "/PeliculasAdmin" : "/Home");
+      } else {
+        alert("Credenciales incorrectas");
+      }
     } catch (error) {
-      alert("Credenciales incorrectas");
+      alert("Error al iniciar sesión");
       console.error("Error de inicio de sesión:", error);
     }
   };
 
-  const togglePassword = () => setShowPassword(!showPassword);
-
   return (
     <div className="formLogin d-flex flex-column justify-content-center align-items-center text-white text-center">
-      <form
-        onSubmit={handleLogin}
-        className="d-flex flex-column justify-content-center align-items-center p-4 rounded-2">
+      <form onSubmit={handleLogin} className="d-flex flex-column p-4 rounded-2">
         <h3>INICIAR SESIÓN</h3>
-        <div className="mb-3">
-          <input
-            type="email"
-            placeholder="Ingresar correo electrónico"
-            className="form-control"
-            style={{ width: "300px" }}
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="input-group mb-3">
+
+        <input
+          type="email"
+          placeholder="Ingresar correo electrónico"
+          className="form-control mb-3"
+          style={{ width: "300px" }}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <div className="input-group mb-3" style={{ width: "300px" }}>
           <input
             type={showPassword ? "text" : "password"}
             className="form-control"
             placeholder="Ingresar contraseña"
-            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <button
-            className="btn btn-outline-secondary"
             type="button"
-            onClick={togglePassword}>
+            className="btn btn-outline-secondary"
+            onClick={toggle}>
             <i
-              className={`fa-solid ${
-                showPassword ? "fa-eye-slash" : "fa-eye"
-              }`}></i>
+              className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+            />
           </button>
         </div>
 
@@ -66,16 +68,12 @@ function Login() {
           className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">
           INGRESAR
         </button>
-        <Link to="/PeliculasAdmin"
-          type="submit"
-          className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">
-          ADMIN
-        </Link>
-        <p className="pb-0">
+
+        <p className="pt-3">
           ¿No tienes cuenta?&nbsp;
-          <a href="/Registro" style={{ color: "white" }}>
-            <strong>Registrate</strong>
-          </a>
+          <Link to="/Registro" style={{ color: "white" }}>
+            <strong>Regístrate</strong>
+          </Link>
         </p>
       </form>
     </div>
