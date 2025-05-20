@@ -8,6 +8,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  
 
   const toggle = () => setShowPassword(!showPassword);
 
@@ -28,6 +29,8 @@ function Login() {
       console.error("Error de inicio de sesión:", error);
     }
   };
+
+  
 
   return (
     <div className="formLogin d-flex flex-column justify-content-center align-items-center text-white text-center">

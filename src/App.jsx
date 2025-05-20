@@ -17,6 +17,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import PeliculasAdmin from "./pages/PeliculasAdmin";
 import SeriesAdmin from "./pages/SeriesAdmin";
 import ProtectedRoute from "../src/routes/ProtectedRoute";
+import Analisis from "./pages/Analisis"
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
           <Route element={<AdminLayout />}>
             <Route path="/PeliculasAdmin" element={<PeliculasAdmin />} />
             <Route path="/SeriesAdmin" element={<SeriesAdmin />} />
+            <Route path="/Analisis" element={<Analisis />} />
           </Route>
         </Route>
       </Routes>

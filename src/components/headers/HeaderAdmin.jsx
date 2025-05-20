@@ -1,10 +1,18 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { logoutUser } from "../../services/logout";
 
 function HeaderAdmin() {
   const linkStyle = ({ isActive }) => ({
     color: isActive ? "white" : "gray",
     textDecoration: "none",
   });
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutUser();
+    navigate("/Login");
+  };
 
   return (
     <nav className="navbar navbar-expand-lg bg-dark">
@@ -41,38 +49,15 @@ function HeaderAdmin() {
                 Series
               </NavLink>
             </li>
-            <li className="nav-item"></li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Analisis de
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Series
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Pagos
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Categorias
-                  </a>
-                </li>
-              </ul>
+            <li className="nav-item">
+              <NavLink to="/Analisis" style={linkStyle} className="nav-link">
+                Analisis
+              </NavLink>
             </li>
           </ul>
-          <NavLink to="/Login" className="btn text-white m-0 ms-3">
+          <button onClick={handleLogout} className="btn text-white m-0 ms-3">
             Cerrar Sesión
-          </NavLink>
+          </button>
         </div>
       </div>
     </nav>

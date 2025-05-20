@@ -1,7 +1,8 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import perfilImg from "../../assets/img/perfil.jpg";
 import "../../assets/styles/HeaderMain.css";
+import { logoutUser } from "../../services/logout";
 
 function HeaderMain() {
   const location = useLocation();
@@ -40,6 +41,13 @@ function HeaderMain() {
   const handleLinkClick = () => {
     setIsOpen(false); // Cerrar el menú
     document.body.style.overflow = "auto"; // Restaurar el scroll
+  };
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutUser();
+    navigate("/Login");
   };
 
   return (
@@ -164,9 +172,12 @@ function HeaderMain() {
                 </Link>
               </li>
               <li>
-                <Link to="/Login" className="dropdown-item">
+                <a
+                  onClick={handleLogout}
+                  className="dropdown-item"
+                  role="button">
                   Salir <i className="fa-solid fa-right-from-bracket"></i>
-                </Link>
+                </a>
               </li>
             </ul>
           </div>

@@ -1,168 +1,335 @@
 import { useState } from "react";
+import { crearPelicula } from "../../services/peliculaAgregarService";
+import {
+  buscarPeliculasPorNombre,
+  buscarDetallesPorTitulo,
+} from "../../services/omdbService";
 
-function AgregarPelicula() {
-  const [imagenPreview, setImagenPreview] = useState(null);
+function AgregarPelicula({ onPeliculaAgregada }) {
+  const [id, setId] = useState("");
+  const [titulo, setTitulo] = useState("");
+  const [sugerencias, setSugerencias] = useState([]);
+  const [pelicula, setPelicula] = useState({});
   const [mostrarAlerta, setMostrarAlerta] = useState(false);
+  const [generoSeleccionado, setGeneroSeleccionado] = useState("");
+  const [imagenPreview, setImagenPreview] = useState(null);
 
-  const handleImagenChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImagenPreview(URL.createObjectURL(file));
+  const [actores, setActores] = useState([]);
+  const [directores, setDirectores] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [youtubeUrl, setYoutubeUrl] = useState("");
+
+  const buscarSugerencias = async (query) => {
+    if (query.length < 2) return setSugerencias([]);
+    const resultados = await buscarPeliculasPorNombre(query);
+    setSugerencias(resultados.slice(0, 5));
+  };
+
+  const seleccionarPelicula = async (tituloSeleccionado) => {
+    setTitulo(tituloSeleccionado);
+    const datos = await buscarDetallesPorTitulo(tituloSeleccionado);
+
+    const actoresArray = datos.Actors
+      ? datos.Actors.split(",").map((a) => a.trim())
+      : [];
+    const directoresArray = datos.Director
+      ? datos.Director.split(",").map((d) => d.trim())
+      : [];
+
+    const peliculaFormateada = {
+      titulo: datos.Title,
+      descripcion: datos.Plot,
+      duracion: parseInt(datos.Runtime) || 0,
+      anio: datos.Year || "",
+      actores: actoresArray,
+      directores: directoresArray,
+      rating: parseFloat(datos.imdbRating) || 0,
+      portada: datos.Poster,
+    };
+
+    setPelicula(peliculaFormateada);
+    setImagenPreview(peliculaFormateada.portada);
+    setActores(peliculaFormateada.actores);
+    setDirectores(peliculaFormateada.directores);
+    setRating(peliculaFormateada.rating);
+    setSugerencias([]);
+  };
+
+  const limpiarFormulario = () => {
+    setId("");
+    setTitulo("");
+    setPelicula({});
+    setGeneroSeleccionado("");
+    setImagenPreview(null);
+    setActores([]);
+    setDirectores([]);
+    setRating(0);
+    setYoutubeUrl("");
+    setSugerencias([]);
+  };
+
+  const handleGuardar = async () => {
+    try {
+      const nuevaPelicula = {
+        id,
+        titulo,
+        portada: imagenPreview,
+        descripcion: pelicula.descripcion,
+        duracion: pelicula.duracion,
+        anio: pelicula.anio,
+        categoria: generoSeleccionado,
+        actores,
+        directores,
+        rating,
+        youtubeUrl,
+      };
+
+      await crearPelicula(nuevaPelicula);
+
+      // Cerrar modal inmediatamente
+      const botonCerrar = document.querySelector(
+        "#modalAgregarPelicula .btn-close"
+      );
+      if (botonCerrar) botonCerrar.click();
+
+      limpiarFormulario();
+
+      // Esperar 1 segundo antes de mostrar alerta
+      setTimeout(() => {
+        setMostrarAlerta(true);
+
+        // Ocultar alerta después de 3 segundos
+        setTimeout(() => setMostrarAlerta(false), 3000);
+      }, 1000);
+
+      if (onPeliculaAgregada) {
+        onPeliculaAgregada();
+      }
+    } catch (error) {
+      console.error("Error al guardar la película:", error);
     }
   };
 
-  const handleGuardar = () => {
-    // Aquí iría tu lógica para guardar los datos
-    setMostrarAlerta(true);
-    setTimeout(() => setMostrarAlerta(false), 3000);
-  };
-
   return (
-    <div
-      className="modal fade"
-      id="modalAgregarPelicula"
-      tabIndex="-1"
-      aria-hidden="true">
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Agregar Película</h5>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"></button>
-          </div>
+    <>
+      {/* ALERTA FUERA DEL MODAL para que sea visible cuando el modal está cerrado */}
+      {mostrarAlerta && (
+        <div
+          className="alert alert-success text-center"
+          role="alert"
+          style={{ position: "fixed", top: 20, right: 20, zIndex: 1055 }}>
+          Película guardada correctamente.
+        </div>
+      )}
 
-          <div className="modal-body">
-            {/* Alerta Bootstrap */}
-            {mostrarAlerta && (
-              <div className="alert alert-success" role="alert">
-                Película guardada correctamente.
+      <div
+        className="modal fade"
+        id="modalAgregarPelicula"
+        tabIndex="-1"
+        aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Agregar Película</h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              {imagenPreview && (
+                <img
+                  src={imagenPreview}
+                  className="img-thumbnail mb-3 mx-auto d-block"
+                  alt="Portada"
+                  style={{ maxHeight: "300px" }}
+                />
+              )}
+
+              <div className="mb-3">
+                <label className="form-label">ID</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                />
               </div>
-            )}
 
-            {/* Imagen de portada */}
-            {imagenPreview && (
-              <img
-                src={imagenPreview}
-                className="img-thumbnail mb-3"
-                alt="Portada"
-              />
-            )}
+              <div className="mb-3 position-relative">
+                <label className="form-label">Nombre de la película</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={titulo}
+                  onChange={(e) => {
+                    setTitulo(e.target.value);
+                    buscarSugerencias(e.target.value);
+                  }}
+                />
+                {sugerencias.length > 0 && (
+                  <ul
+                    className="list-group"
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      zIndex: 1000,
+                      width: "100%",
+                    }}>
+                    {sugerencias.map((item, index) => (
+                      <li
+                        key={index}
+                        className="list-group-item list-group-item-action bg-light"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => seleccionarPelicula(item.Title)}>
+                        {item.Title} ({item.Year})
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
 
-            {/* Subir imagen */}
-            <div className="mb-3">
-              <label htmlFor="formFile" className="form-label">
-                Subir imagen desde PC
-              </label>
-              <input
-                className="form-control"
-                type="file"
-                id="formFile"
-                onChange={handleImagenChange}
-              />
-            </div>
+              <div className="mb-3">
+                <label className="form-label">Descripción</label>
+                <textarea
+                  className="form-control"
+                  value={pelicula.descripcion || ""}
+                  readOnly
+                />
+              </div>
 
-            {/* Nombre */}
-            <div className="mb-3">
-              <label className="form-label">Nombre de la película</label>
-              <input type="text" className="form-control" />
-            </div>
+              <div className="mb-3">
+                <label className="form-label">Duración (minutos)</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={pelicula.duracion || ""}
+                  readOnly
+                />
+              </div>
 
-            {/* Calificación */}
-            <div className="mb-3">
-              <label className="form-label">Calificación</label>
-              <input type="number" className="form-control" step="0.1" />
-            </div>
+              <div className="mb-3">
+                <label className="form-label">Año</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={pelicula.anio || ""}
+                  readOnly
+                />
+              </div>
 
-            {/* Descripción con validación */}
-            <div className="mb-3">
-              <label htmlFor="validationTextarea" className="form-label">
-                Descripción
-              </label>
-              <textarea
-                className="form-control"
-                id="validationTextarea"
-                placeholder="Agrega una descripción de la película"
-                required></textarea>
-              <div className="invalid-feedback">
-                Por favor, escribe una descripción.
+              <div className="mb-3">
+                <label className="form-label">Categoría</label>
+                <div className="d-flex flex-wrap gap-2">
+                  {[
+                    "Acción",
+                    "Animación",
+                    "Biográfico",
+                    "Ciencia Ficción",
+                    "Comedia",
+                    "Crimen",
+                    "Documental",
+                    "Drama",
+                    "Infantil",
+                    "Fantasia",
+                    "Romance",
+                    "Suspenso",
+                    "Terror",
+                  ].map((genero, index) => (
+                    <div key={index} className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="categoria"
+                        id={`categoria-${index}`}
+                        value={genero}
+                        checked={generoSeleccionado === genero}
+                        onChange={(e) => setGeneroSeleccionado(e.target.value)}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor={`categoria-${index}`}>
+                        {genero}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">
+                  Actores (separados por coma)
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={actores.join(", ")}
+                  onChange={(e) =>
+                    setActores(e.target.value.split(",").map((a) => a.trim()))
+                  }
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">
+                  Directores (separados por coma)
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={directores.join(", ")}
+                  onChange={(e) =>
+                    setDirectores(
+                      e.target.value.split(",").map((d) => d.trim())
+                    )
+                  }
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Rating</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="10"
+                  className="form-control"
+                  value={rating}
+                  onChange={(e) => setRating(parseFloat(e.target.value))}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">URL de YouTube (tráiler)</label>
+                <input
+                  type="url"
+                  className="form-control"
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  value={youtubeUrl}
+                  onChange={(e) => setYoutubeUrl(e.target.value)}
+                />
               </div>
             </div>
 
-            {/* Fecha */}
-            <div className="mb-3">
-              <label className="form-label">Fecha de publicación</label>
-              <input type="date" className="form-control" />
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal">
+                Cerrar
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleGuardar}>
+                Guardar
+              </button>
             </div>
-
-            {/* Duración */}
-            <div className="mb-3">
-              <label className="form-label">Duración (minutos)</label>
-              <input type="number" className="form-control" />
-            </div>
-
-            {/* Géneros */}
-            <div className="mb-3">
-              <label className="form-label">Géneros</label>
-              <div className="d-flex flex-wrap gap-2">
-                {[
-                  "Acción",
-                  "Animación",
-                  "Aventura",
-                  "Ciencia ficción",
-                  "Comedia",
-                  "Crimen",
-                  "Documental",
-                  "Drama",
-                  "Familiar / Infantil",
-                  "Fantasía",
-                  "Romance",
-                  "Suspenso",
-                  "Terror",
-                ].map((genero, index) => (
-                  <div key={index} className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id={`genero-${index}`}
-                      value={genero}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor={`genero-${index}`}>
-                      {genero}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Tráiler */}
-            <div className="mb-3">
-              <label className="form-label">Enlace del tráiler (YouTube)</label>
-              <input type="url" className="form-control" />
-            </div>
-          </div>
-
-          <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-bs-dismiss="modal">
-              Cerrar
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleGuardar}>
-              Guardar
-            </button>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
