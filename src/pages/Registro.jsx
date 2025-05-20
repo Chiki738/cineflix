@@ -1,53 +1,16 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../assets/styles/Registro.css";
+import { useRegistro } from "../hooks/useRegistro";
 
 function Registro() {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordMatch, setPasswordMatch] = useState(true);
-  const navigate = useNavigate();
-
-  const handlePasswordChange = (e) => {
-    const newPassword = e.target.value;
-    setPassword(newPassword);
-    setPasswordMatch(newPassword === confirmPassword);
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    const newConfirmPassword = e.target.value;
-    setConfirmPassword(newConfirmPassword);
-    setPasswordMatch(password === newConfirmPassword);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!passwordMatch) {
-      alert("Las contraseñas no coinciden.");
-      return;
-    }
-
-    const form = e.target;
-    const userData = {
-      nombre: form.name.value,
-      apellidos: form.lastName.value,
-      email: form.email.value,
-      contrasena: form.password.value, // Aquí la contraseña sin encriptar
-      fechaNacimiento: form.birthDate.value,
-      telefono: form.phone.value,
-      foto:"https://lc.cx/bu3dOF",
-      rol: "USER",
-      // No enviamos aún plan
-    };
-
-    // Guardar datos en localStorage para usar en el pago
-    localStorage.setItem("user", JSON.stringify(userData));
-
-    // Solo redirigimos a la página de pagos para que el usuario seleccione el plan
-    alert("Registro exitoso. Ahora selecciona tu plan.");
-    navigate("/Pagos");
-  };
+  const {
+    password,
+    confirmPassword,
+    passwordMatch,
+    handlePasswordChange,
+    handleConfirmPasswordChange,
+    handleSubmit,
+  } = useRegistro();
 
   return (
     <div className="formRegistro d-flex flex-column justify-content-center align-items-center text-white text-center p-5">
@@ -106,7 +69,7 @@ function Registro() {
 
           <div className="col-md-6 mb-3">
             <input
-              type={`password`}
+              type="password"
               className={`form-control ${!passwordMatch ? "is-invalid" : ""}`}
               placeholder="Confirmar contraseña"
               id="confirmPassword"

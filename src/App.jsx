@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LandingLayout from "./layouts/LandingLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import Registro from "./pages/Registro";
-import Pagos from "./pages/Pagos";
+import Planes from "./pages/Planes";
 import Login from "./pages/Login";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
@@ -33,7 +33,7 @@ function App() {
             </AuthLayout>
           }
         />
-        <Route path="/Pagos" element={<Pagos />} />
+        <Route path="/Planes" element={<Planes />} />
         <Route
           path="/Login"
           element={

@@ -17,6 +17,5 @@ export async function loginUser(credentials) {
     }
   }
 
-  // Si ninguna API respondió correctamente
   throw new Error("Credenciales incorrectas");
 }

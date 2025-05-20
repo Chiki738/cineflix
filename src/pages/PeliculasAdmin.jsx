@@ -152,7 +152,10 @@ function PeliculasAdmin() {
       </table>
 
       <AgregarPelicula onPeliculaAgregada={cargarPeliculas} />
-      <EditarPelicula pelicula={peliculaSeleccionada} />
+      <EditarPelicula
+        pelicula={peliculaSeleccionada}
+        onActualizar={cargarPeliculas}
+      />
       <ConfirmarEliminar
         pelicula={peliculaSeleccionada}
         onConfirm={() => eliminarPelicula(peliculaSeleccionada.id)}

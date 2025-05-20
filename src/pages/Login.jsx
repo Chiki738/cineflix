@@ -1,36 +1,17 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { loginUser } from "../services/authService";
+import { Link } from "react-router-dom";
+import { useLogin } from "../hooks/useLogin";
 import "../assets/styles/Login.css";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-  
-
-  const toggle = () => setShowPassword(!showPassword);
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await loginUser({ email, contrasena: password });
-
-      if (response.rol === "ADMIN" || response.rol === "USER") {
-        const user = { email: response.email, rol: response.rol };
-        localStorage.setItem("user", JSON.stringify(user));
-        navigate(response.rol === "ADMIN" ? "/PeliculasAdmin" : "/Home");
-      } else {
-        alert("Credenciales incorrectas");
-      }
-    } catch (error) {
-      alert("Error al iniciar sesión");
-      console.error("Error de inicio de sesión:", error);
-    }
-  };
-
-  
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    showPassword,
+    toggleShowPassword,
+    handleLogin,
+  } = useLogin();
 
   return (
     <div className="formLogin d-flex flex-column justify-content-center align-items-center text-white text-center">
@@ -59,7 +40,7 @@ function Login() {
           <button
             type="button"
             className="btn btn-outline-secondary"
-            onClick={toggle}>
+            onClick={toggleShowPassword}>
             <i
               className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
             />

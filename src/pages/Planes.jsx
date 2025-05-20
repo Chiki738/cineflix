@@ -1,62 +1,8 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { obtenerPlanes } from "../services/planService";
-import { registerUser } from "../services/registerService"; // Usamos el servicio para enviar usuario con plan
 import "../assets/styles/Pagos.css";
+import usePlanes from "../hooks/usePlanes";
 
-function Pagos() {
-  const [opcion, setOpcion] = useState("1"); // mensual o anual
-  const [planes, setPlanes] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const cargarPlanes = async () => {
-      try {
-        const datos = await obtenerPlanes();
-        setPlanes(datos);
-      } catch (error) {
-        console.error("Error al cargar los planes:", error.message);
-      }
-    };
-    cargarPlanes();
-  }, []);
-
-  const elegirPlan = async (plan) => {
-    try {
-      // Obtener usuario del localStorage
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (!user) {
-        alert("No hay datos de usuario, por favor regístrate primero.");
-        navigate("/Registro");
-        return;
-      }
-
-      // Agregar datos del plan al usuario
-      const modalidad = opcion === "1" ? "mensual" : "anual";
-
-      const usuarioConPlan = {
-        ...user,
-        plan_seleccionado: plan.nombre,
-        modalidad_plan: modalidad,
-        fecha_inicio_plan: new Date().toISOString(),
-        fecha_fin_plan: new Date(
-          new Date().setMonth(
-            new Date().getMonth() + (modalidad === "mensual" ? 1 : 12)
-          )
-        ).toISOString(),
-      };
-
-      // Enviar datos completos al backend
-      await registerUser(usuarioConPlan);
-
-      // Limpiar localStorage y redirigir
-      localStorage.removeItem("user");
-      alert("Plan seleccionado y registro completo.");
-      navigate("/Login");
-    } catch (error) {
-      alert("Error al seleccionar plan: " + error.message);
-    }
-  };
+function Planes() {
+  const { opcion, setOpcion, planes, elegirPlan } = usePlanes();
 
   return (
     <div className="pagosContainer d-flex justify-content-center align-items-center text-center text-white p-sm-5 px-1 py-5">
@@ -131,4 +77,4 @@ function Pagos() {
   );
 }
 
-export default Pagos;
+export default Planes;
