@@ -1,12 +1,30 @@
-import { useState } from "react";
-import ConfirmarEliminar from "./modals/ConfirmarAccion";
-import CambiarContrasenia from "./modals/CambiarContrasenia";
+import React, { useState, useEffect } from "react";
 
 function InformacionSeguridad() {
   const [showPassword, setShowPassword] = useState(false);
-  const fakePassword = "MiContrasena123"; // Texto de ejemplo
+  const [password, setPassword] = useState("");
+  const [fechaActualizacion, setFechaActualizacion] = useState(null);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setPassword(user.contrasena || "");
+      if (user.fecha_actualizacion_contrasena) {
+        setFechaActualizacion(new Date(user.fecha_actualizacion_contrasena));
+      }
+    }
+  }, []);
 
   const togglePassword = () => setShowPassword(!showPassword);
+
+  const formatoFecha = (fecha) => {
+    if (!fecha) return "No disponible";
+    return fecha.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
   return (
     <div className="card-info mx-3 mb-4" style={{ height: "450px" }}>
@@ -16,10 +34,10 @@ function InformacionSeguridad() {
         <h4 style={{ color: "#71717A" }}>Contraseña:</h4>
         <div className="input-group">
           <input
-            type="text"
+            type={showPassword ? "text" : "password"}
             className="form-control border-0"
             readOnly
-            value={showPassword ? fakePassword : "********"}
+            value={password || ""}
             style={{
               backgroundColor: "transparent",
               color: "#fff",
@@ -39,9 +57,9 @@ function InformacionSeguridad() {
         </div>
       </div>
 
-      <div>
+      <div className="mt-4">
         <h4 style={{ color: "#71717A" }}>Última actualización:</h4>
-        <p className="text-white">Hace un mes</p>
+        <p className="text-white">{formatoFecha(fechaActualizacion)}</p>
       </div>
 
       <div className="d-flex flex-column align-items-center gap-3 mt-4">
@@ -60,9 +78,7 @@ function InformacionSeguridad() {
         </button>
       </div>
 
-      {/* Modales */}
-      <CambiarContrasenia />
-      <ConfirmarEliminar />
+      {/* Aquí puedes incluir los modales si los implementas */}
     </div>
   );
 }

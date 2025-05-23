@@ -1,36 +1,45 @@
-import * as bootstrap from "bootstrap";
 import { useEditarPelicula } from "../../hooks/useEditarPelicula";
 import { actualizarPelicula } from "../../services/editarPeliculaService";
+import { useEffect, useRef, useState } from "react";
 
 function EditarPelicula({ pelicula, onActualizar }) {
-  const {
-    formData,
-    handleChange,
-    camposModificados,
-    setCamposModificados,
-    mostrarAlerta,
-    setMostrarAlerta,
-  } = useEditarPelicula(pelicula, onActualizar);
+  const { formData, handleChange, camposModificados, setCamposModificados } =
+    useEditarPelicula(pelicula, onActualizar);
+
+  const [mostrarAlerta, setMostrarAlerta] = useState(false);
+  const modalRef = useRef(null);
+  const [actualizado, setActualizado] = useState(false);
 
   const handleActualizar = async () => {
     try {
       await actualizarPelicula(formData);
       setCamposModificados(new Set());
-
-      const modalElement = document.getElementById("modalEditar");
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      modalInstance?.hide();
-
-      setTimeout(() => {
-        setMostrarAlerta(true);
-        setTimeout(() => setMostrarAlerta(false), 3000);
-      }, 1000);
-
+      setActualizado(true); // Marca que hubo actualización
       onActualizar?.();
     } catch (error) {
       alert("Error: " + error.message);
     }
   };
+
+  useEffect(() => {
+    if (!modalRef.current) return;
+
+    const modalEl = modalRef.current;
+
+    const handleModalClosed = () => {
+      if (actualizado) {
+        setMostrarAlerta(true);
+        setTimeout(() => setMostrarAlerta(false), 3000);
+        setActualizado(false); // Reiniciar flag para siguiente edición
+      }
+    };
+
+    modalEl.addEventListener("hidden.bs.modal", handleModalClosed);
+
+    return () => {
+      modalEl.removeEventListener("hidden.bs.modal", handleModalClosed);
+    };
+  }, [actualizado]);
 
   return (
     <>
@@ -54,7 +63,8 @@ function EditarPelicula({ pelicula, onActualizar }) {
         id="modalEditar"
         tabIndex="-1"
         aria-labelledby="modalEditarLabel"
-        aria-hidden="true">
+        aria-hidden="true"
+        ref={modalRef}>
         <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
             <div className="modal-header">
@@ -211,21 +221,6 @@ function EditarPelicula({ pelicula, onActualizar }) {
                   name="rating"
                   className="form-control"
                   value={formData.rating}
-                  onChange={handleChange}
-                />
-              </div>
-
-              {/* URL YouTube */}
-              <div className="mb-3">
-                <label htmlFor="youtubeUrl" className="form-label">
-                  URL de YouTube (tráiler)
-                </label>
-                <input
-                  type="url"
-                  id="youtubeUrl"
-                  name="youtubeUrl"
-                  className="form-control"
-                  value={formData.youtubeUrl}
                   onChange={handleChange}
                 />
               </div>

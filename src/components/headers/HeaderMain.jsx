@@ -1,12 +1,15 @@
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import perfilImg from "../../assets/img/perfil.jpg";
+import { useState, useEffect } from "react";
 import "../../assets/styles/HeaderMain.css";
 import { logoutUser } from "../../services/logout";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Importante para dropdowns, offcanvas, etc.
+import * as bootstrap from "bootstrap";
 
 function HeaderMain() {
   const location = useLocation();
   const isCategoria = location.pathname.startsWith("/Categorias");
+  const [user, setUser] = useState(null);
 
   const categorias = [
     "Acción",
@@ -49,6 +52,15 @@ function HeaderMain() {
     logoutUser();
     navigate("/Login");
   };
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const dropdownElements = document.querySelectorAll(".dropdown-toggle");
+    dropdownElements.forEach((dropdownToggleEl) => {
+      new bootstrap.Dropdown(dropdownToggleEl);
+    });
+    setUser(storedUser);
+  }, []);
 
   return (
     <nav className="navbar bg-dark fixed-top px-2" data-bs-theme="dark">
@@ -159,7 +171,7 @@ function HeaderMain() {
               data-bs-toggle="dropdown"
               aria-expanded="false">
               <img
-                src={perfilImg}
+                src={user?.foto}
                 alt="perfil"
                 className="rounded-circle"
                 style={{ width: "40px", height: "40px", objectFit: "cover" }}

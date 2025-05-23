@@ -35,7 +35,7 @@ export function useRegistro() {
       contrasena: form.password.value,
       fechaNacimiento: form.birthDate.value,
       telefono: form.phone.value,
-      foto: "https://lc.cx/bu3dOF",
+      foto: "https://imagenes.elpais.com/resizer/v2/4UPKL26K5ZICHFC6UIAU5DDHWU.jpg?auth=393fdef15d621d403eec4dc5bc104e8ce874f3be8958f4d708d2ca856b646922&width=1200",
       rol: "USER",
     };
 

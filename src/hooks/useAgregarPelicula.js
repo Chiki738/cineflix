@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { crearPelicula } from "../services/peliculaAgregarService";
+import { crearPelicula } from "../services/peliculasService";
 import {
   buscarPeliculasPorNombre,
   buscarDetallesPorTitulo,
@@ -17,7 +17,6 @@ export function useAgregarPelicula(onPeliculaAgregada) {
   const [actores, setActores] = useState([]);
   const [directores, setDirectores] = useState([]);
   const [rating, setRating] = useState(0);
-  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   const buscarSugerencias = async (query) => {
     if (query.length < 2) return setSugerencias([]);
@@ -64,7 +63,6 @@ export function useAgregarPelicula(onPeliculaAgregada) {
     setActores([]);
     setDirectores([]);
     setRating(0);
-    setYoutubeUrl("");
     setSugerencias([]);
   };
 
@@ -81,7 +79,6 @@ export function useAgregarPelicula(onPeliculaAgregada) {
         actores,
         directores,
         rating,
-        youtubeUrl,
       };
 
       await crearPelicula(nuevaPelicula);
@@ -127,8 +124,6 @@ export function useAgregarPelicula(onPeliculaAgregada) {
     setDirectores,
     rating,
     setRating,
-    youtubeUrl,
-    setYoutubeUrl,
     handleGuardar,
   };
 }

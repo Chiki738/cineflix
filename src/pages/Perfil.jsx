@@ -1,33 +1,47 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { useState } from "react";
-import perfilImg from "../assets/img/perfil.jpg";
+import { useState, useEffect } from "react";
 import CambiarFoto from "../components/modals/CambiarFoto";
 
 function Perfil() {
   const location = useLocation();
-  const [mostrarModal, setMostrarModal] = useState(false); // Estado del modal
+  const [mostrarModal, setMostrarModal] = useState(false);
+
+  // Obtener usuario desde localStorage
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    setUser(storedUser);
+  }, []);
 
   return (
     <div className="bg-black py-sm-5 px-sm-3 p-3 min-vh-100">
       <div className="d-flex flex-column justify-content-center align-items-center gap-4">
         <img
-          src={perfilImg}
+          src={user?.foto}
           className="img-fluid rounded-circle"
           alt="perfil"
+          style={{ width: "150px", height: "150px", objectFit: "cover" }}
         />
         <button
-          className="btn btn-secondary text-black " 
-          onClick={() => setMostrarModal(true)} // Abrir modal
-        >
+          className="btn btn-secondary text-black"
+          onClick={() => setMostrarModal(true)}>
           CAMBIAR FOTO
         </button>
-        <p className="text-white">Miembro desde Enero 2025</p>
+        {user && (
+          <p className="text-white">
+            Miembro desde{" "}
+            {new Date(user.fechaCreacionCuenta).toLocaleDateString("es-PE", {
+              year: "numeric",
+              month: "long",
+            })}
+          </p>
+        )}
       </div>
 
       <div
         className="text-center bs-tertiary-color-rgb py-3 px-5 mx-3 rounded-3 shadow-lg"
         style={{ backgroundColor: "#212529" }}>
-        {/* Fondo gris oscuro */}
         <div className="row">
           <Link
             to="Informacion"
@@ -59,7 +73,6 @@ function Perfil() {
         </div>
       </div>
 
-      {/* Modal */}
       {mostrarModal && <CambiarFoto onClose={() => setMostrarModal(false)} />}
 
       <div className="px-3 py-4">

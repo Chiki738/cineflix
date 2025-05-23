@@ -21,8 +21,6 @@ function AgregarPelicula({ onPeliculaAgregada }) {
     setDirectores,
     rating,
     setRating,
-    youtubeUrl,
-    setYoutubeUrl,
     handleGuardar,
   } = useAgregarPelicula(onPeliculaAgregada);
 
@@ -212,17 +210,6 @@ function AgregarPelicula({ onPeliculaAgregada }) {
                   className="form-control"
                   value={rating}
                   onChange={(e) => setRating(parseFloat(e.target.value))}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">URL de YouTube (tráiler)</label>
-                <input
-                  type="url"
-                  className="form-control"
-                  placeholder="https://www.youtube.com/watch?v=..."
-                  value={youtubeUrl}
-                  onChange={(e) => setYoutubeUrl(e.target.value)}
                 />
               </div>
             </div>

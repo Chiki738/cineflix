@@ -1,8 +1,20 @@
 import dragonball from "../assets/img/dragonball.jpg";
 import PeliculasCard from "../components/PeliculasCard";
+import usePeliculas from "../hooks/usePeliculas";
 
 function Home() {
-  // Refs para cada carrusel
+  const { peliculas, cargando, error } = usePeliculas();
+
+  // Agrupar películas por categoría
+  const peliculasPorCategoria = peliculas.reduce((acc, pelicula) => {
+    const categoria = pelicula.categoria;
+    if (!acc[categoria]) acc[categoria] = [];
+    acc[categoria].push(pelicula);
+    return acc;
+  }, {});
+
+  // Obtener todas las categorías únicas desde las películas
+  const categorias = [...new Set(peliculas.map((p) => p.categoria))];
 
   return (
     <div className="min-vh-100 bg-black pt-3 pb-5 pt-sm-0">
@@ -49,23 +61,43 @@ function Home() {
         </div>
       </div>
 
-      {/* Carrusel por categoría */}
-      {["Historial", "Horror", "Aventura", "Suspenso"].map((categoria) => (
-        <div className="ps-3 pe-3 mb-4" key={categoria}>
-          <h3 className="text-white">{categoria}</h3>
-          <div
-            className="d-flex overflow-auto gap-3 py-2"
-            style={{ scrollSnapType: "x mandatory", whiteSpace: "nowrap" }}>
-            {[...Array(10)].map((_, i) => (
+      {/* Cargando/Error */}
+      {cargando && <p className="text-white text-center">Cargando...</p>}
+      {error && <p className="text-danger text-center">Error: {error}</p>}
+
+      {/* Carruseles por categoría */}
+      {!cargando &&
+        categorias.map((categoria) => {
+          const pelis = peliculasPorCategoria[categoria] || [];
+          if (pelis.length === 0) return null;
+
+          return (
+            <div className="ps-3 pe-3 mb-4" key={categoria}>
+              <h3 className="text-white">{categoria}</h3>
               <div
-                key={i}
-                style={{ flex: "0 0 auto", scrollSnapAlign: "start" }}>
-                <PeliculasCard />
+                className="d-flex overflow-auto gap-3 py-2"
+                style={{
+                  scrollSnapType: "x mandatory",
+                  whiteSpace: "nowrap",
+                }}>
+                {pelis.map((peli) => (
+                  <div
+                    key={peli.id}
+                    style={{
+                      flex: "0 0 auto",
+                      scrollSnapAlign: "start",
+                    }}>
+                    <PeliculasCard
+                      titulo={peli.titulo}
+                      portada={peli.portada}
+                      id={peli.id}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      ))}
+            </div>
+          );
+        })}
     </div>
   );
 }

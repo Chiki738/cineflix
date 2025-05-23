@@ -12,7 +12,6 @@ export function useEditarPelicula(pelicula, onActualizar) {
     directores: "",
     rating: "",
     categoria: "",
-    youtubeUrl: "",
   });
 
   const [camposModificados, setCamposModificados] = useState(new Set());
@@ -31,7 +30,6 @@ export function useEditarPelicula(pelicula, onActualizar) {
         directores: (pelicula.directores || []).join(", "),
         rating: pelicula.rating ? String(pelicula.rating) : "",
         categoria: pelicula.categoria || "",
-        youtubeUrl: pelicula.youtubeUrl || "",
       });
       setCamposModificados(new Set());
     }

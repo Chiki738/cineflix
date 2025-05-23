@@ -1,27 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ModificarInformacion from "./modals/ModificarInformacion";
 
 function InformacionPersonal() {
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [user, setUser] = useState({
+    nombre: "",
+    apellido: "",
+    email: "",
+    telefono: "",
+  });
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser({
+        nombre: storedUser.nombre || "",
+        apellido: storedUser.apellidos || "",
+        email: storedUser.email || "",
+        telefono: storedUser.telefono || "",
+      });
+    }
+  }, []);
 
   return (
     <div className="card-info mx-3 mb-4">
       <h3 className="text-white fw-bold text-center">INFORMACIÓN PERSONAL</h3>
       <div>
         <h4 style={{ color: "#71717A" }}>Nombre:</h4>
-        <p className="text-white">GRUPO</p>
+        <p className="text-white">{user.nombre || "No disponible"}</p>
       </div>
       <div>
         <h4 style={{ color: "#71717A" }}>Apellido:</h4>
-        <p className="text-white">A</p>
+        <p className="text-white">{user.apellido || "No disponible"}</p>
       </div>
       <div>
         <h4 style={{ color: "#71717A" }}>Correo electrónico:</h4>
-        <p className="text-white">grupoa@gmail.com</p>
+        <p className="text-white">{user.email || "No disponible"}</p>
       </div>
       <div>
         <h4 style={{ color: "#71717A" }}>Teléfono:</h4>
-        <p className="text-white">+51 987 654 321</p>
+        <p className="text-white">{user.telefono || "No disponible"}</p>
       </div>
 
       <div className="mx-auto" style={{ width: "fit-content" }}>

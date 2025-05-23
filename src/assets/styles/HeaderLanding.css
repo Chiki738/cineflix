@@ -1,8 +1,8 @@
 .btnLogin {
-    background-color: rgb(30, 197, 80);
+    background-color: rgb(30, 197, 80) !important;
 }
 
 .btnLogin:hover {
-    background-color: #3de3c2;
+    background-color: #3de3c2 !important;
     box-shadow: 0 0 10px rgb(30, 197, 80);
 }

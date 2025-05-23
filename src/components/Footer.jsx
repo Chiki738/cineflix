@@ -4,9 +4,9 @@ import terminos from "../assets/pdf/terminos.pdf";
 
 function Footer() {
   return (
-    <footer className="bg-dark text-white py-3 gap-sm-3" data-bs-theme="dark">
+    <footer className="bg-dark text-white py-3">
       <div className="d-flex flex-sm-row flex-column justify-content-evenly align-items-center">
-        <ul className="p-0 mb-4 mb-sm-0">
+        <ul className="p-0 mb-4 mb-sm-0 list-unstyled">
           <li className="p-1">
             <a href={politicas} target="_blank" rel="noopener noreferrer">
               Política de Privacidad
@@ -19,11 +19,12 @@ function Footer() {
           </li>
         </ul>
 
-        <div className="redesEnlace d-flex justify-content-center flex-wrap mb-4 mb-sm-0">
+        <div className="redesEnlace justify-content-center flex-wrap mb-4 mb-sm-0 d-flex">
           <a
             href="https://www.facebook.com/"
             target="_blank"
             title="Facebook"
+            aria-label="Facebook"
             rel="noopener noreferrer">
             <i
               className="fa-brands fa-facebook rounded-2 p-1"
@@ -33,6 +34,7 @@ function Footer() {
           <a
             href="https://www.instagram.com/"
             title="Instagram"
+            aria-label="Instagram"
             target="_blank"
             rel="noopener noreferrer">
             <i
@@ -43,6 +45,7 @@ function Footer() {
           <a
             href="https://x.com/"
             title="Twitter"
+            aria-label="Twitter"
             target="_blank"
             rel="noopener noreferrer">
             <i
@@ -53,6 +56,7 @@ function Footer() {
           <a
             href="https://mail.google.com"
             title="Gmail"
+            aria-label="Gmail"
             target="_blank"
             rel="noopener noreferrer">
             <i className="fa-regular fa-envelope rounded-2 p-1" id="gmail"></i>

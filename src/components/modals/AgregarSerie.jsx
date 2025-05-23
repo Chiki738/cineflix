@@ -51,7 +51,7 @@ function AgregarSerie() {
 
             <div className="mb-3">
               <label htmlFor="formFile" className="form-label">
-                Subir imagen desde PC
+                Link url de la imagen
               </label>
               <input
                 className="form-control"
@@ -62,48 +62,13 @@ function AgregarSerie() {
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Nombre de la serie</label>
+              <label className="form-label">Titulo de la serie</label>
               <input type="text" className="form-control" />
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Cantidad de temporadas</label>
-              <input type="number" className="form-control" />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Géneros</label>
-              <div className="d-flex flex-wrap gap-2">
-                {[
-                  "Acción",
-                  "Animación",
-                  "Aventura",
-                  "Ciencia ficción",
-                  "Comedia",
-                  "Crimen",
-                  "Documental",
-                  "Drama",
-                  "Familiar / Infantil",
-                  "Fantasía",
-                  "Romance",
-                  "Suspenso",
-                  "Terror",
-                ].map((genero, index) => (
-                  <div key={index} className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id={`genero-${index}`}
-                      value={genero}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor={`genero-${index}`}>
-                      {genero}
-                    </label>
-                  </div>
-                ))}
-              </div>
+              <label className="form-label">Descripcion de la serie</label>
+              <input type="text" className="form-control" />
             </div>
           </div>
 
