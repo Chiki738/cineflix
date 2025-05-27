@@ -1,5 +1,6 @@
+// InformacionSeguridad.jsx
 import React, { useState, useEffect } from "react";
-import CambiarContrasenia from "../modals/CambiarContrasenia"; // ajusta la ruta si es necesario
+import CambiarContrasenia from "../modals/CambiarContrasenia";
 
 function InformacionSeguridad() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +18,12 @@ function InformacionSeguridad() {
   }, []);
 
   const togglePassword = () => setShowPassword(!showPassword);
+
+  // Función para actualizar la contraseña en el estado cuando cambia en CambiarContrasenia
+  const actualizarPassword = (nuevaPass) => {
+    setPassword(nuevaPass);
+    // Aquí también puedes actualizar la fecha de actualización si quieres
+  };
 
   const formatoFecha = (fecha) => {
     if (!fecha) return "No disponible";
@@ -79,7 +86,8 @@ function InformacionSeguridad() {
         </button>
       </div>
 
-      <CambiarContrasenia />
+      {/* PASAMOS la función para actualizar el password */}
+      <CambiarContrasenia actualizarPassword={actualizarPassword} />
     </div>
   );
 }

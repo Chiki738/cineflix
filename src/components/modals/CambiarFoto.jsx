@@ -1,19 +1,85 @@
 import { useRef, useState } from "react";
+import { useActualizarUsuario } from "../../hooks/useActualizarUsuario";
 
-function CambiarFoto({ onClose }) {
+function CambiarFoto({ onClose, onFotoActualizada }) {
   const [preview, setPreview] = useState(null);
+  const [file, setFile] = useState(null);
   const fileInputRef = useRef();
 
+  const { actualizar } = useActualizarUsuario();
+
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const url = URL.createObjectURL(selectedFile);
       setPreview(url);
+      setFile(selectedFile);
     }
   };
 
   const openFileDialog = () => {
     fileInputRef.current.click();
+  };
+
+  const handleGuardar = async () => {
+    if (!preview || !file) {
+      alert("Primero selecciona una foto");
+      return;
+    }
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      alert("Usuario no encontrado");
+      return;
+    }
+
+    try {
+      const timestamp = Date.now();
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "cinexflix");
+      formData.append("public_id", `${user.id}_${timestamp}`);
+      formData.append("folder", "samples/ecommerce");
+
+      const cloudinaryResponse = await fetch(
+        "https://api.cloudinary.com/v1_1/doacvhdgt/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await cloudinaryResponse.json();
+
+      if (!cloudinaryResponse.ok) {
+        throw new Error(data.error.message);
+      }
+
+      const urlFotoSubidaConCacheBust = data.secure_url + "?t=" + timestamp;
+
+      const datosActualizados = {
+        nombre: user.nombre,
+        apellidos: user.apellidos,
+        telefono: user.telefono,
+        contrasena: user.contrasena,
+        foto: urlFotoSubidaConCacheBust,
+      };
+
+      const resultado = await actualizar(user.id, datosActualizados);
+
+      if (resultado) {
+        const nuevoUsuario = { ...user, ...datosActualizados };
+        localStorage.setItem("user", JSON.stringify(nuevoUsuario));
+        onFotoActualizada(urlFotoSubidaConCacheBust);
+        alert("Foto actualizada correctamente");
+        window.location.reload();
+      } else {
+        alert("No se pudo actualizar el usuario");
+      }
+    } catch (error) {
+      console.error("Error al subir la imagen o actualizar usuario:", error);
+      alert("Error al subir la imagen o actualizar los datos");
+    }
   };
 
   return (
@@ -49,6 +115,11 @@ function CambiarFoto({ onClose }) {
                   src={preview}
                   className="img-fluid rounded-circle"
                   alt="Vista previa"
+                  style={{
+                    width: "150px",
+                    height: "150px",
+                    objectFit: "cover",
+                  }}
                 />
               </div>
             )}
@@ -63,8 +134,8 @@ function CambiarFoto({ onClose }) {
               <button
                 type="button"
                 className="btn btn-success px-4"
-                onClick={onClose}>
-                ACEPTAR
+                onClick={handleGuardar}>
+                GUARDAR
               </button>
             </div>
           </div>

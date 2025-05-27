@@ -2,12 +2,7 @@ import { useState } from "react";
 import { useActualizarUsuario } from "../../hooks/useActualizarUsuario";
 
 function ModificarInformacion({ userData, onClose, onSave }) {
-  const [formData, setFormData] = useState({
-    ...userData,
-    nuevaContrasenia: "",
-    confirmarContrasenia: "",
-  });
-
+  const [formData, setFormData] = useState({ ...userData });
   const [editable, setEditable] = useState({
     nombre: false,
     apellidos: false,
@@ -17,14 +12,9 @@ function ModificarInformacion({ userData, onClose, onSave }) {
 
   const { actualizar, cargando, error } = useActualizarUsuario();
 
-  const cambiosRealizados =
-    Object.keys(formData).some(
-      (campo) =>
-        campo !== "nuevaContrasenia" &&
-        campo !== "confirmarContrasenia" &&
-        formData[campo] !== userData[campo]
-    ) ||
-    (formData.nuevaContrasenia && formData.confirmarContrasenia);
+  const cambiosRealizados = Object.keys(formData).some(
+    (campo) => formData[campo] !== userData[campo]
+  );
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,16 +26,10 @@ function ModificarInformacion({ userData, onClose, onSave }) {
   };
 
   const handleSubmit = async () => {
+    // Obtengo datos actuales del localStorage
     const localUser = JSON.parse(localStorage.getItem("user")) || {};
 
-    // Validar contraseñas si hay intento de cambio
-    if (formData.nuevaContrasenia || formData.confirmarContrasenia) {
-      if (formData.nuevaContrasenia !== formData.confirmarContrasenia) {
-        alert("Las contraseñas no coinciden");
-        return;
-      }
-    }
-
+    // Actualizo localStorage con los datos nuevos
     const updatedUser = {
       ...localUser,
       nombre: formData.nombre,
@@ -53,13 +37,13 @@ function ModificarInformacion({ userData, onClose, onSave }) {
       email: formData.email,
       telefono: formData.telefono,
       foto: localUser.foto || "",
-      contrasenia: formData.nuevaContrasenia
-        ? formData.nuevaContrasenia
-        : localUser.contrasenia,
+      contrasenia: localUser.contrasenia || "",
     };
 
+    // Guardo en localStorage
     localStorage.setItem("user", JSON.stringify(updatedUser));
 
+    // Obtengo el id desde localStorage, que sí debería existir
     const idUsuario = localUser.id || localUser._id;
     if (!idUsuario) {
       console.error("ID de usuario no disponible");
@@ -158,42 +142,6 @@ function ModificarInformacion({ userData, onClose, onSave }) {
                   onClick={() => habilitarCampo("telefono")}>
                   Editar
                 </button>
-              </div>
-
-              <div className="mb-3">
-                <input
-                  type="password"
-                  name="nuevaContrasenia"
-                  className="form-control"
-                  placeholder="Nueva contraseña"
-                  value={formData.nuevaContrasenia}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="mb-3">
-                <input
-                  type="password"
-                  name="confirmarContrasenia"
-                  className={`form-control ${
-                    formData.nuevaContrasenia &&
-                    formData.confirmarContrasenia &&
-                    formData.nuevaContrasenia !== formData.confirmarContrasenia
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  placeholder="Confirmar contraseña"
-                  value={formData.confirmarContrasenia}
-                  onChange={handleInputChange}
-                />
-                {formData.nuevaContrasenia &&
-                  formData.confirmarContrasenia &&
-                  formData.nuevaContrasenia !==
-                    formData.confirmarContrasenia && (
-                    <div className="invalid-feedback">
-                      Las contraseñas no coinciden.
-                    </div>
-                  )}
               </div>
 
               {error && (

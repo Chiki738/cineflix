@@ -5,8 +5,6 @@ import CambiarFoto from "../components/modals/CambiarFoto";
 function Perfil() {
   const location = useLocation();
   const [mostrarModal, setMostrarModal] = useState(false);
-
-  // Obtener usuario desde localStorage
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -73,7 +71,14 @@ function Perfil() {
         </div>
       </div>
 
-      {mostrarModal && <CambiarFoto onClose={() => setMostrarModal(false)} />}
+      {mostrarModal && (
+        <CambiarFoto
+          onClose={() => setMostrarModal(false)}
+          onFotoActualizada={(urlNuevaFoto) => {
+            console.log("Foto actualizada:", urlNuevaFoto);
+          }}
+        />
+      )}
 
       <div className="px-3 py-4">
         <Outlet />
