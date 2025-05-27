@@ -1,7 +1,7 @@
 import Informacion from "../pages/Informacion";
-import InformacionPersonal from "../components/InformacionPersonal";
-import PlanSuscripcion from "../components/InformacionPlan";
-import InformacionSeguridad from "../components/InformacionSeguridad";
+import InformacionPersonal from "../components/informacionUsuario/InformacionPersonal";
+import PlanSuscripcion from "../components/informacionUsuario/InformacionPlan";
+import InformacionSeguridad from "../components/informacionUsuario/InformacionSeguridad";
 
 function InformacionLayout() {
   return (

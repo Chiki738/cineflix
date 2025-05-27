@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { obtenerPlanes } from "../services/planService";
-import { registerUser } from "../services/registerService";
+import { registerUser } from "../services/usuarioService";
 
 export default function usePlanes() {
   const [opcion, setOpcion] = useState("1");

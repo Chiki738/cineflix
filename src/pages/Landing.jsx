@@ -16,7 +16,7 @@ function Landing() {
 
         <Link
           to="/Registro"
-          className="btnRegistro btn px-sm-4 px-3 py-1 text-dark fw-bold rounded-3 border-success fs-5">
+          className="btnRegistro btn px-sm-4 px-3 py-1 text-dark fw-bold rounded-3 border-success fs-5 text-black">
           Registrate
         </Link>
       </div>

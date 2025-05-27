@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useLogin } from "../hooks/useLogin";
+import { useLogin } from "../hooks/useAuth";
 import "../assets/styles/Login.css";
 
 function Login() {
@@ -15,7 +15,7 @@ function Login() {
 
   return (
     <div className="formLogin d-flex flex-column justify-content-center align-items-center text-white text-center">
-      <form onSubmit={handleLogin} className="d-flex flex-column p-4 rounded-2">
+      <form onSubmit={handleLogin} className="d-flex flex-column p-4 rounded-2 gap-3">
         <h3>INICIAR SESIÓN</h3>
 
         <input
@@ -55,7 +55,7 @@ function Login() {
 
         <p className="pt-3">
           ¿No tienes cuenta?&nbsp;
-          <Link to="/Registro" style={{ color: "white" }}>
+          <Link to="/Registro" className="text-white text-decoration-none">
             <strong>Regístrate</strong>
           </Link>
         </p>

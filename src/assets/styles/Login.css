@@ -7,7 +7,6 @@
 
 .formLogin>form {
     background-color: rgba(0, 0, 0, 0.6);
-    gap: 20px
 }
 
 .formLogin strong:hover {

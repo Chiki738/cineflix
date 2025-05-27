@@ -8,18 +8,18 @@ function Footer() {
       <div className="d-flex flex-sm-row flex-column justify-content-evenly align-items-center">
         <ul className="p-0 mb-4 mb-sm-0 list-unstyled">
           <li className="p-1">
-            <a href={politicas} target="_blank" rel="noopener noreferrer">
+            <a href={politicas} target="_blank" rel="noopener noreferrer" className="text-white text-decoration-none">
               Política de Privacidad
             </a>
           </li>
           <li className="p-1">
-            <a href={terminos} target="_blank" rel="noopener noreferrer">
+            <a href={terminos} target="_blank" rel="noopener noreferrer" className="text-white text-decoration-none">
               Términos y Condiciones
             </a>
           </li>
         </ul>
 
-        <div className="redesEnlace justify-content-center flex-wrap mb-4 mb-sm-0 d-flex">
+        <div className="redesEnlace justify-content-center flex-wrap mb-4 mb-sm-0 d-flex gap-3">
           <a
             href="https://www.facebook.com/"
             target="_blank"

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { obtenerPeliculaPorId } from "../services/peliculasService";
 import { useTrailer } from "../hooks/useTrailer";
 
-function Ver() {
+function VerPelicula() {
   const { id } = useParams();
   const [pelicula, setPelicula] = useState(null);
   const [error, setError] = useState(null);
@@ -87,4 +87,4 @@ function Ver() {
   );
 }
 
-export default Ver;
+export default VerPelicula;

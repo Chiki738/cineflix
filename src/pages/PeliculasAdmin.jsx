@@ -1,64 +1,21 @@
-import React, { useState, useEffect } from "react";
-import FotoPortada from "../assets/img/transformers.jpg";
 import ConfirmarEliminar from "../components/modals/ConfirmarAccion";
 import AgregarPelicula from "../components/modals/AgregarPelicula";
 import EditarPelicula from "../components/modals/EditarPelicula";
+import { usePeliculas } from "../hooks/useEliminarPelicula";
 
 function PeliculasAdmin() {
-  const [peliculas, setPeliculas] = useState([]);
-  const [busqueda, setBusqueda] = useState("");
-  const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null);
-
-  const cargarPeliculas = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/peliculas");
-      if (!response.ok) throw new Error("Error al cargar películas");
-      const data = await response.json();
-      setPeliculas(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    cargarPeliculas();
-  }, []);
-
-  const peliculasFiltradas = peliculas.filter((p) =>
-    p.titulo.toLowerCase().includes(busqueda.trim().toLowerCase())
-  );
-
-  const extraerNumero = (id) => {
-    const match = id.toUpperCase().match(/^MOV(\d+)$/);
-    return match ? parseInt(match[1], 10) : Number.MAX_SAFE_INTEGER;
-  };
-
-  const peliculasOrdenadas = peliculasFiltradas.sort((a, b) => {
-    const numA = extraerNumero(a.id);
-    const numB = extraerNumero(b.id);
-    return numA - numB;
-  });
+  const {
+    peliculas,
+    busqueda,
+    setBusqueda,
+    peliculaSeleccionada,
+    setPeliculaSeleccionada,
+    cargarPeliculas,
+    eliminarPelicula,
+  } = usePeliculas();
 
   const handleChange = (e) => setBusqueda(e.target.value);
   const handleBuscar = (e) => e.preventDefault();
-
-  const eliminarPelicula = async (id) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/peliculas/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) throw new Error("No se pudo eliminar la película");
-
-      // Recargar la lista de películas después de eliminar
-      cargarPeliculas();
-    } catch (error) {
-      console.error("Error al eliminar la película:", error);
-    }
-  };
 
   return (
     <div className="min-vh-100 px-3 py-5">
@@ -101,13 +58,13 @@ function PeliculasAdmin() {
           </tr>
         </thead>
         <tbody>
-          {peliculasOrdenadas.length > 0 ? (
-            peliculasOrdenadas.map((pelicula) => (
+          {peliculas.length > 0 ? (
+            peliculas.map((pelicula) => (
               <tr key={pelicula.id}>
                 <th>{pelicula.id}</th>
                 <td>
                   <img
-                    src={pelicula.portada || FotoPortada}
+                    src={pelicula.portada}
                     alt={pelicula.titulo}
                     className="rounded img-fluid"
                     style={{ maxWidth: "100px" }}
@@ -123,7 +80,7 @@ function PeliculasAdmin() {
                   {pelicula.duracion ? `${pelicula.duracion} min` : "N/A"}
                 </td>
                 <td>{pelicula.categoria || "N/A"}</td>
-                <td className="d-flex flex-column align-items-center gap-2">
+                <td className="p-2">
                   <button
                     className="btn btn-success w-100"
                     data-bs-toggle="modal"
@@ -132,7 +89,7 @@ function PeliculasAdmin() {
                     EDITAR
                   </button>
                   <button
-                    className="btn btn-danger w-100"
+                    className="btn btn-danger w-100 mt-4"
                     data-bs-toggle="modal"
                     data-bs-target="#modalEliminar"
                     onClick={() => setPeliculaSeleccionada(pelicula)}>
@@ -153,7 +110,7 @@ function PeliculasAdmin() {
 
       <AgregarPelicula onPeliculaAgregada={cargarPeliculas} />
       <EditarPelicula
-        pelicula={peliculaSeleccionada}
+        idPelicula={peliculaSeleccionada?.id}
         onActualizar={cargarPeliculas}
       />
       <ConfirmarEliminar

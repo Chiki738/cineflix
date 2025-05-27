@@ -9,5 +9,5 @@ export async function obtenerTrailerPorTitulo(titulo) {
     }
   );
 
-  return response.data.url; // Asumiendo que el backend responde con { url: "https://..." }
+  return response.data.url;
 }

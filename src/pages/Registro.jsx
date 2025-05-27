@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
+import { useRegistro } from "../hooks/useRegistroUsuario";
 import "../assets/styles/Registro.css";
-import { useRegistro } from "../hooks/useRegistro";
 
 function Registro() {
   const {
@@ -116,8 +116,8 @@ function Registro() {
 
         <p className="pt-3">
           ¿Ya tienes una cuenta?&nbsp;
-          <Link to="/Login" style={{ color: "white" }}>
-            <strong>Iniciar sesión</strong>
+          <Link to="/Login" className="text-decoration-none text-white">
+            <strong className="color-white">Iniciar sesión</strong>
           </Link>
         </p>
       </form>

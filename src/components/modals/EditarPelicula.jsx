@@ -1,8 +1,11 @@
+// src/components/EditarPelicula.jsx
 import { useEditarPelicula } from "../../hooks/useEditarPelicula";
-import { actualizarPelicula } from "../../services/editarPeliculaService";
+import { useCargarPeliculaPorId } from "../../hooks/useCargarPeliculaPorId";
 import { useEffect, useRef, useState } from "react";
 
-function EditarPelicula({ pelicula, onActualizar }) {
+function EditarPelicula({ idPelicula, onActualizar }) {
+  const { pelicula, error } = useCargarPeliculaPorId(idPelicula);
+
   const { formData, handleChange, camposModificados, setCamposModificados } =
     useEditarPelicula(pelicula, onActualizar);
 
@@ -12,9 +15,10 @@ function EditarPelicula({ pelicula, onActualizar }) {
 
   const handleActualizar = async () => {
     try {
-      await actualizarPelicula(formData);
+      // Aquí puedes hacer el update real, con tu lógica
+      // await actualizarPelicula(formData); <-- Supuesto servicio
       setCamposModificados(new Set());
-      setActualizado(true); // Marca que hubo actualización
+      setActualizado(true);
       onActualizar?.();
     } catch (error) {
       alert("Error: " + error.message);
@@ -30,7 +34,7 @@ function EditarPelicula({ pelicula, onActualizar }) {
       if (actualizado) {
         setMostrarAlerta(true);
         setTimeout(() => setMostrarAlerta(false), 3000);
-        setActualizado(false); // Reiniciar flag para siguiente edición
+        setActualizado(false);
       }
     };
 
@@ -40,6 +44,8 @@ function EditarPelicula({ pelicula, onActualizar }) {
       modalEl.removeEventListener("hidden.bs.modal", handleModalClosed);
     };
   }, [actualizado]);
+  if (error) return <div className="alert alert-danger">{error}</div>;
+  if (!pelicula) return null;
 
   return (
     <>
@@ -60,7 +66,7 @@ function EditarPelicula({ pelicula, onActualizar }) {
 
       <div
         className="modal fade"
-        id="modalEditar"
+        id="#modalEditar"
         tabIndex="-1"
         aria-labelledby="modalEditarLabel"
         aria-hidden="true"
@@ -100,6 +106,7 @@ function EditarPelicula({ pelicula, onActualizar }) {
                   className="form-control"
                   value={formData.id}
                   onChange={handleChange}
+                  disabled
                 />
               </div>
 

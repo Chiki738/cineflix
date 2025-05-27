@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import ModificarInformacion from "./modals/ModificarInformacion";
+import ModificarInformacion from "../modals/ModificarInformacion";
 
 function InformacionPersonal() {
   const [mostrarModal, setMostrarModal] = useState(false);

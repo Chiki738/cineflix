@@ -1,0 +1,58 @@
+const API_URL = "http://localhost:8080/api/series";
+
+export async function obtenerSeries() {
+  try {
+    const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error("Error al cargar las series");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error en obtenerSeries:", error);
+    throw error;
+  }
+}
+
+export async function crearSerie(datosSerie) {
+  try {
+    const response = await fetch(`${API_URL}/crear`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datosSerie),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al crear la serie");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error en crearSerie:", error);
+    throw error;
+  }
+}
+
+export async function agregarTemporada(idSerie, temporada) {
+  try {
+    const response = await fetch(`${API_URL}/${idSerie}/temporadas`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(temporada),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar la temporada");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error en agregarTemporada:", error);
+    throw error;
+  }
+}

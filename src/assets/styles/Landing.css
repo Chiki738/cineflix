@@ -12,11 +12,9 @@
 
 .btnRegistro {
     background-color: rgb(30, 197, 80) !important;
-    border: 2px solid rgb(30, 197, 80) !important;
 }
 
 .btnRegistro:hover {
     background-color: #3de3c2 !important;
-    box-shadow: 0 0 10px rgb(30, 197, 80) !important;
-    color: black !important;
+    box-shadow: 0 0 10px rgb(30, 197, 80);
 }

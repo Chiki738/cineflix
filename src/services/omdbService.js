@@ -15,3 +15,29 @@ export const buscarDetallesPorTitulo = async (titulo) => {
   );
   return await res.json();
 };
+
+export const buscarSeriesPorNombre = async (titulo) => {
+  const res = await fetch(
+    `https://www.omdbapi.com/?s=${encodeURIComponent(
+      titulo
+    )}&type=series&apikey=${API_KEY}`
+  );
+  const data = await res.json();
+  return data.Search || []; // Array de sugerencias
+};
+
+export const buscarDetallesSerie = async (titulo) => {
+  const res = await fetch(
+    `https://www.omdbapi.com/?t=${encodeURIComponent(
+      titulo
+    )}&type=series&apikey=${API_KEY}`
+  );
+  return await res.json();
+};
+
+export const buscarTemporadaSerie = async (imdbID, numeroTemporada) => {
+  const res = await fetch(
+    `https://www.omdbapi.com/?i=${imdbID}&Season=${numeroTemporada}&apikey=${API_KEY}`
+  );
+  return await res.json();
+};

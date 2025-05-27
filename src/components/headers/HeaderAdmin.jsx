@@ -54,6 +54,14 @@ function HeaderAdmin() {
                 Analisis
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink
+                to="/UsuariosAdmin"
+                style={linkStyle}
+                className="nav-link">
+                Usuarios
+              </NavLink>
+            </li>
           </ul>
           <button onClick={handleLogout} className="btn text-white m-0 ms-3">
             Cerrar Sesión

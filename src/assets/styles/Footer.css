@@ -1,27 +1,5 @@
-footer * {
-    color: #ffffff;
-    /* Ojo con esto si quieres enlaces negros */
-}
-
-.redesEnlace {
-    gap: 20px;
-    display: flex;
-    /* Asegura que gap funcione */
-}
-
-.redesEnlace i {
-    outline: 1px solid #ccc;
-    /* Color más suave */
-    padding: 4px;
-    /* Para que el outline no quede pegado */
-    border-radius: 6px;
-}
-
 .redesEnlace a {
-    text-decoration: none;
-    font-size: clamp(1.3rem, 1.26rem + 0.212vw, 1.6rem);
-    color: #000;
-    /* Si quieres negro, asegúrate que el fondo lo permita */
+    font-size: clamp(1.4rem, 1.26rem + 0.212vw, 1.8rem);
 }
 
 #facebook {
@@ -43,10 +21,4 @@ footer * {
 #gmail {
     background-color: #ff4f4f;
     color: black;
-}
-
-.footerContainer>p {
-    text-align: center;
-    margin-top: 25px;
-    font-size: 17px;
 }

@@ -1,9 +1,21 @@
-import tronos from "../assets/img/tronos.jpg";
+import { useState } from "react";
+import { useSeries } from "../hooks/useSeries"; // Ajusta la ruta si es necesario
 import ConfirmarEliminar from "../components/modals/ConfirmarAccion";
 import AgregarSerie from "../components/modals/AgregarSerie";
 import EditarPelicula from "../components/modals/EditarPelicula";
+import AgregarCapitulo from "../components/modals/AgregarTemporada";
 
-function PeliculasAdmin() {
+function SeriesAdmin() {
+  const { series, loading, error, refetch } = useSeries();
+  const [serieSeleccionada, setSerieSeleccionada] = useState("");
+
+  const handleSerieAgregada = () => {
+    refetch(); // Así actualizas la lista de series
+  };
+
+  if (loading) return <p>Cargando series...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
     <div className="min-vh-100 px-3 py-5">
       <div className="d-flex justify-content-around align-items-center mb-5">
@@ -34,149 +46,140 @@ function PeliculasAdmin() {
       </div>
 
       <div className="accordion accordion-flush" id="accordionFlushExample">
-        {/* Película 1 */}
-        <div className="accordion-item">
-          <h2 className="accordion-header" id="flush-headingOne">
-            <button
-              className="accordion-button collapsed d-flex align-items-center"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#flush-collapseOne"
-              aria-expanded="false"
-              aria-controls="flush-collapseOne"
-              style={{ gap: "15px" }}>
-              <img
-                src={tronos}
-                className="img-thumbnail"
-                alt="Juego de tronos"
-                style={{ width: "80px", height: "auto" }}
-              />
-              <span className="flex-grow-1 fw-semibold">Juego de tronos</span>
-              <span>
-                Cantidad de temporadas: <strong>8</strong>
-              </span>
-              <div className="d-flex gap-2 px-3 py-2">
+        {series.map((serie) => (
+          <div key={serie.id} className="accordion-item">
+            <h2 className="accordion-header " id={`flush-heading-${serie.id}`}>
+              <div className="d-flex align-items-center">
                 <button
-                  className="btn btn-warning btn-sm"
+                  className="accordion-button collapsed flex-grow-1 border-dark bg-light"
                   type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalEditar">
-                  Editar
-                </button>
-                <button
-                  className="btn btn-danger btn-sm"
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalEliminar">
-                  Eliminar serie
+                  data-bs-toggle="collapse"
+                  data-bs-target={`#flush-collapse-${serie.id}`}
+                  aria-expanded="false"
+                  aria-controls={`flush-collapse-${serie.id}`}
+                  style={{ gap: "15px" }}>
+                  <img
+                    src={serie.imagen}
+                    className="img-thumbnail"
+                    alt={serie.titulo}
+                    style={{ width: "80px", height: "auto" }}
+                  />
+                  <span className="fw-semibold">{serie.titulo}</span>
+                  <span className="ms-auto">
+                    Categoría: <strong>{serie.categoria}</strong>
+                  </span>
                 </button>
               </div>
-            </button>
-          </h2>
+            </h2>
 
-          {/* Botones fuera del acordeón */}
-          <div
-            id="flush-collapseOne"
-            className="accordion-collapse collapse"
-            aria-labelledby="flush-headingOne"
-            data-bs-parent="#accordionFlushExample">
-            <div className="accordion-body">
-              <button className="btn btn-primary mb-3" type="button">
-                Agregar capítulo
-              </button>
+            <div
+              id={`flush-collapse-${serie.id}`}
+              className="accordion-collapse collapse"
+              aria-labelledby={`flush-heading-${serie.id}`}
+              data-bs-parent="#accordionFlushExample">
+              <div className="accordion-body">
+                <p>{serie.descripcion}</p>
+                <p>Rating: {serie.rating}</p>
+                <p>
+                  Año:{" "}
+                  {serie.anioInicio
+                    ? serie.anioInicio +
+                      (serie.anioFin ? ` - ${serie.anioFin}` : " - En emisión")
+                    : "Sin información"}
+                </p>
 
-              {/* Sub-acordeón de temporadas */}
-              <div
-                className="accordion accordion-flush"
-                id="accordionFlushTemporadasOne">
-                <div className="accordion-item">
-                  <h2 className="accordion-header" id="flush-temporada1">
-                    <button
-                      className="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#flush-collapseTemporada1"
-                      aria-expanded="false"
-                      aria-controls="flush-collapseTemporada1">
-                      Temporada 1
-                    </button>
-                  </h2>
-                  <div
-                    id="flush-collapseTemporada1"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="flush-temporada1"
-                    data-bs-parent="#accordionFlushTemporadasOne">
-                    <div className="accordion-body p-0">
-                      <table className="table mb-0">
-                        <thead className="table-light">
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Título</th>
-                            <th scope="col">Video</th>
-                            <th scope="col">Botones</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>Winter Is Coming</td>
-                            <td>Transformers.mp4</td>
-                            <td className="d-flex flex-column align-items-center gap-2">
-                              <button
-                                className="btn btn-success w-100"
-                                type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalEditar">
-                                EDITAR
-                              </button>
-                              <button
-                                className="btn btn-danger w-100"
-                                type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalEliminar">
-                                ELIMINAR
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">2</th>
-                            <td>The Kingsroad</td>
-                            <td>Transformers.mp4</td>
-                            <td className="d-flex flex-column align-items-center gap-2">
-                              <button
-                                className="btn btn-success w-100"
-                                type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalEditar">
-                                EDITAR
-                              </button>
-                              <button
-                                className="btn btn-danger w-100"
-                                type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalEliminar">
-                                ELIMINAR
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+                <div className="d-grid gap-2 col-12 col-md-4 mx-auto mt-3">
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalAgregarCapitulo"
+                    onClick={() => setSerieSeleccionada(serie.titulo)}>
+                    Agregar temporada
+                  </button>
+                  <button
+                    className="btn btn-warning"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalEditar">
+                    Editar
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalEliminar">
+                    Eliminar serie
+                  </button>
                 </div>
+
+                {/* Mostrar todas las temporadas con episodios */}
+                {serie.temporadas && serie.temporadas.length > 0 ? (
+                  <div
+                    className="accordion mt-5"
+                    id={`accordionTemporadas-${serie.id}`}>
+                    {serie.temporadas.map((temporada) => (
+                      <div className="accordion-item" key={temporada.numero}>
+                        <h2
+                          className="accordion-header"
+                          id={`headingTemporada-${serie.id}-${temporada.numero}`}>
+                          <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target={`#collapseTemporada-${serie.id}-${temporada.numero}`}
+                            aria-expanded="false"
+                            aria-controls={`collapseTemporada-${serie.id}-${temporada.numero}`}>
+                            Temporada {temporada.numero}
+                          </button>
+                        </h2>
+                        <div
+                          id={`collapseTemporada-${serie.id}-${temporada.numero}`}
+                          className="accordion-collapse collapse"
+                          aria-labelledby={`headingTemporada-${serie.id}-${temporada.numero}`}
+                          data-bs-parent={`#accordionTemporadas-${serie.id}`}>
+                          <div className="accordion-body">
+                            <table className="table">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Título</th>
+                                  <th>Fecha</th>
+                                  <th>Rating</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {temporada.episodios.map((episodio) => (
+                                  <tr key={episodio.numero}>
+                                    <td>{episodio.numero}</td>
+                                    <td>{episodio.titulo}</td>
+                                    <td>{episodio.fecha}</td>
+                                    <td>{episodio.rating}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>No hay temporadas disponibles</p>
+                )}
               </div>
-              {/* Fin sub-acordeón */}
             </div>
           </div>
-        </div>
+        ))}
       </div>
 
       {/* Modales */}
-      <AgregarSerie />
+      <AgregarSerie onSerieAgregada={handleSerieAgregada} />
+      <AgregarCapitulo nombreSerie={serieSeleccionada} />
       <EditarPelicula />
       <ConfirmarEliminar />
     </div>
   );
 }
 
-export default PeliculasAdmin;
+export default SeriesAdmin;

@@ -1,21 +1,13 @@
+// services/authService.js
+import { loginAdmin } from "./adminService";
+import { loginUsuario } from "./usuarioService";
+
 export async function loginUser(credentials) {
-  const urls = [
-    { url: "http://localhost:8080/api/admins/login", rolEsperado: "ADMIN" },
-    { url: "http://localhost:8080/api/usuarios/login", rolEsperado: "USER" },
-  ];
+  const admin = await loginAdmin(credentials);
+  if (admin) return admin;
 
-  for (const { url, rolEsperado } of urls) {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      if (data.rol === rolEsperado) return data;
-    }
-  }
+  const user = await loginUsuario(credentials);
+  if (user) return user;
 
   throw new Error("Credenciales incorrectas");
 }

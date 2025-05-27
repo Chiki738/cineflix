@@ -21,7 +21,7 @@ export async function crearPelicula(pelicula) {
   return response.data;
 }
 
-// Actualizar una película existente
+// Actualizar película existente
 export async function actualizarPelicula(formData) {
   const dataActualizar = {
     ...formData,
@@ -38,3 +38,9 @@ export async function actualizarPelicula(formData) {
   const response = await axios.put(`${API_URL}/${formData.id}`, dataActualizar);
   return response.data;
 }
+
+// Eliminar película por ID
+export const eliminarPeliculaPorId = async (id) => {
+  const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  if (!response.ok) throw new Error("No se pudo eliminar la película");
+};

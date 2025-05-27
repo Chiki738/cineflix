@@ -1,4 +1,4 @@
-import "../assets/styles/Pagos.css";
+import "../assets/styles/Planes.css";
 import usePlanes from "../hooks/usePlanes";
 
 function Planes() {

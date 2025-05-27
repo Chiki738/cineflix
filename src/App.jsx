@@ -9,7 +9,7 @@ import Home from "./pages/Home";
 import Perfil from "./pages/Perfil";
 import Peliculas from "./pages/Peliculas";
 import Series from "./pages/Series";
-import Ver from "./pages/Ver";
+import VerPelicula from "./pages/VerPelicula";
 import InformacionLayout from "./layouts/InformacionLayout";
 import Historial from "./pages/Historial";
 import Lista from "./pages/Lista";
@@ -18,6 +18,7 @@ import PeliculasAdmin from "./pages/PeliculasAdmin";
 import SeriesAdmin from "./pages/SeriesAdmin";
 import ProtectedRoute from "../src/routes/ProtectedRoute";
 import Analisis from "./pages/Analisis";
+import UsuariosAdmin from "./pages/UsuariosAdmin";
 
 function App() {
   return (
@@ -54,7 +55,7 @@ function App() {
             </Route>
             <Route path="/Peliculas" element={<Peliculas />} />
             <Route path="/Series" element={<Series />} />
-            <Route path="/peliculas/:id" element={<Ver />} />
+            <Route path="/peliculas/:id" element={<VerPelicula />} />
           </Route>
         </Route>
 
@@ -64,6 +65,7 @@ function App() {
             <Route path="/PeliculasAdmin" element={<PeliculasAdmin />} />
             <Route path="/SeriesAdmin" element={<SeriesAdmin />} />
             <Route path="/Analisis" element={<Analisis />} />
+            <Route path="/UsuariosAdmin" element={<UsuariosAdmin />} />
           </Route>
         </Route>
       </Routes>
