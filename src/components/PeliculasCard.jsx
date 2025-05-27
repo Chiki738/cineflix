@@ -1,6 +1,35 @@
-import { Link } from "react-router-dom";
+import { useLista } from "../hooks/useLista";
+import { useHistorial } from "../hooks/useHistorial";
 
 function PeliculasCard({ id, titulo, portada }) {
+  const { agregar: agregarALista } = useLista();
+  const { agregar: agregarAHistorial } = useHistorial();
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleGuardarLista = async () => {
+    if (!user) {
+      alert("Debes iniciar sesión para guardar en lista");
+      return;
+    }
+    try {
+      await agregarALista(user.id, id);
+      alert("¡Agregado a tu lista para ver más tarde!");
+    } catch (error) {
+      alert("Error al agregar a la lista",error);
+    }
+  };
+
+  const handleVer = () => {
+    if (user) {
+      agregarAHistorial(user.id, id).finally(() => {
+        window.location.href = `/peliculas/${id}`;
+      });
+    } else {
+      window.location.href = `/peliculas/${id}`;
+    }
+  };
+
   return (
     <div
       className="card mx-3 mb-4 bg-dark"
@@ -31,16 +60,13 @@ function PeliculasCard({ id, titulo, portada }) {
         </h5>
 
         <div className="d-flex flex-column align-items-center gap-3 mt-3">
-          <button
-            className="btn btn-success w-75"
-            data-bs-toggle="modal"
-            data-bs-target="#modalGuardarLista">
+          <button className="btn btn-success w-75" onClick={handleGuardarLista}>
             GUARDAR EN LISTA
           </button>
 
-          <Link to={`/peliculas/${id}`} className="btn btn-info w-75">
+          <button className="btn btn-info w-75" onClick={handleVer}>
             VER
-          </Link>
+          </button>
         </div>
       </div>
     </div>
