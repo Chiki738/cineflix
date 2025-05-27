@@ -62,3 +62,24 @@ export async function obtenerUsuarios() {
     return null; // o puedes lanzar error si quieres manejarlo afuera
   }
 }
+
+export async function actualizarUsuario(id, datos) {
+  const response = await fetch(`${BASE_URL}/${id}/actualizar`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos),
+  });
+
+  if (!response.ok) {
+    let errorMessage = "Error al actualizar usuario";
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorMessage;
+    } catch {
+      // no hacer nada
+    }
+    throw new Error(errorMessage);
+  }
+
+  return response.json();
+}

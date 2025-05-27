@@ -1,13 +1,27 @@
-// src/services/youtubeService.js
 import axios from "axios";
 
 export async function obtenerTrailerPorTitulo(titulo) {
-  const response = await axios.get(
-    `http://localhost:8080/api/youtube/trailer`,
-    {
-      params: { movie: titulo },
-    }
-  );
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/youtube/trailer`,
+      { params: { movie: titulo } }
+    );
+    return response.data.url;
+  } catch (error) {
+    console.error("Error en obtenerTrailerPorTitulo:", error);
+    throw error;
+  }
+}
 
-  return response.data.url;
+export async function obtenerVideosPorPlaylist(playlistId) {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/youtube/playlist/videos`,
+      { params: { playlistId } }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error en obtenerVideosPorPlaylist:", error);
+    throw error;
+  }
 }

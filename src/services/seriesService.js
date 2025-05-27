@@ -87,3 +87,16 @@ export async function editarSerie(id, datosActualizados) {
     throw error;
   }
 }
+export async function obtenerSeriePorId(id) {
+  try {
+    const response = await fetch(`${API_URL}/${id}`);
+    if (!response.ok) {
+      throw new Error("Error al obtener la serie");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error en obtenerSeriePorId:", error);
+    throw error;
+  }
+}

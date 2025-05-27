@@ -17,7 +17,7 @@ export function useLogin() {
 
       if (response.rol === "ADMIN" || response.rol === "USER") {
         const user = {
-          id: response._id,
+          id: response.id,
           rol: response.rol,
           nombre: response.nombre,
           apellidos: response.apellidos,
@@ -34,6 +34,24 @@ export function useLogin() {
         };
 
         localStorage.setItem("user", JSON.stringify(user));
+
+        const sessionResponse = await fetch(
+          "http://localhost:8080/api/sesiones/inicio",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: response.id }),
+          }
+        );
+
+        if (sessionResponse.ok) {
+          const sessionData = await sessionResponse.json();
+          localStorage.setItem("sessionId", sessionData.id);
+          console.log("Inicio de sesión registrado:", sessionData);
+        } else {
+          console.warn("No se pudo registrar la sesión");
+        }
+
         navigate(response.rol === "ADMIN" ? "/PeliculasAdmin" : "/Home");
       } else {
         alert("Credenciales incorrectas");

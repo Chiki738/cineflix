@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import CambiarContrasenia from "../modals/CambiarContrasenia"; // ajusta la ruta si es necesario
 
 function InformacionSeguridad() {
   const [showPassword, setShowPassword] = useState(false);
@@ -78,7 +79,7 @@ function InformacionSeguridad() {
         </button>
       </div>
 
-      {/* Aquí puedes incluir los modales si los implementas */}
+      <CambiarContrasenia />
     </div>
   );
 }

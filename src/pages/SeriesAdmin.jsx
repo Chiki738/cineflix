@@ -1,18 +1,21 @@
+// components/SeriesAdmin.jsx
 import { useState } from "react";
 import { useSeries } from "../hooks/useSeries";
+import { useEliminarSerie } from "../hooks/useEliminarSerie";
 import ConfirmarEliminar from "../components/modals/ConfirmarAccion";
 import AgregarSerie from "../components/modals/AgregarSerie";
-// import AgregarCapitulo from "../components/modals/AgregarTemporada";
-// import EditarSerie from "../components/modals/EditarSerie";
+import AgregarCapitulo from "../components/modals/AgregarTemporada";
 
 function SeriesAdmin() {
-  const { series, loading, error, refetch, eliminarSerie} =
-    useSeries();
+  const { series, loading, error, refetch } = useSeries();
+  const {
+    eliminarSerie,
+    loading: eliminarLoading,
+    error: eliminarError,
+  } = useEliminarSerie(refetch);
 
   const [serieSeleccionada, setSerieSeleccionada] = useState("");
   const [serieAEliminar, setSerieAEliminar] = useState(null);
-  // Estado que guarda la serie seleccionada para edición
-  const [ setSerieAEditar] = useState(null);
 
   const handleSerieAgregada = () => {
     refetch();
@@ -55,7 +58,7 @@ function SeriesAdmin() {
       <div className="accordion accordion-flush" id="accordionFlushExample">
         {series.map((serie) => (
           <div key={serie.id} className="accordion-item">
-            <h2 className="accordion-header " id={`flush-heading-${serie.id}`}>
+            <h2 className="accordion-header" id={`flush-heading-${serie.id}`}>
               <div className="d-flex align-items-center">
                 <button
                   className="accordion-button collapsed flex-grow-1 border-dark bg-light"
@@ -103,12 +106,6 @@ function SeriesAdmin() {
                     data-bs-target="#modalAgregarCapitulo"
                     onClick={() => setSerieSeleccionada(serie.titulo)}>
                     Agregar temporada
-                  </button>
-                  <button
-                    className="btn btn-warning"
-                    type="button"
-                    onClick={() => setSerieAEditar(serie)}>
-                    Editar
                   </button>
 
                   <button
@@ -186,18 +183,13 @@ function SeriesAdmin() {
         nombreSerie={serieSeleccionada}
         onTemporadaAgregada={handleTemporadaAgregada}
       />
-      {/* {serieAEditar && (
-        <EditarSerie
-          serie={serieAEditar}
-          editarSerie={editarSerie}
-          setSerieAEditar={setSerieAEditar}
-        />
-      )} */}
 
       <ConfirmarEliminar
         pelicula={serieAEliminar}
         onConfirm={() => eliminarSerie(serieAEliminar.id)}
       />
+      {eliminarLoading && <p>Eliminando serie...</p>}
+      {eliminarError && <p>Error al eliminar: {eliminarError}</p>}
     </div>
   );
 }

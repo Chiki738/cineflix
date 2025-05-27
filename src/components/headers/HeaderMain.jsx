@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../../assets/styles/HeaderMain.css";
 import { logoutUser } from "../../services/logout";
@@ -7,25 +7,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Importante para dropdowns
 import * as bootstrap from "bootstrap";
 
 function HeaderMain() {
-  const location = useLocation();
-  const isCategoria = location.pathname.startsWith("/Categorias");
   const [user, setUser] = useState(null);
-
-  const categorias = [
-    "Acción",
-    "Animación",
-    "Aventura",
-    "Ciencia ficción",
-    "Comedia",
-    "Crimen",
-    "Documental",
-    "Drama",
-    "Familiar / Infantil",
-    "Fantasía",
-    "Romance",
-    "Suspenso",
-    "Terror",
-  ];
 
   // Estado para controlar la visibilidad del offcanvas
   const [isOpen, setIsOpen] = useState(false);
@@ -94,35 +76,6 @@ function HeaderMain() {
               <NavLink to="/Series" className="nav-link">
                 Series
               </NavLink>
-            </li>
-
-            {/* Menú Categorías */}
-            <li className="nav-item dropdown">
-              <a
-                className={`nav-link dropdown-toggle ${
-                  isCategoria ? "active" : ""
-                }`}
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Categorías
-              </a>
-              <ul className="dropdown-menu">
-                {categorias.map((cat, i) => (
-                  <li key={i}>
-                    <Link
-                      to={`/Categorias/${cat
-                        .replace(/ /g, "")
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "")}`}
-                      className="dropdown-item"
-                      onClick={handleLinkClick}>
-                      {cat}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
             </li>
 
             <li className="nav-item">
@@ -233,31 +186,6 @@ function HeaderMain() {
               <Link className="nav-link" to="/Series" onClick={handleLinkClick}>
                 Series
               </Link>
-            </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Categorías
-              </a>
-              <ul className="dropdown-menu">
-                {categorias.map((cat, i) => (
-                  <li key={i}>
-                    <Link
-                      to={`/Categorias/${cat
-                        .replace(/ /g, "")
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "")}`}
-                      className="dropdown-item"
-                      onClick={handleLinkClick}>
-                      {cat}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
             </li>
             <li className="nav-item">
               <Link

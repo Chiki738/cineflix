@@ -8,8 +8,9 @@ import dash
 from dash import html, dcc, Input, Output
 import threading
 
-# Puerto para la aplicacion Dash 
+# Puerto para la aplicacion Dash - cambienlo por si quieren usar otro puerto
 PUERTO_DASH = 8055
+
 MONGO_URI = "mongodb+srv://Hugo:analisis12345@cineflix-db.5mvzahh.mongodb.net/?retryWrites=true&w=majority"
 DB_NAME = "cineflix"
 
@@ -38,6 +39,7 @@ def cargar_datos():
 
     df_sesiones = pd.DataFrame(list(db['sesiones'].find()))
     df_sesiones['inicioSesion'] = pd.to_datetime(df_sesiones['inicioSesion'])
+    df_sesiones['finSesion'] = pd.to_datetime(df_sesiones['finSesion'], errors='coerce')
 
     hoy = datetime.now().replace(day=1)
     mes_ant_end = hoy - timedelta(days=1)
@@ -48,10 +50,11 @@ def cargar_datos():
     etq_ant = f"{calendar.month_abbr[mes_ant_start.month]} {mes_ant_start.year}"
     etq_act = f"{calendar.month_abbr[mes_act_start.month]} {mes_act_start.year}"
 
-# Funcion que verifica si un plan esta activo 
+    # Funcion que verifica si un plan esta activo en un rango
     def plan_activo_en_rango(r, start, end):
         return (r['fecha_inicio_plan'] <= end) and (r['fecha_fin_plan'] >= start)
 
+    # Recoleccion de registros de planes activos en los meses comparados
     regs = []
     for _, r in df_users.iterrows():
         if plan_activo_en_rango(r, mes_ant_start, mes_ant_end):
@@ -59,7 +62,7 @@ def cargar_datos():
         if plan_activo_en_rango(r, mes_act_start, mes_act_end):
             regs.append({'plan': r['plan_seleccionado'], 'mes': etq_act})
 
-# Grafico de comparacion de planes activos
+    # Grafico de comparacion de planes activos
     df_reg = pd.DataFrame(regs)
     plot_planes = df_reg.groupby(['mes', 'plan']).size().reset_index(name='count')
 
@@ -76,7 +79,7 @@ def cargar_datos():
         font=dict(family='Verdana', size=12, color='#555')
     )
 
-# Grafico circular para categorias mas buscadas
+    # Grafico circular para categorias mas buscadas
     genre_counts = df_search.groupby('category').size().reset_index(name='count')
     fig_genres = px.pie(
         genre_counts,
@@ -100,7 +103,7 @@ def cargar_datos():
     year_curr = hoy.year
     year_prev = year_curr - 1
 
-# Calculo de metricas (usuarios nuevos, vistas, visitas, activos)
+    # Calculo de metricas (usuarios nuevos, vistas, visitas, activos)
     count_month = lambda df, col, start, end: df[(df[col] >= start) & (df[col] <= end)].shape[0]
 
     altas_now = count_month(df_users, 'fechaCreacionCuenta', mes_act_start, mes_act_end)
@@ -109,17 +112,21 @@ def cargar_datos():
     vistas_prev = count_month(df_vistas, 'timestamp', mes_ant_start, mes_ant_end)
     visits_now = count_month(df_sesiones, 'inicioSesion', mes_act_start, mes_act_end)
     visits_prev = count_month(df_sesiones, 'inicioSesion', mes_ant_start, mes_ant_end)
-    act_now = df_users.apply(lambda r: plan_activo_en_rango(r, mes_act_start, mes_act_end), axis=1).sum()
+
+    # USUARIOS ACTIVOS finSesion: null
+    active_user_ids_now = df_sesiones[pd.isna(df_sesiones['finSesion'])]['userId'].unique()
+    act_now = len(active_user_ids_now)
+
+    # act_prev para la tarjeta se mantiene basado en plan activo
     act_prev = df_users.apply(lambda r: plan_activo_en_rango(r, mes_ant_start, mes_ant_end), axis=1).sum()
 
-# Funcion para crear tarjetas para mostrar metricas en el dash
-    def make_card(title, actual, prev):
-        has_delta = prev > 0
+    # Funcion para crear tarjetas para mostrar metricas en el dash
+    def make_card(title, actual, prev, show_delta=True): 
         fig = go.Figure(go.Indicator(
-            mode="number+delta" if has_delta else "number",
+            mode="number+delta" if show_delta and prev > 0 else "number", 
             value=actual,
             title={'text': f'<b>{title}</b>', 'font': {'size': 18}},
-            delta=dict(reference=prev, relative=True, valueformat='.0%') if has_delta else None,
+            delta=dict(reference=prev, relative=True, valueformat='.0%') if show_delta and prev > 0 else None, 
             number={'font': {'size': 48}}
         ))
         fig.update_layout(
@@ -131,18 +138,19 @@ def cargar_datos():
         )
         return fig
 
-# Tarjetas de metricas
+    # Tarjetas de metricas
     card_new = make_card('Nuevos Usuarios', altas_now, altas_prev)
     card_views = make_card('Vistas', vistas_now, vistas_prev)
     card_visits = make_card('Visitas', visits_now, visits_prev)
-    card_active = make_card('Usuarios Activos', act_now, act_prev)
+    card_active = make_card('Usuarios Activos', act_now, act_prev, show_delta=False) 
 
-# Grafico de linea para usuarios activos por mes y año
+    # GRÁFICO DE LÍNEA 'USUARIOS ACTIVOS MENSUALES' (EN BASE A PLANES ACTIVOS)
     active_monthly = []
     for yr in [year_prev, year_curr]:
         for m in range(1, 13):
             start = datetime(yr, m, 1)
             end = datetime(yr, m, calendar.monthrange(yr, m)[1], 23, 59, 59)
+            # Contar usuarios activos según el plan activo en el rango
             cnt = df_users.apply(lambda r: plan_activo_en_rango(r, start, end), axis=1).sum()
             active_monthly.append({'year': yr, 'month': m, 'count': cnt})
     active_df = pd.DataFrame(active_monthly)
@@ -174,7 +182,7 @@ def escuchar_cambios():
     except Exception as e:
         print("Error en change stream:", e)
 
-# Lanzar hilo para change stream 
+# Lanzar hilo para change stream
 hilo_cambios = threading.Thread(target=escuchar_cambios, daemon=True)
 hilo_cambios.start()
 
@@ -192,10 +200,10 @@ app.layout = html.Div([
         dcc.Tab(label='Usuarios', value='tab-users', style={'fontWeight': 'bold', 'fontFamily': 'Verdana'}),
     ], style={'marginBottom': '20px', 'fontFamily': 'Verdana'}),
     html.Div(id='tabs-content'),
-    dcc.Interval(id='interval-component', interval=3*1000, n_intervals=0)  
+    dcc.Interval(id='interval-component', interval=3*1000, n_intervals=0)   
 ], style={'padding': '20px', 'backgroundColor': '#ecf0f1', 'fontFamily': 'Verdana', 'maxWidth': '1200px', 'margin': 'auto'})
 
-# Callback que actualiza el contenido 
+# Callback que actualiza el contenido
 @app.callback(
     Output('tabs-content', 'children'),
     Input('tabs', 'value'),
@@ -231,5 +239,6 @@ def render_tab(tab, n):
         ], style={'width': '100%'})
     return html.Div()
 
+# Ejecuta la app
 if __name__ == '__main__':
     app.run(debug=True, port=PUERTO_DASH)

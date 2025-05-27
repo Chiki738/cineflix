@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import dragonball from "../assets/img/dragonball.jpg";
 import PeliculasCard from "../components/PeliculasCard";
 import usePeliculas from "../hooks/usePeliculas";
@@ -51,12 +52,9 @@ function Home() {
               GUARDAR EN LISTA
             </button>
 
-            <button
-              className="btn btn-info w-75 text-black"
-              data-bs-toggle="modal"
-              data-bs-target="#modalVerPelicula">
-              VER
-            </button>
+            <Link to={`/series/SER5454`} className="btn btn-info w-75">
+            VER
+          </Link>
           </div>
         </div>
       </div>

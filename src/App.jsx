@@ -19,6 +19,7 @@ import SeriesAdmin from "./pages/SeriesAdmin";
 import ProtectedRoute from "../src/routes/ProtectedRoute";
 import Analisis from "./pages/Analisis";
 import UsuariosAdmin from "./pages/UsuariosAdmin";
+import VerSerie from "./pages/VerSeries";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
             <Route path="/Peliculas" element={<Peliculas />} />
             <Route path="/Series" element={<Series />} />
             <Route path="/peliculas/:id" element={<VerPelicula />} />
+            <Route path="/Series/:id" element={<VerSerie />} />
           </Route>
         </Route>
 

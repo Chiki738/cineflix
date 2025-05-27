@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import {
   obtenerSeries,
   agregarTemporada,
-  eliminarSerie as eliminarSerieService,
-  editarSerie as editarSerieService,
 } from "../services/seriesService";
 
 export function useSeries() {
@@ -24,11 +22,6 @@ export function useSeries() {
     }
   };
 
-  const eliminarSerie = async (id) => {
-    await eliminarSerieService(id);
-    await fetchSeries();
-  };
-
   const guardarTemporada = async (tituloSerie, numeroTemporada, episodios) => {
     const serie = series.find((s) => s.titulo === tituloSerie);
     if (!serie) throw new Error("Serie no encontrada");
@@ -46,24 +39,6 @@ export function useSeries() {
     return await agregarTemporada(serie.id, temporada);
   };
 
-  // Función para editar serie, combinando datos actuales y actualizados
-  const editarSerie = async (id, datosActualizados) => {
-    const serieActual = series.find((s) => s.id === id);
-
-    if (!serieActual) {
-      throw new Error("Serie no encontrada");
-    }
-
-    const datosCompletos = {
-      ...serieActual,
-      ...datosActualizados,
-    };
-
-    const actualizada = await editarSerieService(id, datosCompletos);
-    await fetchSeries();
-    return actualizada;
-  };
-
   useEffect(() => {
     fetchSeries();
   }, []);
@@ -74,7 +49,5 @@ export function useSeries() {
     error,
     refetch: fetchSeries,
     guardarTemporada,
-    eliminarSerie,
-    editarSerie,
   };
 }

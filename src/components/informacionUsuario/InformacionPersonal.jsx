@@ -5,7 +5,7 @@ function InformacionPersonal() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [user, setUser] = useState({
     nombre: "",
-    apellido: "",
+    apellidos: "",
     email: "",
     telefono: "",
   });
@@ -15,7 +15,7 @@ function InformacionPersonal() {
     if (storedUser) {
       setUser({
         nombre: storedUser.nombre || "",
-        apellido: storedUser.apellidos || "",
+        apellidos: storedUser.apellidos || "",
         email: storedUser.email || "",
         telefono: storedUser.telefono || "",
       });
@@ -25,13 +25,14 @@ function InformacionPersonal() {
   return (
     <div className="card-info mx-3 mb-4">
       <h3 className="text-white fw-bold text-center">INFORMACIÓN PERSONAL</h3>
+
       <div>
         <h4 style={{ color: "#71717A" }}>Nombre:</h4>
         <p className="text-white">{user.nombre || "No disponible"}</p>
       </div>
       <div>
         <h4 style={{ color: "#71717A" }}>Apellido:</h4>
-        <p className="text-white">{user.apellido || "No disponible"}</p>
+        <p className="text-white">{user.apellidos || "No disponible"}</p>
       </div>
       <div>
         <h4 style={{ color: "#71717A" }}>Correo electrónico:</h4>
@@ -51,7 +52,14 @@ function InformacionPersonal() {
       </div>
 
       {mostrarModal && (
-        <ModificarInformacion onClose={() => setMostrarModal(false)} />
+        <ModificarInformacion
+          userData={user}
+          onClose={() => setMostrarModal(false)}
+          onSave={(updatedUser) => {
+            setUser(updatedUser);
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+          }}
+        />
       )}
     </div>
   );

@@ -1,25 +1,30 @@
 import { useState } from "react";
+import { useActualizarUsuario } from "../../hooks/useActualizarUsuario";
 
-function ModificarInformacion({ onClose }) {
-  const datosOriginales = {
-    nombre: "GRUPO",
-    apellido: "A",
-    correo: "grupoa@gmail.com",
-    telefono: "+51 987 654 321",
-  };
+function ModificarInformacion({ userData, onClose, onSave }) {
+  const [formData, setFormData] = useState({
+    ...userData,
+    nuevaContrasenia: "",
+    confirmarContrasenia: "",
+  });
 
-  const [formData, setFormData] = useState({ ...datosOriginales });
   const [editable, setEditable] = useState({
     nombre: false,
-    apellido: false,
-    correo: false,
+    apellidos: false,
+    email: false,
     telefono: false,
   });
 
-  // Detectar si se ha modificado al menos un campo
-  const cambiosRealizados = Object.keys(formData).some(
-    (campo) => formData[campo] !== datosOriginales[campo]
-  );
+  const { actualizar, cargando, error } = useActualizarUsuario();
+
+  const cambiosRealizados =
+    Object.keys(formData).some(
+      (campo) =>
+        campo !== "nuevaContrasenia" &&
+        campo !== "confirmarContrasenia" &&
+        formData[campo] !== userData[campo]
+    ) ||
+    (formData.nuevaContrasenia && formData.confirmarContrasenia);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,6 +33,48 @@ function ModificarInformacion({ onClose }) {
 
   const habilitarCampo = (campo) => {
     setEditable((prev) => ({ ...prev, [campo]: true }));
+  };
+
+  const handleSubmit = async () => {
+    const localUser = JSON.parse(localStorage.getItem("user")) || {};
+
+    // Validar contraseñas si hay intento de cambio
+    if (formData.nuevaContrasenia || formData.confirmarContrasenia) {
+      if (formData.nuevaContrasenia !== formData.confirmarContrasenia) {
+        alert("Las contraseñas no coinciden");
+        return;
+      }
+    }
+
+    const updatedUser = {
+      ...localUser,
+      nombre: formData.nombre,
+      apellidos: formData.apellidos,
+      email: formData.email,
+      telefono: formData.telefono,
+      foto: localUser.foto || "",
+      contrasenia: formData.nuevaContrasenia
+        ? formData.nuevaContrasenia
+        : localUser.contrasenia,
+    };
+
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+    const idUsuario = localUser.id || localUser._id;
+    if (!idUsuario) {
+      console.error("ID de usuario no disponible");
+      return;
+    }
+
+    try {
+      const respuesta = await actualizar(idUsuario, updatedUser);
+      if (respuesta) {
+        onSave(respuesta);
+      }
+      onClose();
+    } catch (e) {
+      console.error(e.message);
+    }
   };
 
   return (
@@ -65,16 +112,16 @@ function ModificarInformacion({ onClose }) {
               <div className="input-group mb-3">
                 <input
                   type="text"
-                  name="apellido"
+                  name="apellidos"
                   className="form-control"
-                  value={formData.apellido}
+                  value={formData.apellidos}
                   onChange={handleInputChange}
-                  disabled={!editable.apellido}
+                  disabled={!editable.apellidos}
                 />
                 <button
                   type="button"
                   className="btn btn-outline-primary"
-                  onClick={() => habilitarCampo("apellido")}>
+                  onClick={() => habilitarCampo("apellidos")}>
                   Editar
                 </button>
               </div>
@@ -82,16 +129,16 @@ function ModificarInformacion({ onClose }) {
               <div className="input-group mb-3">
                 <input
                   type="email"
-                  name="correo"
+                  name="email"
                   className="form-control"
-                  value={formData.correo}
+                  value={formData.email}
                   onChange={handleInputChange}
-                  disabled={!editable.correo}
+                  disabled={!editable.email}
                 />
                 <button
                   type="button"
                   className="btn btn-outline-primary"
-                  onClick={() => habilitarCampo("correo")}>
+                  onClick={() => habilitarCampo("email")}>
                   Editar
                 </button>
               </div>
@@ -112,6 +159,48 @@ function ModificarInformacion({ onClose }) {
                   Editar
                 </button>
               </div>
+
+              <div className="mb-3">
+                <input
+                  type="password"
+                  name="nuevaContrasenia"
+                  className="form-control"
+                  placeholder="Nueva contraseña"
+                  value={formData.nuevaContrasenia}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="mb-3">
+                <input
+                  type="password"
+                  name="confirmarContrasenia"
+                  className={`form-control ${
+                    formData.nuevaContrasenia &&
+                    formData.confirmarContrasenia &&
+                    formData.nuevaContrasenia !== formData.confirmarContrasenia
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  placeholder="Confirmar contraseña"
+                  value={formData.confirmarContrasenia}
+                  onChange={handleInputChange}
+                />
+                {formData.nuevaContrasenia &&
+                  formData.confirmarContrasenia &&
+                  formData.nuevaContrasenia !==
+                    formData.confirmarContrasenia && (
+                    <div className="invalid-feedback">
+                      Las contraseñas no coinciden.
+                    </div>
+                  )}
+              </div>
+
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
             </form>
           </div>
 
@@ -123,10 +212,11 @@ function ModificarInformacion({ onClose }) {
               Cerrar
             </button>
             <button
-              type="submit"
+              type="button"
               className="btn btn-primary"
-              disabled={!cambiosRealizados}>
-              Guardar
+              onClick={handleSubmit}
+              disabled={!cambiosRealizados || cargando}>
+              {cargando ? "Guardando..." : "Guardar"}
             </button>
           </div>
         </div>
