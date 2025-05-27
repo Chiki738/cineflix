@@ -43,12 +43,6 @@ export function useEditarPelicula(pelicula, onActualizar) {
   };
 
   const actualizarPelicula = async () => {
-    // Cerrar modal inmediatamente
-    const botonCerrar = document.querySelector(
-      "#modalAgregarSerie .btn-close"
-    );
-    if (botonCerrar) botonCerrar.click();
-    
     try {
       const peliculaActualizada = {
         ...formData,

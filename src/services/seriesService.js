@@ -56,3 +56,34 @@ export async function agregarTemporada(idSerie, temporada) {
     throw error;
   }
 }
+
+export async function eliminarSerie(id) {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al eliminar la serie");
+  }
+}
+
+export async function editarSerie(id, datosActualizados) {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datosActualizados),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al editar la serie");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error en editarSerie:", error);
+    throw error;
+  }
+}

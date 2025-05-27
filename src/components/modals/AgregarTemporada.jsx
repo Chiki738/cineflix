@@ -2,14 +2,11 @@ import { useState, useEffect } from "react";
 import { useTemporada } from "../../hooks/useTemporada";
 import { useSeries } from "../../hooks/useSeries";
 
-function AgregarCapitulo({ nombreSerie }) {
+function AgregarCapitulo({ nombreSerie, onTemporadaAgregada }) {
   const [numeroTemporada, setNumeroTemporada] = useState("");
   const { episodios, fetchTemporada, loading, error } = useTemporada();
   const { guardarTemporada } = useSeries();
   const [mensaje, setMensaje] = useState("");
-
-  // En el hook useTemporada, envuelve fetchTemporada en useCallback
-  // para evitar que cambie de referencia sin necesidad (te lo muestro abajo).
 
   useEffect(() => {
     if (numeroTemporada.trim() && !isNaN(numeroTemporada)) {
@@ -24,6 +21,15 @@ function AgregarCapitulo({ nombreSerie }) {
       );
       await guardarTemporada(nombreSerie, numeroTemporada, filtrados);
       setMensaje("Temporada guardada correctamente");
+
+      // ✅ Llamar al callback para actualizar en el padre
+      if (onTemporadaAgregada) onTemporadaAgregada();
+
+      // ✅ Cerrar modal automáticamente
+      const botonCerrar = document.querySelector(
+        "#modalAgregarCapitulo .btn-close"
+      );
+      if (botonCerrar) botonCerrar.click();
     } catch (err) {
       setMensaje(`Error: ${err.message}`);
     }
@@ -43,7 +49,6 @@ function AgregarCapitulo({ nombreSerie }) {
           </div>
 
           <div className="modal-body">
-            {/* Inputs */}
             <div className="mb-3 row">
               <label className="col-sm-3 col-form-label">
                 Nombre de la Serie
@@ -74,9 +79,8 @@ function AgregarCapitulo({ nombreSerie }) {
 
             {loading && <p>Cargando episodios...</p>}
             {error && <p className="text-danger">{error}</p>}
-            {mensaje && <p>{mensaje}</p>}
+            {mensaje && <p className="text-success">{mensaje}</p>}
 
-            {/* Tabla de episodios */}
             <table className="table mt-3">
               <thead>
                 <tr>

@@ -1,16 +1,25 @@
 import { useState } from "react";
-import { useSeries } from "../hooks/useSeries"; // Ajusta la ruta si es necesario
+import { useSeries } from "../hooks/useSeries";
 import ConfirmarEliminar from "../components/modals/ConfirmarAccion";
 import AgregarSerie from "../components/modals/AgregarSerie";
-import EditarPelicula from "../components/modals/EditarPelicula";
 import AgregarCapitulo from "../components/modals/AgregarTemporada";
+import EditarSerie from "../components/modals/EditarSerie";
 
 function SeriesAdmin() {
-  const { series, loading, error, refetch } = useSeries();
+  const { series, loading, error, refetch, eliminarSerie, editarSerie } =
+    useSeries();
+
   const [serieSeleccionada, setSerieSeleccionada] = useState("");
+  const [serieAEliminar, setSerieAEliminar] = useState(null);
+  // Estado que guarda la serie seleccionada para edición
+  const [serieAEditar, setSerieAEditar] = useState(null);
 
   const handleSerieAgregada = () => {
-    refetch(); // Así actualizas la lista de series
+    refetch();
+  };
+
+  const handleTemporadaAgregada = () => {
+    refetch();
   };
 
   if (loading) return <p>Cargando series...</p>;
@@ -19,7 +28,6 @@ function SeriesAdmin() {
   return (
     <div className="min-vh-100 px-3 py-5">
       <div className="d-flex justify-content-around align-items-center mb-5">
-        {/* Buscador */}
         <form
           className="d-flex w-50"
           role="search"
@@ -35,7 +43,6 @@ function SeriesAdmin() {
           </button>
         </form>
 
-        {/* Botón Agregar */}
         <button
           className="btn btn-dark"
           data-bs-toggle="modal"
@@ -100,20 +107,20 @@ function SeriesAdmin() {
                   <button
                     className="btn btn-warning"
                     type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalEditar">
+                    onClick={() => setSerieAEditar(serie)}>
                     Editar
                   </button>
+
                   <button
                     className="btn btn-danger"
                     type="button"
                     data-bs-toggle="modal"
-                    data-bs-target="#modalEliminar">
+                    data-bs-target="#modalEliminar"
+                    onClick={() => setSerieAEliminar(serie)}>
                     Eliminar serie
                   </button>
                 </div>
 
-                {/* Mostrar todas las temporadas con episodios */}
                 {serie.temporadas && serie.temporadas.length > 0 ? (
                   <div
                     className="accordion mt-5"
@@ -175,9 +182,22 @@ function SeriesAdmin() {
 
       {/* Modales */}
       <AgregarSerie onSerieAgregada={handleSerieAgregada} />
-      <AgregarCapitulo nombreSerie={serieSeleccionada} />
-      <EditarPelicula />
-      <ConfirmarEliminar />
+      <AgregarCapitulo
+        nombreSerie={serieSeleccionada}
+        onTemporadaAgregada={handleTemporadaAgregada}
+      />
+      {serieAEditar && (
+        <EditarSerie
+          serie={serieAEditar}
+          editarSerie={editarSerie}
+          setSerieAEditar={setSerieAEditar}
+        />
+      )}
+
+      <ConfirmarEliminar
+        pelicula={serieAEliminar}
+        onConfirm={() => eliminarSerie(serieAEliminar.id)}
+      />
     </div>
   );
 }
