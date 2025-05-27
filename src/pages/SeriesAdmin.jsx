@@ -2,17 +2,17 @@ import { useState } from "react";
 import { useSeries } from "../hooks/useSeries";
 import ConfirmarEliminar from "../components/modals/ConfirmarAccion";
 import AgregarSerie from "../components/modals/AgregarSerie";
-import AgregarCapitulo from "../components/modals/AgregarTemporada";
-import EditarSerie from "../components/modals/EditarSerie";
+// import AgregarCapitulo from "../components/modals/AgregarTemporada";
+// import EditarSerie from "../components/modals/EditarSerie";
 
 function SeriesAdmin() {
-  const { series, loading, error, refetch, eliminarSerie, editarSerie } =
+  const { series, loading, error, refetch, eliminarSerie} =
     useSeries();
 
   const [serieSeleccionada, setSerieSeleccionada] = useState("");
   const [serieAEliminar, setSerieAEliminar] = useState(null);
   // Estado que guarda la serie seleccionada para edición
-  const [serieAEditar, setSerieAEditar] = useState(null);
+  const [ setSerieAEditar] = useState(null);
 
   const handleSerieAgregada = () => {
     refetch();
@@ -186,13 +186,13 @@ function SeriesAdmin() {
         nombreSerie={serieSeleccionada}
         onTemporadaAgregada={handleTemporadaAgregada}
       />
-      {serieAEditar && (
+      {/* {serieAEditar && (
         <EditarSerie
           serie={serieAEditar}
           editarSerie={editarSerie}
           setSerieAEditar={setSerieAEditar}
         />
-      )}
+      )} */}
 
       <ConfirmarEliminar
         pelicula={serieAEliminar}

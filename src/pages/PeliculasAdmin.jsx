@@ -1,3 +1,4 @@
+import React from "react";
 import ConfirmarEliminar from "../components/modals/ConfirmarAccion";
 import AgregarPelicula from "../components/modals/AgregarPelicula";
 import EditarPelicula from "../components/modals/EditarPelicula";
@@ -84,7 +85,7 @@ function PeliculasAdmin() {
                   <button
                     className="btn btn-success w-100"
                     data-bs-toggle="modal"
-                    data-bs-target="#modalEditar"
+                    data-bs-target="#modalEditarPelicula"
                     onClick={() => setPeliculaSeleccionada(pelicula)}>
                     EDITAR
                   </button>
@@ -109,10 +110,13 @@ function PeliculasAdmin() {
       </table>
 
       <AgregarPelicula onPeliculaAgregada={cargarPeliculas} />
+
       <EditarPelicula
-        idPelicula={peliculaSeleccionada?.id}
-        onActualizar={cargarPeliculas}
+        peliculaSeleccionada={peliculaSeleccionada}
+        setPeliculaSeleccionada={setPeliculaSeleccionada}
+        onActualizar={cargarPeliculas} // Pasamos la función para actualizar
       />
+
       <ConfirmarEliminar
         pelicula={peliculaSeleccionada}
         onConfirm={() => eliminarPelicula(peliculaSeleccionada.id)}

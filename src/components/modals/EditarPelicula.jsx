@@ -1,76 +1,40 @@
-// src/components/EditarPelicula.jsx
+import React, { useEffect } from "react";
 import { useEditarPelicula } from "../../hooks/useEditarPelicula";
-import { useCargarPeliculaPorId } from "../../hooks/useCargarPeliculaPorId";
-import { useEffect, useRef, useState } from "react";
 
-function EditarPelicula({ idPelicula, onActualizar }) {
-  const { pelicula, error } = useCargarPeliculaPorId(idPelicula);
-
-  const { formData, handleChange, camposModificados, setCamposModificados } =
-    useEditarPelicula(pelicula, onActualizar);
-
-  const [mostrarAlerta, setMostrarAlerta] = useState(false);
-  const modalRef = useRef(null);
-  const [actualizado, setActualizado] = useState(false);
-
-  const handleActualizar = async () => {
-    try {
-      // Aquí puedes hacer el update real, con tu lógica
-      // await actualizarPelicula(formData); <-- Supuesto servicio
-      setCamposModificados(new Set());
-      setActualizado(true);
-      onActualizar?.();
-    } catch (error) {
-      alert("Error: " + error.message);
-    }
-  };
+function EditarPelicula({ peliculaSeleccionada, onActualizar }) {
+  const { form, handleChange, handleSubmit } =
+    useEditarPelicula(peliculaSeleccionada);
 
   useEffect(() => {
-    if (!modalRef.current) return;
+    const modalEl = document.getElementById("modalEditarPelicula");
+    if (!modalEl) return;
 
-    const modalEl = modalRef.current;
-
-    const handleModalClosed = () => {
-      if (actualizado) {
-        setMostrarAlerta(true);
-        setTimeout(() => setMostrarAlerta(false), 3000);
-        setActualizado(false);
-      }
+    // Evento que se dispara cuando el modal se cierra
+    const handleModalClose = () => {
+      onActualizar(); // Actualizar tabla cuando se cierra el modal
     };
 
-    modalEl.addEventListener("hidden.bs.modal", handleModalClosed);
+    modalEl.addEventListener("hidden.bs.modal", handleModalClose);
 
+    // Limpieza del evento al desmontar componente
     return () => {
-      modalEl.removeEventListener("hidden.bs.modal", handleModalClosed);
+      modalEl.removeEventListener("hidden.bs.modal", handleModalClose);
     };
-  }, [actualizado]);
-  if (error) return <div className="alert alert-danger">{error}</div>;
-  if (!pelicula) return null;
+  }, [onActualizar]);
+
+  const guardarCambios = async () => {
+    await handleSubmit();
+    // NO cerramos el modal aquí, el usuario lo cierra manualmente
+  };
 
   return (
     <>
-      {mostrarAlerta && (
-        <div
-          className="alert alert-success text-center"
-          role="alert"
-          style={{
-            position: "fixed",
-            top: 20,
-            right: 20,
-            zIndex: 1055,
-            minWidth: "250px",
-          }}>
-          Película actualizada correctamente.
-        </div>
-      )}
-
       <div
         className="modal fade"
-        id="#modalEditar"
+        id="modalEditarPelicula"
         tabIndex="-1"
         aria-labelledby="modalEditarLabel"
-        aria-hidden="true"
-        ref={modalRef}>
+        aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
             <div className="modal-header">
@@ -84,17 +48,15 @@ function EditarPelicula({ idPelicula, onActualizar }) {
                 aria-label="Cerrar"></button>
             </div>
 
-            {formData.portada && (
-              <img
-                src={formData.portada}
-                className="img-thumbnail mb-3 mx-auto d-block"
-                alt="Portada"
-                style={{ maxHeight: "300px" }}
-              />
-            )}
+            <img
+              className="img-thumbnail mb-3 mx-auto d-block"
+              alt="Portada"
+              src={form.portada || ""}
+              style={{ maxHeight: "300px" }}
+            />
 
             <div className="modal-body">
-              {/* ID */}
+              {/* Aquí van los campos del formulario, iguales que antes */}
               <div className="mb-3">
                 <label htmlFor="id" className="form-label">
                   ID
@@ -104,13 +66,11 @@ function EditarPelicula({ idPelicula, onActualizar }) {
                   id="id"
                   name="id"
                   className="form-control"
-                  value={formData.id}
-                  onChange={handleChange}
                   disabled
+                  value={form.id}
                 />
               </div>
 
-              {/* Título */}
               <div className="mb-3">
                 <label htmlFor="titulo" className="form-label">
                   Título
@@ -120,12 +80,11 @@ function EditarPelicula({ idPelicula, onActualizar }) {
                   id="titulo"
                   name="titulo"
                   className="form-control"
-                  value={formData.titulo}
+                  value={form.titulo}
                   onChange={handleChange}
                 />
               </div>
 
-              {/* Descripción */}
               <div className="mb-3">
                 <label htmlFor="descripcion" className="form-label">
                   Descripción
@@ -134,12 +93,11 @@ function EditarPelicula({ idPelicula, onActualizar }) {
                   id="descripcion"
                   name="descripcion"
                   className="form-control"
-                  value={formData.descripcion}
+                  value={form.descripcion}
                   onChange={handleChange}
                 />
               </div>
 
-              {/* Duración */}
               <div className="mb-3">
                 <label htmlFor="duracion" className="form-label">
                   Duración (minutos)
@@ -149,12 +107,11 @@ function EditarPelicula({ idPelicula, onActualizar }) {
                   id="duracion"
                   name="duracion"
                   className="form-control"
-                  value={formData.duracion}
+                  value={form.duracion}
                   onChange={handleChange}
                 />
               </div>
 
-              {/* Año */}
               <div className="mb-3">
                 <label htmlFor="anio" className="form-label">
                   Año
@@ -164,12 +121,11 @@ function EditarPelicula({ idPelicula, onActualizar }) {
                   id="anio"
                   name="anio"
                   className="form-control"
-                  value={formData.anio}
+                  value={form.anio}
                   onChange={handleChange}
                 />
               </div>
 
-              {/* Categoría */}
               <div className="mb-3">
                 <label htmlFor="categoria" className="form-label">
                   Categoría
@@ -179,12 +135,11 @@ function EditarPelicula({ idPelicula, onActualizar }) {
                   id="categoria"
                   name="categoria"
                   className="form-control"
-                  value={formData.categoria}
+                  value={form.categoria}
                   onChange={handleChange}
                 />
               </div>
 
-              {/* Actores */}
               <div className="mb-3">
                 <label htmlFor="actores" className="form-label">
                   Actores (separados por coma)
@@ -194,12 +149,11 @@ function EditarPelicula({ idPelicula, onActualizar }) {
                   id="actores"
                   name="actores"
                   className="form-control"
-                  value={formData.actores}
+                  value={form.actores}
                   onChange={handleChange}
                 />
               </div>
 
-              {/* Directores */}
               <div className="mb-3">
                 <label htmlFor="directores" className="form-label">
                   Directores (separados por coma)
@@ -209,12 +163,11 @@ function EditarPelicula({ idPelicula, onActualizar }) {
                   id="directores"
                   name="directores"
                   className="form-control"
-                  value={formData.directores}
+                  value={form.directores}
                   onChange={handleChange}
                 />
               </div>
 
-              {/* Rating */}
               <div className="mb-3">
                 <label htmlFor="rating" className="form-label">
                   Rating
@@ -227,7 +180,7 @@ function EditarPelicula({ idPelicula, onActualizar }) {
                   id="rating"
                   name="rating"
                   className="form-control"
-                  value={formData.rating}
+                  value={form.rating}
                   onChange={handleChange}
                 />
               </div>
@@ -243,8 +196,7 @@ function EditarPelicula({ idPelicula, onActualizar }) {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={handleActualizar}
-                disabled={camposModificados.size === 0}>
+                onClick={guardarCambios}>
                 Guardar Cambios
               </button>
             </div>

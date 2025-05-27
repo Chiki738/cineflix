@@ -1,78 +1,57 @@
-import { useEffect, useState } from "react";
-import { actualizarPelicula as actualizarPeliculaServicio } from "../services/peliculasService";
-7
-export function useEditarPelicula(pelicula, onActualizar) {
-  const [formData, setFormData] = useState({
+// hooks/useEditarPelicula.js
+import { useState, useEffect } from "react";
+import { actualizarPelicula } from "../services/peliculasService";
+
+export function useEditarPelicula(peliculaSeleccionada) {
+  const [form, setForm] = useState({
     id: "",
     titulo: "",
-    portada: "",
     descripcion: "",
     duracion: "",
     anio: "",
+    categoria: "",
     actores: "",
     directores: "",
     rating: "",
-    categoria: "",
+    portada: "",
   });
 
-  const [camposModificados, setCamposModificados] = useState(new Set());
-  const [mostrarAlerta, setMostrarAlerta] = useState(false);
-
   useEffect(() => {
-    if (pelicula) {
-      setFormData({
-        id: pelicula.id || "",
-        titulo: pelicula.titulo || "",
-        portada: pelicula.portada || "",
-        descripcion: pelicula.descripcion || "",
-        duracion: pelicula.duracion ? String(pelicula.duracion) : "",
-        anio: pelicula.anio || "",
-        actores: (pelicula.actores || []).join(", "),
-        directores: (pelicula.directores || []).join(", "),
-        rating: pelicula.rating ? String(pelicula.rating) : "",
-        categoria: pelicula.categoria || "",
+    if (peliculaSeleccionada) {
+      setForm({
+        id: peliculaSeleccionada.id || "",
+        titulo: peliculaSeleccionada.titulo || "",
+        descripcion: peliculaSeleccionada.descripcion || "",
+        duracion: peliculaSeleccionada.duracion || "",
+        anio: peliculaSeleccionada.anio || "",
+        categoria: peliculaSeleccionada.categoria || "",
+        actores: peliculaSeleccionada.actores
+          ? peliculaSeleccionada.actores.join(", ")
+          : "",
+        directores: peliculaSeleccionada.directores
+          ? peliculaSeleccionada.directores.join(", ")
+          : "",
+        rating: peliculaSeleccionada.rating || "",
+        portada: peliculaSeleccionada.portada || "",
       });
-      setCamposModificados(new Set());
     }
-  }, [pelicula]);
+  }, [peliculaSeleccionada]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setCamposModificados((prev) => new Set(prev).add(name));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const actualizarPelicula = async () => {
+  const handleSubmit = async () => {
     try {
-      const peliculaActualizada = {
-        ...formData,
-        duracion: parseInt(formData.duracion),
-        rating: parseFloat(formData.rating),
-        actores: formData.actores.split(",").map((a) => a.trim()),
-        directores: formData.directores.split(",").map((d) => d.trim()),
-      };
-
-      await actualizarPeliculaServicio(peliculaActualizada);
-
-      if (typeof onActualizar === "function") {
-        onActualizar(peliculaActualizada);
-      }
-
-      setMostrarAlerta(true);
-      setCamposModificados(new Set());
+      await actualizarPelicula(form);
+      alert("Película actualizada correctamente");
+      // Aquí podrías cerrar modal o actualizar lista
     } catch (error) {
-      alert("Error al actualizar la película: " + error.message);
+      alert("Error al actualizar la película");
+      console.error(error);
     }
   };
 
-  return {
-    formData,
-    setFormData,
-    handleChange,
-    camposModificados,
-    setCamposModificados,
-    mostrarAlerta,
-    setMostrarAlerta,
-    actualizarPelicula,
-  };
+  return { form, handleChange, handleSubmit };
 }
