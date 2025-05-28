@@ -16,7 +16,7 @@ export async function obtenerListaPorUsuario(usuarioId) {
 
 // Eliminar contenido de la lista
 export async function eliminarDeLista(usuarioId, contenidoId) {
-  const response = await axios.delete(`${API_URL}`, {
+  const response = await axios.delete(API_URL, {
     params: { usuarioId, contenidoId },
   });
   return response.data;
