@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/lista";
+const API_URL = "https://cinexflix-gq2n.onrender.com/lista";
 
 // Agregar a la lista
 export async function agregarALista(lista) {

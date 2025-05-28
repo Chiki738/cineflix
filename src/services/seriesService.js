@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080/api/series";
+const API_URL = "https://cinexflix-gq2n.onrender.com/series";
 
 export async function obtenerSeries() {
   try {

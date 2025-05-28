@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/historial";
+const API_URL = "https://cinexflix-gq2n.onrender.com/historial";
 
 // Agregar al historial
 export async function agregarAHistorial(historial) {

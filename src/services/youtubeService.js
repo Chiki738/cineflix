@@ -3,7 +3,7 @@ import axios from "axios";
 export async function obtenerTrailerPorTitulo(titulo) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/youtube/trailer`,
+      `https://cinexflix-gq2n.onrender.com/youtube/trailer`,
       { params: { movie: titulo } }
     );
     return response.data.url;
@@ -16,7 +16,7 @@ export async function obtenerTrailerPorTitulo(titulo) {
 export async function obtenerVideosPorPlaylist(playlistId) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/youtube/playlist/videos`,
+      `https://cinexflix-gq2n.onrender.com/youtube/playlist/videos`,
       { params: { playlistId } }
     );
     return response.data;

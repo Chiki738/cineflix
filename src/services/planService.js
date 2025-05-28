@@ -2,7 +2,7 @@
 
 export const obtenerPlanes = async () => {
   try {
-    const response = await fetch("http://localhost:8080/api/planes", {
+    const response = await fetch("https://cinexflix-gq2n.onrender.com/planes", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });

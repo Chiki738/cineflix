@@ -36,7 +36,7 @@ export function useLogin() {
         localStorage.setItem("user", JSON.stringify(user));
 
         const sessionResponse = await fetch(
-          "http://localhost:8080/api/sesiones/inicio",
+          "https://cinexflix-gq2n.onrender.com/api/sesiones/inicio",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
