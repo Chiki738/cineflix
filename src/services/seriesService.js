@@ -1,4 +1,4 @@
-const API_URL = "https://cinexflix-gq2n.onrender.com/series";
+const API_URL = "https://cinexflix-gq2n.onrender.com/api/series";
 
 export async function obtenerSeries() {
   try {

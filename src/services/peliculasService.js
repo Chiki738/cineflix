@@ -1,7 +1,7 @@
 // src/services/peliculasService.js
 import axios from "axios";
 
-const API_URL = "https://cinexflix-gq2n.onrender.com/peliculas";
+const API_URL = "https://cinexflix-gq2n.onrender.com/api/peliculas";
 
 // Obtener todas las películas
 export async function obtenerPeliculas() {

@@ -1,6 +1,6 @@
 // services/usuarioService.js
 
-const BASE_URL = "https://cinexflix-gq2n.onrender.com/usuarios";
+const BASE_URL = "https://cinexflix-gq2n.onrender.com/api/usuarios";
 
 // Login de usuario
 export async function loginUsuario(credentials) {

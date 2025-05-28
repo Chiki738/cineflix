@@ -4,7 +4,7 @@ export async function logoutUser() {
   if (sessionId) {
     try {
       const response = await fetch(
-        "https://cinexflix-gq2n.onrender.com/sesiones/cierre",
+        "https://cinexflix-gq2n.onrender.com/api/sesiones/cierre",
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

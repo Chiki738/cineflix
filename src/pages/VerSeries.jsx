@@ -75,7 +75,7 @@ function VerSerie() {
     async function fetchYoutubeVideos() {
       try {
         const res = await fetch(
-          "https://cinexflix-gq2n.onrender.com/youtube/playlist/videos?playlistId=PLM99PdrQScMxn0fMm_1OswE4Xv4fJrbLi"
+          "https://cinexflix-gq2n.onrender.com/api/youtube/playlist/videos?playlistId=PLM99PdrQScMxn0fMm_1OswE4Xv4fJrbLi"
         );
         const data = await res.json();
         setYoutubeVideos(data);
