@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useLogin } from "../hooks/useAuth";
-import "../assets/styles/Login.css";
+import { Eye, EyeOff, LogIn } from "lucide-react";
 
 function Login() {
   const {
@@ -14,21 +14,21 @@ function Login() {
   } = useLogin();
 
   return (
-    <div className="formLogin d-flex flex-column justify-content-center align-items-center text-white text-center">
-      <form onSubmit={handleLogin} className="d-flex flex-column p-4 rounded-2 gap-3">
-        <h3>INICIAR SESIÓN</h3>
+    <div className="auth-page d-flex flex-column justify-content-center align-items-center text-white text-center p-3">
+      <form onSubmit={handleLogin} className="auth-panel d-flex flex-column p-4 gap-3">
+        <p className="section-kicker mb-0">Bienvenido de vuelta</p>
+        <h1 className="h3 fw-bold mb-2">Iniciar sesión</h1>
 
         <input
           type="email"
           placeholder="Ingresar correo electrónico"
-          className="form-control mb-3"
-          style={{ width: "300px" }}
+          className="form-control"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
 
-        <div className="input-group mb-3" style={{ width: "300px" }}>
+        <div className="input-group">
           <input
             type={showPassword ? "text" : "password"}
             className="form-control"
@@ -40,20 +40,20 @@ function Login() {
           <button
             type="button"
             className="btn btn-outline-secondary"
+            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
             onClick={toggleShowPassword}>
-            <i
-              className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
-            />
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         </div>
 
         <button
           type="submit"
-          className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">
-          INGRESAR
+          className="btn btn-cine px-4 py-2 d-inline-flex align-items-center justify-content-center gap-2">
+          <LogIn size={18} />
+          Ingresar
         </button>
 
-        <p className="pt-3">
+        <p className="pt-2 mb-0 text-muted-soft">
           ¿No tienes cuenta?&nbsp;
           <Link to="/Registro" className="text-white text-decoration-none">
             <strong>Regístrate</strong>

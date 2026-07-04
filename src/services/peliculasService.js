@@ -1,27 +1,22 @@
-// src/services/peliculasService.js
-import axios from "axios";
+import { apiRequest } from "./apiClient";
 
-const API_URL = "https://cinexflix-gq2n.onrender.com/api/peliculas";
+const API_URL = "/peliculas";
 
-// Obtener todas las películas
 export async function obtenerPeliculas() {
-  const response = await axios.get(API_URL);
-  return response.data;
+  return apiRequest(API_URL);
 }
 
-// Obtener una película por ID
 export async function obtenerPeliculaPorId(id) {
-  const response = await axios.get(`${API_URL}/${id}`);
-  return response.data;
+  return apiRequest(`${API_URL}/${encodeURIComponent(id)}`);
 }
 
-// Crear nueva película
 export async function crearPelicula(pelicula) {
-  const response = await axios.post(`${API_URL}/crear`, pelicula);
-  return response.data;
+  return apiRequest(`${API_URL}/crear`, {
+    method: "POST",
+    body: JSON.stringify(pelicula),
+  });
 }
 
-// Actualizar película existente
 export async function actualizarPelicula(formData) {
   const dataActualizar = {
     ...formData,
@@ -35,12 +30,12 @@ export async function actualizarPelicula(formData) {
       : formData.directores.split(",").map((d) => d.trim()),
   };
 
-  const response = await axios.put(`${API_URL}/${formData.id}`, dataActualizar);
-  return response.data;
+  return apiRequest(`${API_URL}/${encodeURIComponent(formData.id)}`, {
+    method: "PUT",
+    body: JSON.stringify(dataActualizar),
+  });
 }
 
-// Eliminar película por ID
 export const eliminarPeliculaPorId = async (id) => {
-  const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-  if (!response.ok) throw new Error("No se pudo eliminar la película");
+  await apiRequest(`${API_URL}/${encodeURIComponent(id)}`, { method: "DELETE" });
 };

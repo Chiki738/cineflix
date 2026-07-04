@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import dragonball from "../assets/img/dragonball.jpg";
 import PeliculasCard from "../components/PeliculasCard";
 import usePeliculas from "../hooks/usePeliculas";
+import { Play } from "lucide-react";
 
 function Home() {
   const { peliculas, cargando, error } = usePeliculas();
 
-  // Agrupar películas por categoría
   const peliculasPorCategoria = peliculas.reduce((acc, pelicula) => {
     const categoria = pelicula.categoria;
     if (!acc[categoria]) acc[categoria] = [];
@@ -14,86 +14,66 @@ function Home() {
     return acc;
   }, {});
 
-  // Obtener todas las categorías únicas desde las películas
   const categorias = [...new Set(peliculas.map((p) => p.categoria))];
 
   return (
-    <div className="min-vh-100 bg-black pt-3 pb-5 pt-sm-0">
-      {/* Fondo principal con opacidad */}
-      <div
-        className="w-100 mb-5 d-none d-sm-block position-relative"
-        style={{ minHeight: "100vh" }}>
+    <div className="page-shell pb-5">
+      <section className="home-hero position-relative overflow-hidden mb-5">
         <div
-          className="position-absolute top-0 start-0 w-100 h-100"
+          className="position-absolute inset-0 top-0 start-0 w-100 h-100"
           style={{
             backgroundImage: `url(${dragonball})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            opacity: 0.4,
+            opacity: 0.34,
             zIndex: 0,
             pointerEvents: "none",
           }}></div>
 
-        {/* Contenido sobre fondo */}
-        <div className="d-flex flex-column justify-content-center align-items-start vh-100 ps-3">
-          <div style={{ width: "50%", zIndex: 1 }}>
-            <h3 className="display-2 text-white fw-bold">DRAGON BALL</h3>
-            <p className="text-white">
-              An ancient struggle between two Cybertronian races, the heroic
-              Autobots and the evil Decepticons, comes to Earth...
+        <div className="position-relative z-1 d-flex align-items-center h-100">
+          <div className="col-12 col-lg-6 p-4 p-md-5">
+            <p className="section-kicker mb-3">Destacado</p>
+            <h1 className="display-3 text-white fw-bold mb-3">Dragon Ball</h1>
+            <p className="text-muted-soft fs-5">
+              Aventuras, poder y nostalgia en una serie que sigue reuniendo
+              generaciones frente a la pantalla.
             </p>
-            <p className="display-5 text-white">⭐ 10/10</p>
+            <p className="h3 text-white mb-4">⭐ 10/10</p>
 
-            <button
-              className="btn btn-success w-75 mb-3 text-black"
-              data-bs-toggle="modal"
-              data-bs-target="#modalGuardarLista">
-              GUARDAR EN LISTA
-            </button>
-
-            <Link to={`/series/SER5454`} className="btn btn-info w-75">
-            VER
-          </Link>
+            <Link to="/series/SER5454" className="btn btn-cine d-inline-flex align-items-center gap-2 px-4 py-2">
+              <Play size={18} />
+              Ver ahora
+            </Link>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Cargando/Error */}
-      {cargando && <p className="text-white text-center">Cargando...</p>}
+      {cargando && <p className="text-white text-center">Cargando catálogo...</p>}
       {error && <p className="text-danger text-center">Error: {error}</p>}
+      {!cargando && !error && peliculas.length === 0 && (
+        <p className="text-muted-soft text-center">Aún no hay películas disponibles.</p>
+      )}
 
-      {/* Carruseles por categoría */}
       {!cargando &&
         categorias.map((categoria) => {
           const pelis = peliculasPorCategoria[categoria] || [];
           if (pelis.length === 0) return null;
 
           return (
-            <div className="ps-3 pe-3 mb-4" key={categoria}>
-              <h3 className="text-white">{categoria}</h3>
-              <div
-                className="d-flex overflow-auto gap-3 py-2"
-                style={{
-                  scrollSnapType: "x mandatory",
-                  whiteSpace: "nowrap",
-                }}>
+            <section className="mb-4" key={categoria}>
+              <h2 className="section-title mb-3">{categoria}</h2>
+              <div className="horizontal-rail no-scrollbar">
                 {pelis.map((peli) => (
-                  <div
+                  <PeliculasCard
                     key={peli.id}
-                    style={{
-                      flex: "0 0 auto",
-                      scrollSnapAlign: "start",
-                    }}>
-                    <PeliculasCard
-                      titulo={peli.titulo}
-                      portada={peli.portada}
-                      id={peli.id}
-                    />
-                  </div>
+                    titulo={peli.titulo}
+                    portada={peli.portada}
+                    id={peli.id}
+                  />
                 ))}
               </div>
-            </div>
+            </section>
           );
         })}
     </div>

@@ -1,19 +1,17 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { getStoredUser } from "../utils/storage";
 
-const ProtectedRoute = ({ allowedRoles }) => {
-  const user = JSON.parse(localStorage.getItem("user"));
+const ProtectedRoute = ({ allowedRoles = [] }) => {
+  const user = getStoredUser();
 
-  // Si no hay usuario
   if (!user) {
     return <Navigate to="/Login" replace />;
   }
 
-  // Si el rol no está permitido
   if (!allowedRoles.includes(user.rol)) {
     return <Navigate to="/" replace />;
   }
 
-  // Si pasa los chequeos, muestra la ruta hija
   return <Outlet />;
 };
 

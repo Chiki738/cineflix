@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { useActualizarUsuario } from "../../hooks/useActualizarUsuario";
+import { CLOUDINARY_UPLOAD_URL } from "../../services/apiClient";
+import { getStoredUser, setStoredUser } from "../../utils/storage";
 
 function CambiarFoto({ onClose, onFotoActualizada }) {
   const [preview, setPreview] = useState(null);
@@ -27,7 +29,7 @@ function CambiarFoto({ onClose, onFotoActualizada }) {
       return;
     }
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = getStoredUser();
     if (!user) {
       alert("Usuario no encontrado");
       return;
@@ -41,13 +43,10 @@ function CambiarFoto({ onClose, onFotoActualizada }) {
       formData.append("public_id", `${user.id}_${timestamp}`);
       formData.append("folder", "samples/ecommerce");
 
-      const cloudinaryResponse = await fetch(
-        "https://api.cloudinary.com/v1_1/doacvhdgt/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const cloudinaryResponse = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: "POST",
+        body: formData,
+      });
 
       const data = await cloudinaryResponse.json();
 
@@ -61,7 +60,6 @@ function CambiarFoto({ onClose, onFotoActualizada }) {
         nombre: user.nombre,
         apellidos: user.apellidos,
         telefono: user.telefono,
-        contrasena: user.contrasena,
         foto: urlFotoSubidaConCacheBust,
       };
 
@@ -69,15 +67,13 @@ function CambiarFoto({ onClose, onFotoActualizada }) {
 
       if (resultado) {
         const nuevoUsuario = { ...user, ...datosActualizados };
-        localStorage.setItem("user", JSON.stringify(nuevoUsuario));
+        setStoredUser(nuevoUsuario);
         onFotoActualizada(urlFotoSubidaConCacheBust);
         alert("Foto actualizada correctamente");
-        window.location.reload();
       } else {
         alert("No se pudo actualizar el usuario");
       }
-    } catch (error) {
-      console.error("Error al subir la imagen o actualizar usuario:", error);
+    } catch {
       alert("Error al subir la imagen o actualizar los datos");
     }
   };

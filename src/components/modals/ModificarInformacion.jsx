@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useActualizarUsuario } from "../../hooks/useActualizarUsuario";
+import { getStoredUser, setStoredUser } from "../../utils/storage";
 
 function ModificarInformacion({ userData, onClose, onSave }) {
   const [formData, setFormData] = useState({ ...userData });
@@ -26,10 +27,8 @@ function ModificarInformacion({ userData, onClose, onSave }) {
   };
 
   const handleSubmit = async () => {
-    // Obtengo datos actuales del localStorage
-    const localUser = JSON.parse(localStorage.getItem("user")) || {};
+    const localUser = getStoredUser() || {};
 
-    // Actualizo localStorage con los datos nuevos
     const updatedUser = {
       ...localUser,
       nombre: formData.nombre,
@@ -37,16 +36,12 @@ function ModificarInformacion({ userData, onClose, onSave }) {
       email: formData.email,
       telefono: formData.telefono,
       foto: localUser.foto || "",
-      contrasenia: localUser.contrasenia || "",
     };
 
-    // Guardo en localStorage
-    localStorage.setItem("user", JSON.stringify(updatedUser));
+    setStoredUser(updatedUser);
 
-    // Obtengo el id desde localStorage, que sí debería existir
     const idUsuario = localUser.id || localUser._id;
     if (!idUsuario) {
-      console.error("ID de usuario no disponible");
       return;
     }
 
@@ -56,8 +51,8 @@ function ModificarInformacion({ userData, onClose, onSave }) {
         onSave(respuesta);
       }
       onClose();
-    } catch (e) {
-      console.error(e.message);
+    } catch {
+      onClose();
     }
   };
 

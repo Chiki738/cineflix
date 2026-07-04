@@ -1,9 +1,12 @@
+import { DASHBOARD_URL } from "../services/apiClient";
+
 function Analisis() {
   return (
     <iframe
-      src="https://cinexflix-gq2n.onrender.com:8055"
+      src={DASHBOARD_URL}
+      className="border-0"
       style={{ width: "100%", height: "100vh" }}
-      title="Dashboard"
+      title="Panel de análisis"
     />
   );
 }

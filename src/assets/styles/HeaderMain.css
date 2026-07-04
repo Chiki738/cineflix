@@ -1,17 +1,91 @@
-.btnBuscar:hover {
-    background-color: #3de3c2;
-    box-shadow: 0 0 10px rgb(30, 197, 80);
-    color: black;
+.main-header {
+  min-height: 64px;
+  background: rgba(7, 10, 17, 0.86);
+  border-bottom: 1px solid var(--cf-border);
+  backdrop-filter: blur(14px);
 }
 
-.navbar-nav .dropdown-menu {
-    position: absolute !important;
-    z-index: 1050;
+.brand-mark {
+  color: var(--cf-primary);
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.brand-mark:hover {
+  color: #54ffe0;
+}
+
+.main-header .nav-link {
+  color: var(--cf-muted);
+  font-weight: 700;
+}
+
+.main-header .nav-link:hover,
+.main-header .nav-link.active {
+  color: var(--cf-text);
+}
+
+.search-form {
+  max-width: 430px;
+  width: 100%;
+}
+
+.profile-button {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--cf-border);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cf-text);
+  overflow: hidden;
+}
+
+.profile-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.main-header .dropdown-menu {
+  --bs-dropdown-bg: var(--cf-surface);
+  --bs-dropdown-link-color: var(--cf-text);
+  --bs-dropdown-link-hover-bg: rgba(255, 255, 255, 0.08);
+  --bs-dropdown-link-hover-color: var(--cf-text);
+  min-width: 190px;
+}
+
+.mobile-drawer {
+  width: min(86vw, 340px);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1060;
+  padding: 1.25rem;
+  background: var(--cf-surface);
+  border-left: 1px solid var(--cf-border);
+  transform: translateX(100%);
+  transition: transform 180ms ease;
+}
+
+.mobile-drawer.is-open {
+  transform: translateX(0);
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1055;
+  border: 0;
+  background: rgba(0, 0, 0, 0.55);
 }
 
 @media (max-width: 992px) {
-    .navbar-nav .dropdown-menu {
-        position: relative !important;
-        z-index: 1050;
-    }
+  .main-header .navbar-collapse {
+    padding-block: 1rem;
+  }
 }

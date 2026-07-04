@@ -10,6 +10,7 @@ export function useLista() {
       await listaService.agregarALista({ usuarioId, contenidoId });
     } catch (e) {
       setError(e.message || "Error al agregar a la lista");
+      throw e;
     }
   };
 

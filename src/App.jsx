@@ -25,7 +25,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index path="/" element={<LandingLayout />} />
+        <Route path="/" element={<LandingLayout />} />
 
         <Route
           path="/Registro"
@@ -45,23 +45,22 @@ function App() {
           }
         />
 
-        {/* Rutas protegidas para usuarios con rol USER */}
         <Route element={<ProtectedRoute allowedRoles={["USER"]} />}>
           <Route element={<MainLayout />}>
             <Route path="/Home" element={<Home />} />
             <Route path="/Perfil" element={<Perfil />}>
-              <Route index path="Informacion" element={<InformacionLayout />} />
+              <Route index element={<InformacionLayout />} />
+              <Route path="Informacion" element={<InformacionLayout />} />
               <Route path="Historial" element={<Historial />} />
               <Route path="Lista" element={<Lista />} />
             </Route>
             <Route path="/Peliculas" element={<Peliculas />} />
             <Route path="/Series" element={<Series />} />
             <Route path="/peliculas/:id" element={<VerPelicula />} />
-            <Route path="/Series/:id" element={<VerSerie />} />
+            <Route path="/series/:id" element={<VerSerie />} />
           </Route>
         </Route>
 
-        {/* Rutas protegidas para rol ADMIN */}
         <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
           <Route element={<AdminLayout />}>
             <Route path="/PeliculasAdmin" element={<PeliculasAdmin />} />

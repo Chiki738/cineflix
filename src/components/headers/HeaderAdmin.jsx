@@ -1,13 +1,15 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { logoutUser } from "../../services/logout";
+import { Clapperboard, LogOut } from "lucide-react";
 
 function HeaderAdmin() {
-  const linkStyle = ({ isActive }) => ({
-    color: isActive ? "white" : "gray",
-    textDecoration: "none",
-  });
-
   const navigate = useNavigate();
+  const items = [
+    { to: "/PeliculasAdmin", label: "Películas" },
+    { to: "/SeriesAdmin", label: "Series" },
+    { to: "/Analisis", label: "Análisis" },
+    { to: "/UsuariosAdmin", label: "Usuarios" },
+  ];
 
   const handleLogout = () => {
     logoutUser();
@@ -15,14 +17,11 @@ function HeaderAdmin() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg bg-dark">
+    <nav className="navbar navbar-expand-lg main-header">
       <div className="container-fluid">
-        <NavLink to="/PeliculasAdmin" style={{ textDecoration: "none" }}>
-          <h1
-            className="me-3"
-            style={{ color: "#3DE3C2", fontWeight: "bold", marginBottom: 0 }}>
-            CINEFLIX
-          </h1>
+        <NavLink to="/PeliculasAdmin" className="brand-mark navbar-brand d-inline-flex align-items-center gap-2">
+          <Clapperboard size={30} />
+          CineFlix Admin
         </NavLink>
         <button
           className="navbar-toggler"
@@ -36,35 +35,21 @@ function HeaderAdmin() {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <NavLink
-                to="/PeliculasAdmin"
-                style={linkStyle}
-                className="nav-link">
-                Peliculas
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/SeriesAdmin" style={linkStyle} className="nav-link">
-                Series
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/Analisis" style={linkStyle} className="nav-link">
-                Analisis
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                to="/UsuariosAdmin"
-                style={linkStyle}
-                className="nav-link">
-                Usuarios
-              </NavLink>
-            </li>
+            {items.map((item) => (
+              <li className="nav-item" key={item.to}>
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `nav-link ${isActive ? "active" : ""}`
+                  }>
+                  {item.label}
+                </NavLink>
+              </li>
+            ))}
           </ul>
-          <button onClick={handleLogout} className="btn text-white m-0 ms-3">
-            Cerrar Sesión
+          <button onClick={handleLogout} className="btn btn-ghost d-inline-flex align-items-center gap-2 m-0 ms-3">
+            <LogOut size={18} />
+            Cerrar sesión
           </button>
         </div>
       </div>

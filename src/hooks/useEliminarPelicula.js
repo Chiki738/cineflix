@@ -1,5 +1,5 @@
 // hooks/usePeliculas.js
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { obtenerPeliculas, eliminarPeliculaPorId } from "../services/peliculasService";
 
 export function usePeliculas() {
@@ -7,14 +7,14 @@ export function usePeliculas() {
   const [busqueda, setBusqueda] = useState("");
   const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null);
 
-  const cargarPeliculas = async () => {
+  const cargarPeliculas = useCallback(async () => {
     try {
       const data = await obtenerPeliculas();
       setPeliculas(data);
     } catch (error) {
       console.error(error);
     }
-  };
+  }, []);
 
   const eliminarPelicula = async (id) => {
     try {
@@ -27,7 +27,7 @@ export function usePeliculas() {
 
   useEffect(() => {
     cargarPeliculas();
-  }, []);
+  }, [cargarPeliculas]);
 
   const peliculasFiltradas = peliculas.filter((p) =>
     p.titulo.toLowerCase().includes(busqueda.trim().toLowerCase())

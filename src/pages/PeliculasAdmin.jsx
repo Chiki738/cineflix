@@ -1,8 +1,8 @@
-import React from "react";
 import ConfirmarEliminar from "../components/modals/ConfirmarAccion";
 import AgregarPelicula from "../components/modals/AgregarPelicula";
 import EditarPelicula from "../components/modals/EditarPelicula";
 import { usePeliculas } from "../hooks/useEliminarPelicula";
+import { Plus } from "lucide-react";
 
 function PeliculasAdmin() {
   const {
@@ -19,9 +19,13 @@ function PeliculasAdmin() {
   const handleBuscar = (e) => e.preventDefault();
 
   return (
-    <div className="min-vh-100 px-3 py-5">
-      <div className="d-flex justify-content-around align-items-center mb-5">
-        <form className="d-flex w-50" role="search" onSubmit={handleBuscar}>
+    <main className="min-vh-100 px-3 py-5">
+      <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+        <div>
+          <p className="section-kicker mb-1">Administración</p>
+          <h1 className="section-title mb-0">Películas</h1>
+        </div>
+        <form className="d-flex w-100" style={{ maxWidth: "520px" }} role="search" onSubmit={handleBuscar}>
           <input
             className="form-control me-2"
             type="search"
@@ -36,14 +40,16 @@ function PeliculasAdmin() {
         </form>
 
         <button
-          className="btn btn-dark"
+          className="btn btn-cine d-inline-flex align-items-center gap-2"
           data-bs-toggle="modal"
           data-bs-target="#modalAgregarPelicula"
           onClick={cargarPeliculas}>
+          <Plus size={18} />
           Agregar Película
         </button>
       </div>
 
+      <div className="table-responsive-soft">
       <table className="table">
         <thead>
           <tr>
@@ -108,6 +114,7 @@ function PeliculasAdmin() {
           )}
         </tbody>
       </table>
+      </div>
 
       <AgregarPelicula onPeliculaAgregada={cargarPeliculas} />
 
@@ -121,7 +128,7 @@ function PeliculasAdmin() {
         pelicula={peliculaSeleccionada}
         onConfirm={() => eliminarPelicula(peliculaSeleccionada.id)}
       />
-    </div>
+    </main>
   );
 }
 

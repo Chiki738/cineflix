@@ -3,6 +3,7 @@ import { useHistorialUsuario } from "../hooks/useHistorialUsuario";
 import { useCargarPeliculaPorId } from "../hooks/useCargarPeliculaPorId";
 import { useCargarSeriePorId } from "../hooks/useCargarSeriePorId";
 import ContenidoCard from "../components/ContenidoCard";
+import { getStoredUser } from "../utils/storage";
 
 function Historial() {
   const [historial, setHistorial] = useState([]);
@@ -11,7 +12,7 @@ function Historial() {
   const { obtenerPorUsuario } = useHistorialUsuario();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = getStoredUser();
     if (!user) {
       setError("Debes iniciar sesión");
       setCargando(false);
@@ -53,7 +54,7 @@ function Historial() {
     };
 
     fetchHistorial();
-  }, []);
+  }, [obtenerPorUsuario]);
 
   if (cargando) return <p>Cargando historial...</p>;
   if (error) return <p>{error}</p>;

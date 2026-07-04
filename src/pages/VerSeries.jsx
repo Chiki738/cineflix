@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { obtenerSeriePorId } from "../services/seriesService";
+import { obtenerVideosPorPlaylist } from "../services/youtubeService";
 
 function TemporadasAcordeon({ temporadas, onSelectEpisodio }) {
   return (
@@ -58,7 +59,6 @@ function VerSerie() {
   const [temporadaSeleccionada, setTemporadaSeleccionada] = useState(null);
   const [episodioSeleccionado, setEpisodioSeleccionado] = useState(null);
 
-  // Referencia al iframe para hacer scroll hacia él
   const iframeRef = useRef(null);
 
   useEffect(() => {
@@ -74,13 +74,12 @@ function VerSerie() {
 
     async function fetchYoutubeVideos() {
       try {
-        const res = await fetch(
-          "https://cinexflix-gq2n.onrender.com/api/youtube/playlist/videos?playlistId=PLM99PdrQScMxn0fMm_1OswE4Xv4fJrbLi"
+        const data = await obtenerVideosPorPlaylist(
+          "PLM99PdrQScMxn0fMm_1OswE4Xv4fJrbLi"
         );
-        const data = await res.json();
         setYoutubeVideos(data);
-      } catch (err) {
-        console.error(err);
+      } catch {
+        setYoutubeVideos([]);
       }
     }
 
@@ -107,7 +106,6 @@ function VerSerie() {
     }
   }, [temporadaSeleccionada, episodioSeleccionado, serie, youtubeVideos]);
 
-  // Cuando cambie episodio, hacer scroll suave hacia el iframe
   useEffect(() => {
     if (iframeRef.current) {
       iframeRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -131,7 +129,7 @@ function VerSerie() {
 
   if (error) {
     return (
-      <div className="min-vh-100 bg-black p-4 text-white text-center">
+      <div className="page-shell text-white text-center">
         {error}
       </div>
     );
@@ -139,28 +137,29 @@ function VerSerie() {
 
   if (!serie) {
     return (
-      <div className="min-vh-100 bg-black p-4 text-white text-center">
+      <div className="page-shell text-white text-center">
         Cargando serie...
       </div>
     );
   }
 
   return (
-    <div className="min-vh-100 bg-black p-4">
-      <div className="d-flex mb-5">
-        <div className="me-5 mb-3" style={{ minWidth: "250px" }}>
+    <main className="page-shell">
+      <div className="container">
+      <section className="detail-hero d-flex flex-column flex-lg-row gap-4 mb-5">
+        <div className="detail-poster">
           <img
             src={serie.imagen}
-            className="img-thumbnail"
+            className="img-fluid"
             alt={serie.titulo}
-            style={{ width: "250px", height: "auto" }}
           />
         </div>
 
         <div className="flex-grow-1">
-          <h3 className="text-white display-4">{serie.titulo}</h3>
+          <p className="section-kicker mb-2">Serie</p>
+          <h1 className="text-white display-4 fw-bold">{serie.titulo}</h1>
           <p className="text-white fs-4">⭐ {serie.rating}/10</p>
-          <p className="fs-4 text-white">{serie.descripcion}</p>
+          <p className="fs-5 text-muted-soft">{serie.descripcion}</p>
           <p className="text-white mb-1">
             <strong>Categoría:</strong> {serie.categoria}
           </p>
@@ -171,22 +170,22 @@ function VerSerie() {
             <strong>Año Fin:</strong> {serie.anioFin}
           </p>
         </div>
-      </div>
+      </section>
 
-      <div className="ratio ratio-16x9 mb-4" ref={iframeRef}>
+      <section className="ratio ratio-16x9 mb-4 app-surface overflow-hidden" ref={iframeRef}>
         {videoActual ? (
           <iframe
             src={videoActual}
-            title="YouTube video"
+            title={`Video de ${serie.titulo}`}
             allowFullScreen
             frameBorder="0"
             width="100%"
             height="100%"
           />
         ) : (
-          <p className="text-white">Cargando video...</p>
+          <p className="text-white p-4">Cargando video...</p>
         )}
-      </div>
+      </section>
 
       {serie.temporadas && serie.temporadas.length > 0 && (
         <div className="text-white">
@@ -197,7 +196,8 @@ function VerSerie() {
           />
         </div>
       )}
-    </div>
+      </div>
+    </main>
   );
 }
 

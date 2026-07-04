@@ -1,5 +1,8 @@
+import { Play, Plus, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useLista } from "../hooks/useLista";
 import { useHistorial } from "../hooks/useHistorial";
+import { getStoredUser } from "../utils/storage";
 
 function ContenidoCard({
   id,
@@ -7,12 +10,14 @@ function ContenidoCard({
   portada,
   tipo,
   enHistorial = false,
-  mostrarAgregarLista = true, // Nuevo prop para controlar mostrar botón agregar
-  onEliminar, // Si viene esta función, mostramos botón eliminar
+  mostrarAgregarLista = true,
+  onEliminar,
 }) {
   const { agregar: agregarALista } = useLista();
   const { agregar: agregarAHistorial } = useHistorial();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+  const user = getStoredUser();
+  const detallePath = `/${tipo === "serie" ? "series" : "peliculas"}/${id}`;
 
   const handleGuardarLista = async () => {
     if (!user) {
@@ -29,73 +34,58 @@ function ContenidoCard({
   };
 
   const handleEliminar = async () => {
-    if (onEliminar) {
-      onEliminar();
-    }
+    onEliminar?.();
   };
 
   const handleVer = () => {
     if (user) {
       agregarAHistorial(user.id, id).finally(() => {
-        window.location.href = `/${tipo}s/${id}`;
+        navigate(detallePath);
       });
     } else {
-      window.location.href = `/${tipo}s/${id}`;
+      navigate(detallePath);
     }
   };
 
   return (
-    <div
-      className="card mx-3 mb-4 bg-dark"
-      style={{ width: "18rem", height: "100%" }}>
-      <div
-        className="text-center"
-        style={{ height: "250px", overflow: "hidden" }}>
+    <article className="content-card">
+      <div className="content-card__poster">
         <img
           src={portada}
           alt={titulo}
-          className="rounded img-fluid"
-          style={{ maxHeight: "100%", objectFit: "cover" }}
+          loading="lazy"
         />
       </div>
 
-      <div
-        className="card-body px-1 py-3 d-flex flex-column justify-content-between"
-        style={{ height: "calc(100% - 250px)" }}>
-        <h5
-          className="card-title text-center text-white text-break"
-          style={{
-            fontSize: "1rem",
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-          }}>
+      <div className="content-card__body">
+        <h3 className="content-card__title" title={titulo}>
           {titulo}
-        </h5>
+        </h3>
 
-        <div className="d-flex flex-column align-items-center gap-3 mt-3">
-          {/* Mostrar botón agregar solo si está permitido y no en historial */}
+        <div className="d-flex flex-column align-items-stretch gap-2 mt-3">
           {mostrarAgregarLista && !enHistorial && (
             <button
-              className="btn btn-success w-75"
+              className="btn btn-cine d-inline-flex align-items-center justify-content-center gap-2"
               onClick={handleGuardarLista}>
-              GUARDAR EN LISTA
+              <Plus size={17} />
+              Mi lista
             </button>
           )}
 
-          {/* Mostrar botón eliminar si onEliminar fue pasado */}
           {onEliminar && (
-            <button className="btn btn-danger w-75" onClick={handleEliminar}>
-              ELIMINAR DE LISTA
+            <button className="btn btn-danger d-inline-flex align-items-center justify-content-center gap-2" onClick={handleEliminar}>
+              <Trash2 size={17} />
+              Quitar
             </button>
           )}
 
-          <button className="btn btn-info w-75" onClick={handleVer}>
-            VER
+          <button className="btn btn-ghost d-inline-flex align-items-center justify-content-center gap-2" onClick={handleVer}>
+            <Play size={17} />
+            Ver
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 

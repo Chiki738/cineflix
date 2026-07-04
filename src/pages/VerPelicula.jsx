@@ -26,7 +26,7 @@ function VerPelicula() {
 
   if (error) {
     return (
-      <div className="min-vh-100 bg-black p-4 text-white text-center">
+      <div className="page-shell text-white text-center">
         {error}
       </div>
     );
@@ -34,27 +34,29 @@ function VerPelicula() {
 
   if (!pelicula) {
     return (
-      <div className="min-vh-100 bg-black p-4 text-white text-center">
+      <div className="page-shell text-white text-center">
         Cargando película...
       </div>
     );
   }
 
   return (
-    <div className="min-vh-100 bg-black p-4">
-      <div className="d-flex mb-5">
-        <div className="me-5 mb-3" style={{ minWidth: "250px" }}>
+    <main className="page-shell">
+      <div className="container">
+        <section className="detail-hero d-flex flex-column flex-lg-row gap-4 mb-5">
+        <div className="detail-poster">
           <img
             src={pelicula.portada}
-            className="img-thumbnail"
+            className="img-fluid"
             alt={pelicula.titulo}
           />
         </div>
 
         <div className="flex-grow-1">
-          <h3 className="text-white display-4">{pelicula.titulo}</h3>
+          <p className="section-kicker mb-2">Película</p>
+          <h1 className="text-white display-4 fw-bold">{pelicula.titulo}</h1>
           <p className="text-white fs-4">⭐ {pelicula.rating}/10</p>
-          <p className="fs-4 text-white">{pelicula.descripcion}</p>
+          <p className="fs-5 text-muted-soft">{pelicula.descripcion}</p>
           <p className="text-white mb-1">
             <strong>Año:</strong> {pelicula.anio}
           </p>
@@ -71,19 +73,20 @@ function VerPelicula() {
             <strong>Directores:</strong> {pelicula.directores?.join(", ")}
           </p>
         </div>
-      </div>
+        </section>
 
-      <div className="ratio ratio-16x9">
+      <section className="ratio ratio-16x9 app-surface overflow-hidden">
         {trailerUrl ? (
           <iframe
             src={trailerUrl}
-            title="YouTube video"
+            title={`Tráiler de ${pelicula.titulo}`}
             allowFullScreen></iframe>
         ) : (
-          <p className="text-white">{errorTrailer || "Cargando tráiler..."}</p>
+          <p className="text-white p-4">{errorTrailer || "Cargando tráiler..."}</p>
         )}
+      </section>
       </div>
-    </div>
+    </main>
   );
 }
 

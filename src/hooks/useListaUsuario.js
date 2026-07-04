@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   obtenerListaPorUsuario,
   agregarALista,
@@ -10,7 +10,7 @@ export function useListaUsuario() {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
 
-  const obtenerPorUsuario = async (usuarioId) => {
+  const obtenerPorUsuario = useCallback(async (usuarioId) => {
     setCargando(true);
     setError(null);
     try {
@@ -23,26 +23,26 @@ export function useListaUsuario() {
     } finally {
       setCargando(false);
     }
-  };
+  }, []);
 
-  const agregar = async (usuarioId, contenidoId) => {
+  const agregar = useCallback(async (usuarioId, contenidoId) => {
     try {
       await agregarALista({ usuarioId, contenidoId });
       await obtenerPorUsuario(usuarioId);
     } catch (e) {
       setError(e.message || "Error al agregar a la lista");
     }
-  };
+  }, [obtenerPorUsuario]);
 
-  const eliminar = async (usuarioId, contenidoId) => {
+  const eliminar = useCallback(async (usuarioId, contenidoId) => {
     try {
       await eliminarDeLista(usuarioId, contenidoId);
       await obtenerPorUsuario(usuarioId);
     } catch (e) {
       setError(e.message || "Error al eliminar de la lista");
-      throw e; // para que el componente pueda capturar el error
+      throw e;
     }
-  };
+  }, [obtenerPorUsuario]);
 
   return {
     lista,

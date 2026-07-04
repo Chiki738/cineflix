@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { useActualizarUsuario } from "../../hooks/useActualizarUsuario"; // ajusta la ruta
+import { useActualizarUsuario } from "../../hooks/useActualizarUsuario";
+import { getStoredUser, setStoredUser } from "../../utils/storage";
 
 function CambiarContrasenia({ actualizarPassword }) {
   const passwordRef = useRef(null);
@@ -17,19 +18,12 @@ function CambiarContrasenia({ actualizarPassword }) {
       return;
     }
 
-    const userString = localStorage.getItem("user");
-    if (!userString) {
+    const user = getStoredUser();
+    if (!user) {
       alert("No hay usuario en sesión");
       return;
     }
 
-    const user = JSON.parse(userString);
-
-    // Actualizamos contraseña en localStorage
-    user.contrasena = pass;
-    localStorage.setItem("user", JSON.stringify(user));
-
-    // Llamamos al servicio para actualizar el usuario en backend
     const datosActualizar = {
       nombre: user.nombre,
       apellidos: user.apellidos,
@@ -42,17 +36,16 @@ function CambiarContrasenia({ actualizarPassword }) {
     const resultado = await actualizar(user.id, datosActualizar);
 
     if (resultado) {
-      alert(
-        "Contraseña actualizada correctamente"
-      );
-      // Actualizar estado en componente padre
+      const usuarioActualizado = {
+        ...user,
+        fecha_actualizacion_contrasena: new Date().toISOString(),
+      };
+      setStoredUser(usuarioActualizado);
+      alert("Contraseña actualizada correctamente");
       if (actualizarPassword) actualizarPassword(pass);
 
-      // Limpiar inputs
       passwordRef.current.value = "";
       confirmPasswordRef.current.value = "";
-
-      // Aquí puedes cerrar el modal si quieres
     } else {
       alert("Error al actualizar datos. Intenta de nuevo.");
     }

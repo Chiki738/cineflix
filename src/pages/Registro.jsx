@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useRegistro } from "../hooks/useRegistroUsuario";
-import "../assets/styles/Registro.css";
+import { UserPlus } from "lucide-react";
 
 function Registro() {
   const {
@@ -13,12 +13,13 @@ function Registro() {
   } = useRegistro();
 
   return (
-    <div className="formRegistro d-flex flex-column justify-content-center align-items-center text-white text-center p-5">
+    <div className="auth-page d-flex flex-column justify-content-center align-items-center text-white text-center p-3">
       <form
         onSubmit={handleSubmit}
-        className="w-100 p-4"
+        className="auth-panel w-100 p-4"
         style={{ maxWidth: "500px" }}>
-        <h3 className="fw-bold mb-4">REGÍSTRATE</h3>
+        <p className="section-kicker mb-2">Empieza tu cuenta</p>
+        <h1 className="h3 fw-bold mb-4">Regístrate</h1>
 
         <div className="row">
           <div className="col-md-6 mb-3">
@@ -110,11 +111,12 @@ function Registro() {
 
         <button
           type="submit"
-          className="btn btn-primary px-4 py-1 text-dark fw-bold btnLogin rounded-3 border-success">
-          REGISTRARSE
+          className="btn btn-cine px-4 py-2 d-inline-flex align-items-center justify-content-center gap-2">
+          <UserPlus size={18} />
+          Crear cuenta
         </button>
 
-        <p className="pt-3">
+        <p className="pt-3 mb-0 text-muted-soft">
           ¿Ya tienes una cuenta?&nbsp;
           <Link to="/Login" className="text-decoration-none text-white">
             <strong className="color-white">Iniciar sesión</strong>

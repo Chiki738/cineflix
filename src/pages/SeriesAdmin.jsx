@@ -5,6 +5,7 @@ import { useEliminarSerie } from "../hooks/useEliminarSerie";
 import ConfirmarEliminar from "../components/modals/ConfirmarAccion";
 import AgregarSerie from "../components/modals/AgregarSerie";
 import AgregarCapitulo from "../components/modals/AgregarTemporada";
+import { Plus } from "lucide-react";
 
 function SeriesAdmin() {
   const { series, loading, error, refetch } = useSeries();
@@ -29,10 +30,15 @@ function SeriesAdmin() {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="min-vh-100 px-3 py-5">
-      <div className="d-flex justify-content-around align-items-center mb-5">
+    <main className="min-vh-100 px-3 py-5">
+      <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+        <div>
+          <p className="section-kicker mb-1">Administración</p>
+          <h1 className="section-title mb-0">Series</h1>
+        </div>
         <form
-          className="d-flex w-50"
+          className="d-flex w-100"
+          style={{ maxWidth: "520px" }}
           role="search"
           onSubmit={(e) => e.preventDefault()}>
           <input
@@ -47,10 +53,11 @@ function SeriesAdmin() {
         </form>
 
         <button
-          className="btn btn-dark"
+          className="btn btn-cine d-inline-flex align-items-center gap-2"
           data-bs-toggle="modal"
           data-bs-target="#modalAgregarSerie"
           type="button">
+          <Plus size={18} />
           Agregar Serie
         </button>
       </div>
@@ -190,7 +197,7 @@ function SeriesAdmin() {
       />
       {eliminarLoading && <p>Eliminando serie...</p>}
       {eliminarError && <p>Error al eliminar: {eliminarError}</p>}
-    </div>
+    </main>
   );
 }
 

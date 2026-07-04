@@ -1,30 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useListaUsuario } from "../hooks/useListaUsuario";
 import { useCargarPeliculaPorId } from "../hooks/useCargarPeliculaPorId";
 import { useCargarSeriePorId } from "../hooks/useCargarSeriePorId";
 import ContenidoCard from "../components/ContenidoCard";
+import { getStoredUser } from "../utils/storage";
 
 function Lista() {
-  const [listaFiltrada, setListaFiltrada] = useState([]);
+  const [user] = useState(() => getStoredUser());
   const { lista, cargando, error, obtenerPorUsuario, eliminar } =
     useListaUsuario();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
 
   useEffect(() => {
-    if (!user) return;
+    if (!userId) return;
 
     const cargarLista = async () => {
-      await obtenerPorUsuario(user.id);
+      await obtenerPorUsuario(userId);
     };
 
     cargarLista();
-  }, [user?.id]);
+  }, [obtenerPorUsuario, userId]);
 
-  // Filtrar y mantener solo el más reciente (igual que historial)
-  useEffect(() => {
+  const listaFiltrada = useMemo(() => {
     if (!lista.length) {
-      setListaFiltrada([]);
-      return;
+      return [];
     }
 
     const vistos = new Map();
@@ -41,12 +40,12 @@ function Lista() {
         vistos.set(item.contenidoId, { contenidoId: item.contenidoId, tipo });
       }
     }
-    setListaFiltrada(Array.from(vistos.values()));
+    return Array.from(vistos.values());
   }, [lista]);
 
   const handleEliminar = async (contenidoId) => {
     try {
-      await eliminar(user.id, contenidoId);
+      await eliminar(userId, contenidoId);
       alert("Eliminado de la lista");
     } catch {
       alert("Error al eliminar de la lista");
@@ -92,7 +91,7 @@ function ContenidoCardWrapper({ id, tipo, onEliminar }) {
       tipo={tipo}
       enHistorial={false}
       onEliminar={onEliminar}
-      mostrarAgregarLista={false} // Ocultar botón agregar en esta vista
+      mostrarAgregarLista={false}
     />
   );
 }

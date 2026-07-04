@@ -5,13 +5,11 @@ import InformacionSeguridad from "../components/informacionUsuario/InformacionSe
 
 function InformacionLayout() {
   return (
-    <>
-      <Informacion>
-        <InformacionPersonal />
-        <PlanSuscripcion />
-        <InformacionSeguridad />
-      </Informacion>
-    </>
+    <Informacion>
+      <InformacionPersonal />
+      <PlanSuscripcion />
+      <InformacionSeguridad />
+    </Informacion>
   );
 }
 

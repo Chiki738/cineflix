@@ -1,6 +1,6 @@
-// services/adminService.js
+import { API_BASE_URL } from "./apiClient";
 
-const BASE_URL = "https://cinexflix-gq2n.onrender.com/api/admins";
+const BASE_URL = `${API_BASE_URL}/admins`;
 
 export async function registrarAdministrador(adminData) {
   const response = await fetch(`${BASE_URL}/registro`, {

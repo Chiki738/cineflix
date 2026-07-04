@@ -7,6 +7,12 @@ export default function UsuariosAdmin() {
   if (error) return <p>Error: {error}</p>;
 
   return (
+    <main className="min-vh-100 px-3 py-5">
+      <div className="mb-4">
+        <p className="section-kicker mb-1">Administración</p>
+        <h1 className="section-title mb-0">Usuarios</h1>
+      </div>
+      <div className="table-responsive-soft">
     <table className="table">
       <thead>
         <tr>
@@ -51,5 +57,7 @@ export default function UsuariosAdmin() {
         )}
       </tbody>
     </table>
+      </div>
+    </main>
   );
 }

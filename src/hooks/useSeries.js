@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   obtenerSeries,
   agregarTemporada,
@@ -9,7 +9,7 @@ export function useSeries() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchSeries = async () => {
+  const fetchSeries = useCallback(async () => {
     setLoading(true);
     try {
       const data = await obtenerSeries();
@@ -20,7 +20,7 @@ export function useSeries() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const guardarTemporada = async (tituloSerie, numeroTemporada, episodios) => {
     const serie = series.find((s) => s.titulo === tituloSerie);
@@ -41,7 +41,7 @@ export function useSeries() {
 
   useEffect(() => {
     fetchSeries();
-  }, []);
+  }, [fetchSeries]);
 
   return {
     series,

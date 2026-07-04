@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { setPendingRegistration } from "../utils/storage";
 
 export function useRegistro() {
   const [password, setPassword] = useState("");
@@ -39,7 +40,7 @@ export function useRegistro() {
       rol: "USER",
     };
 
-    localStorage.setItem("user", JSON.stringify(userData));
+    setPendingRegistration(userData);
 
     alert("Registro exitoso. Ahora selecciona tu plan.");
     navigate("/Planes");

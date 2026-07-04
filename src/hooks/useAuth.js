@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authService";
+import { apiRequest } from "../services/apiClient";
+import { setStoredUser } from "../utils/storage";
 
 export function useLogin() {
   const [email, setEmail] = useState("");
@@ -30,35 +32,26 @@ export function useLogin() {
           modalidad_plan: response.modalidad_plan,
           fecha_inicio_plan: response.fecha_inicio_plan,
           fecha_fin_plan: response.fecha_fin_plan,
-          contrasena: password,
         };
 
-        localStorage.setItem("user", JSON.stringify(user));
+        setStoredUser(user);
 
-        const sessionResponse = await fetch(
-          "https://cinexflix-gq2n.onrender.com/api/sesiones/inicio",
-          {
+        try {
+          const sessionData = await apiRequest("/sesiones/inicio", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userId: response.id }),
-          }
-        );
-
-        if (sessionResponse.ok) {
-          const sessionData = await sessionResponse.json();
+          });
           localStorage.setItem("sessionId", sessionData.id);
-          console.log("Inicio de sesión registrado:", sessionData);
-        } else {
-          console.warn("No se pudo registrar la sesión");
+        } catch {
+          localStorage.removeItem("sessionId");
         }
 
         navigate(response.rol === "ADMIN" ? "/PeliculasAdmin" : "/Home");
       } else {
         alert("Credenciales incorrectas");
       }
-    } catch (error) {
+    } catch {
       alert("Error al iniciar sesión");
-      console.error("Error de inicio de sesión:", error);
     }
   };
 

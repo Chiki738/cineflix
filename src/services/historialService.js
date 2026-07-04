@@ -1,15 +1,14 @@
-import axios from "axios";
+import { apiRequest } from "./apiClient";
 
-const API_URL = "https://cinexflix-gq2n.onrender.com/api/historial";
+const API_URL = "/historial";
 
-// Agregar al historial
 export async function agregarAHistorial(historial) {
-  const response = await axios.post(API_URL, historial);
-  return response.data;
+  return apiRequest(API_URL, {
+    method: "POST",
+    body: JSON.stringify(historial),
+  });
 }
 
-// Obtener historial de un usuario
 export async function obtenerHistorialPorUsuario(usuarioId) {
-  const response = await axios.get(`${API_URL}/${usuarioId}`);
-  return response.data;
+  return apiRequest(`${API_URL}/${encodeURIComponent(usuarioId)}`);
 }

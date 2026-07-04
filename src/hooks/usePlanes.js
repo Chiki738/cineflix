@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { obtenerPlanes } from "../services/planService";
 import { registerUser } from "../services/usuarioService";
+import {
+  clearPendingRegistration,
+  getPendingRegistration,
+  getStoredUser,
+} from "../utils/storage";
 
 export default function usePlanes() {
   const [opcion, setOpcion] = useState("1");
@@ -13,8 +18,8 @@ export default function usePlanes() {
       try {
         const datos = await obtenerPlanes();
         setPlanes(datos);
-      } catch (error) {
-        console.error("Error al cargar los planes:", error.message);
+      } catch {
+        setPlanes([]);
       }
     };
     cargarPlanes();
@@ -22,7 +27,7 @@ export default function usePlanes() {
 
   const elegirPlan = async (plan) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
+      const user = getPendingRegistration() || getStoredUser();
       if (!user) {
         alert("No hay datos de usuario, por favor regístrate primero.");
         navigate("/Registro");
@@ -45,7 +50,7 @@ export default function usePlanes() {
 
       await registerUser(usuarioConPlan);
 
-      localStorage.removeItem("user");
+      clearPendingRegistration();
       alert("Plan seleccionado y registro completo.");
       navigate("/Login");
     } catch (error) {

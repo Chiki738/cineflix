@@ -1,6 +1,8 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import CambiarFoto from "../components/modals/CambiarFoto";
+import { Camera } from "lucide-react";
+import { getStoredUser } from "../utils/storage";
 
 function Perfil() {
   const location = useLocation();
@@ -8,26 +10,26 @@ function Perfil() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    setUser(storedUser);
+    setUser(getStoredUser());
   }, []);
 
   return (
-    <div className="bg-black py-sm-5 px-sm-3 p-3 min-vh-100">
+    <main className="page-shell">
       <div className="d-flex flex-column justify-content-center align-items-center gap-4">
         <img
           src={user?.foto}
           className="img-fluid rounded-circle"
-          alt="perfil"
+          alt="Perfil"
           style={{ width: "150px", height: "150px", objectFit: "cover" }}
         />
         <button
-          className="btn btn-secondary text-black"
+          className="btn btn-cine d-inline-flex align-items-center gap-2"
           onClick={() => setMostrarModal(true)}>
-          CAMBIAR FOTO
+          <Camera size={18} />
+          Cambiar foto
         </button>
         {user && (
-          <p className="text-white">
+          <p className="text-muted-soft">
             Miembro desde{" "}
             {new Date(user.fechaCreacionCuenta).toLocaleDateString("es-PE", {
               year: "numeric",
@@ -38,8 +40,8 @@ function Perfil() {
       </div>
 
       <div
-        className="text-center bs-tertiary-color-rgb py-3 px-5 mx-3 rounded-3 shadow-lg"
-        style={{ backgroundColor: "#212529" }}>
+        className="profile-tabs text-center py-3 px-3 mx-auto app-surface"
+        style={{ maxWidth: "820px" }}>
         <div className="row">
           <Link
             to="Informacion"
@@ -75,7 +77,10 @@ function Perfil() {
         <CambiarFoto
           onClose={() => setMostrarModal(false)}
           onFotoActualizada={(urlNuevaFoto) => {
-            console.log("Foto actualizada:", urlNuevaFoto);
+            setUser((currentUser) =>
+              currentUser ? { ...currentUser, foto: urlNuevaFoto } : currentUser
+            );
+            setMostrarModal(false);
           }}
         />
       )}
@@ -83,7 +88,7 @@ function Perfil() {
       <div className="px-3 py-4">
         <Outlet />
       </div>
-    </div>
+    </main>
   );
 }
 

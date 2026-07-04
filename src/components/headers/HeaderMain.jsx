@@ -2,215 +2,180 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../../assets/styles/HeaderMain.css";
 import { logoutUser } from "../../services/logout";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Importante para dropdowns, offcanvas, etc.
-import * as bootstrap from "bootstrap";
+import { Clapperboard, LogOut, Menu, Search, User, X } from "lucide-react";
+import { getStoredUser } from "../../utils/storage";
 
 function HeaderMain() {
   const [user, setUser] = useState(null);
-
-  // Estado para controlar la visibilidad del offcanvas
   const [isOpen, setIsOpen] = useState(false);
-
-  // Función para abrir y cerrar el offcanvas
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-    if (!isOpen) {
-      document.body.style.overflow = "hidden"; // Desactivar el scroll
-    } else {
-      document.body.style.overflow = "auto"; // Restaurar el scroll
-    }
-  };
-
-  // Función para manejar el clic en un enlace y cerrar el menú
-  const handleLinkClick = () => {
-    setIsOpen(false); // Cerrar el menú
-    document.body.style.overflow = "auto"; // Restaurar el scroll
-  };
-
   const navigate = useNavigate();
+
+  const navItems = [
+    { to: "/Home", label: "Inicio" },
+    { to: "/Peliculas", label: "Películas" },
+    { to: "/Series", label: "Series" },
+    { to: "/Perfil/Lista", label: "Mi lista" },
+  ];
 
   const handleLogout = () => {
     logoutUser();
     navigate("/Login");
   };
 
+  const toggleMenu = () => {
+    setIsOpen((current) => !current);
+  };
+
+  const handleLinkClick = () => {
+    setIsOpen(false);
+  };
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+  };
+
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const dropdownElements = document.querySelectorAll(".dropdown-toggle");
-    dropdownElements.forEach((dropdownToggleEl) => {
-      new bootstrap.Dropdown(dropdownToggleEl);
-    });
-    setUser(storedUser);
+    setUser(getStoredUser());
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   return (
-    <nav className="navbar bg-dark fixed-top px-2" data-bs-theme="dark">
+    <nav className="main-header navbar fixed-top px-2 px-sm-3" data-bs-theme="dark">
       <div className="container-fluid hstack gap-3 justify-content-between align-items-center">
-        {/* Logo */}
         <Link
           to="/Home"
-          className="navbar-brand mb-0 h1"
-          style={{ color: "#3DE3C2", fontWeight: "bold", fontSize: "35px" }}>
-          CINEFLIX
+          className="brand-mark navbar-brand mb-0 h1 d-inline-flex align-items-center gap-2">
+          <Clapperboard size={30} />
+          CineFlix
         </Link>
 
-        {/* Menú en línea (pantallas grandes) */}
         <div className="d-none d-lg-flex hstack gap-4 flex-grow-1 align-items-center">
           <ul className="navbar-nav flex-row gap-3">
-            <li className="nav-item">
-              <NavLink
-                to="/Home"
-                className={({ isActive }) =>
-                  `nav-link ${isActive ? "active" : ""}`
-                }>
-                Inicio
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/Peliculas" className="nav-link">
-                Películas
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/Series" className="nav-link">
-                Series
-              </NavLink>
-            </li>
-
-            <li className="nav-item">
-              <NavLink
-                to="/Perfil/Lista"
-                className={({ isActive }) =>
-                  `nav-link ${isActive ? "active" : ""}`
-                }>
-                Mi lista
-              </NavLink>
-            </li>
+            {navItems.map((item) => (
+              <li className="nav-item" key={item.to}>
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `nav-link ${isActive ? "active" : ""}`
+                  }>
+                  {item.label}
+                </NavLink>
+              </li>
+            ))}
           </ul>
 
-          {/* Separador */}
           <div className="vr d-none d-xl-block"></div>
 
-          {/* Barra de búsqueda */}
-          <form className="d-flex ms-auto" role="search">
+          <form className="search-form d-flex ms-auto" role="search" onSubmit={handleSearch}>
             <input
               className="form-control me-2"
               type="search"
-              placeholder="Buscar..."
+              placeholder="Buscar títulos"
+              aria-label="Buscar títulos"
             />
-            <button className="btnBuscar btn btn-outline-success" type="submit">
+            <button className="btn btn-ghost d-inline-flex align-items-center gap-2" type="submit">
+              <Search size={17} />
               Buscar
             </button>
           </form>
         </div>
 
-        {/* Iconos: perfil y botón menú móvil */}
         <div className="hstack gap-3">
           <button
             className="navbar-toggler border-0 p-1 d-lg-none"
             type="button"
-            onClick={toggleMenu} // Abre y cierra el menú con un solo clic
-            style={{ boxShadow: "none" }}>
-            <span className="navbar-toggler-icon"></span>
+            onClick={toggleMenu}
+            aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}>
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
 
-          {/* Perfil con dropdown */}
           <div className="dropdown">
-            <a
-              href="#"
-              className="d-flex align-items-center"
+            <button
+              className="profile-button"
+              type="button"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false">
-              <img
-                src={user?.foto}
-                alt="perfil"
-                className="rounded-circle"
-                style={{ width: "40px", height: "40px", objectFit: "cover" }}
-              />
-            </a>
-            <ul className="dropdown-menu dropdown-menu-end">
+              {user?.foto ? (
+                <img src={user.foto} alt="Perfil" />
+              ) : (
+                <User size={22} />
+              )}
+            </button>
+            <ul className="dropdown-menu dropdown-menu-end app-surface">
               <li>
-                <Link to="/Perfil/Informacion" className="dropdown-item">
-                  Perfil <i className="fa-solid fa-user"></i>
+                <Link to="/Perfil/Informacion" className="dropdown-item d-flex align-items-center gap-2">
+                  <User size={16} />
+                  Perfil
                 </Link>
               </li>
               <li>
-                <a
+                <button
                   onClick={handleLogout}
-                  className="dropdown-item"
-                  role="button">
-                  Salir <i className="fa-solid fa-right-from-bracket"></i>
-                </a>
+                  className="dropdown-item d-flex align-items-center gap-2"
+                  type="button">
+                  <LogOut size={16} />
+                  Salir
+                </button>
               </li>
             </ul>
           </div>
         </div>
       </div>
 
-      {/* Menú lateral móvil */}
       <div
-        className={`offcanvas offcanvas-end ${isOpen ? "show" : ""}`}
+        className={`mobile-drawer ${isOpen ? "is-open" : ""}`}
         tabIndex="-1"
-        id="offcanvasNavbar"
-        aria-labelledby="offcanvasNavbarLabel">
-        <div className="offcanvas-header">
-          <h5 className="offcanvas-title" id="offcanvasNavbarLabel">
+        aria-hidden={!isOpen}>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h5 className="mb-0 fw-bold">
             Menú
           </h5>
           <button
             type="button"
-            className="btn-close"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-            onClick={toggleMenu}></button>{" "}
-          {/* Cierra el menú */}
+            className="btn btn-ghost btn-sm"
+            aria-label="Cerrar menú"
+            onClick={toggleMenu}>
+            <X size={20} />
+          </button>
         </div>
-        <div className="offcanvas-body">
-          <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+        <div>
+          <ul className="navbar-nav justify-content-end flex-grow-1">
+            {navItems.map((item) => (
+              <li className="nav-item" key={item.to}>
+                <Link className="nav-link" to={item.to} onClick={handleLinkClick}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
             <li className="nav-item">
-              <Link className="nav-link" to="/Home" onClick={handleLinkClick}>
-                Inicio
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to="/Peliculas"
-                onClick={handleLinkClick}>
-                Películas
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/Series" onClick={handleLinkClick}>
-                Series
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to="/Perfil/Lista"
-                onClick={handleLinkClick}>
-                Mi lista
-              </Link>
+              <button className="nav-link text-start" type="button" onClick={handleLogout}>
+                Salir
+              </button>
             </li>
           </ul>
 
-          {/* Búsqueda móvil */}
-          <form className="d-flex mt-3" role="search">
+          <form className="d-flex mt-3" role="search" onSubmit={handleSearch}>
             <input
               className="form-control me-2"
               type="search"
-              placeholder="Buscar..."
+              placeholder="Buscar títulos"
+              aria-label="Buscar títulos"
             />
-            <button className="btn btn-outline-success" type="submit">
-              Buscar
+            <button className="btn btn-cine" type="submit" aria-label="Buscar">
+              <Search size={18} />
             </button>
           </form>
         </div>
       </div>
+      {isOpen && <button className="drawer-backdrop" aria-label="Cerrar menú" onClick={handleLinkClick} />}
     </nav>
   );
 }

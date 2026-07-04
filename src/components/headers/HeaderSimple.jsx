@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
+import { Clapperboard } from "lucide-react";
 
 function Header() {
   return (
     <header
-      className="navbar bg-dark border-bottom border-body px-2 px-sm-3"
+      className="main-header navbar px-2 px-sm-3"
       data-bs-theme="dark">
-      <Link to={"/"} className="text-decoration-none">
-        <h1 style={{ color: "#3DE3C2" }} className="display-6 fw-bold mb-0">
-          CINEFLIX
-        </h1>
+      <Link to="/" className="brand-mark text-decoration-none d-inline-flex align-items-center gap-2">
+        <Clapperboard size={30} />
+        <span>CineFlix</span>
       </Link>
     </header>
   );

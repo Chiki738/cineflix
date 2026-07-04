@@ -2,6 +2,7 @@ from pymongo import MongoClient
 import pandas as pd
 from datetime import datetime, timedelta
 import calendar
+import os
 import plotly.express as px
 import plotly.graph_objects as go
 import dash
@@ -11,8 +12,11 @@ import threading
 # Puerto para la aplicacion Dash - cambienlo por si quieren usar otro puerto
 PUERTO_DASH = 8055
 
-MONGO_URI = "mongodb+srv://Hugo:analisis12345@cineflix-db.5mvzahh.mongodb.net/?retryWrites=true&w=majority"
+MONGO_URI = os.environ.get("CINEFLIX_MONGO_URI")
 DB_NAME = "cineflix"
+
+if not MONGO_URI:
+    raise RuntimeError("Define CINEFLIX_MONGO_URI para iniciar el dashboard.")
 
 client = MongoClient(MONGO_URI)
 db = client[DB_NAME]

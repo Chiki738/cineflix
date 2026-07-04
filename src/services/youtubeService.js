@@ -1,27 +1,10 @@
-import axios from "axios";
+import { apiRequest, buildQuery } from "./apiClient";
 
 export async function obtenerTrailerPorTitulo(titulo) {
-  try {
-    const response = await axios.get(
-      `https://cinexflix-gq2n.onrender.com/api/youtube/trailer`,
-      { params: { movie: titulo } }
-    );
-    return response.data.url;
-  } catch (error) {
-    console.error("Error en obtenerTrailerPorTitulo:", error);
-    throw error;
-  }
+  const data = await apiRequest(`/youtube/trailer${buildQuery({ movie: titulo })}`);
+  return data.url;
 }
 
 export async function obtenerVideosPorPlaylist(playlistId) {
-  try {
-    const response = await axios.get(
-      `https://cinexflix-gq2n.onrender.com/api/youtube/playlist/videos`,
-      { params: { playlistId } }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error en obtenerVideosPorPlaylist:", error);
-    throw error;
-  }
+  return apiRequest(`/youtube/playlist/videos${buildQuery({ playlistId })}`);
 }
